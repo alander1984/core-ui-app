@@ -149,19 +149,7 @@
         <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
         <id>openshift</id>
         <build>
-            <finalName>SampleApp</finalName>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.3</version>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <outputDirectory>target</outputDirectory>
-              		    <warName>ROOT</warName>
-                    </configuration>
-                </plugin>
-            </plugins>
+            <finalName>core-ui-app</finalName>
         </build>
         </profile>
     </profiles>
