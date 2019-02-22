@@ -11,6 +11,8 @@ hibernate:
         use_jdbc_metadata_defaults: false
         
 spring:
+    profiles:
+        active=@runProfile@
     liquibase:
         change-log: classpath:/db/changelog/db.changelog-master.xml
     devtools:
