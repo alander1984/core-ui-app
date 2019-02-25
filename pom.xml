@@ -128,7 +128,7 @@
             </properties>
             <build>
                 <finalName>cds-ui</finalName>
-            <build>
+            </build>
         </profile>
     </profiles>
 </project>
