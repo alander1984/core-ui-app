@@ -126,6 +126,13 @@
             <properties>
                 <runProfile>dev</runProfile>
             </properties>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <warName>cds-ui</warName>
+                </configuration>
+            </plugin>
         </profile>
     </profiles>
 </project>
