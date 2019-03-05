@@ -13,6 +13,7 @@ hibernate:
 server:
     servlet:
         context-path: /cds-ui
+        
 spring:
     liquibase:
         change-log: classpath:/db/changelog/db.changelog-master.xml
