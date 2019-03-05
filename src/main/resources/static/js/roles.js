@@ -1,6 +1,7 @@
 Vue.component('roles', {
 
     template:  '<div>' +
+                    '<h3>Roles</h3>' +
                     '<div v-for="(item, index) in listRoles" :key=item.index>' +
                         '{{ index }}. {{item}}' +
                     '</div>' +

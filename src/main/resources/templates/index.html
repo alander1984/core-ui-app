@@ -2,14 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title></title>
-    <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+    
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <!--script src="//unpkg.com/vue@latest/dist/vue.min.js"></script-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+    <!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 
 </head>
 <body>
     <h2>Hellow</h2>
     <div id="app"></div>
+    <script th:src="@{/js/permissions.js}"></script>
     <script th:src="@{/js/roles.js}"></script>
     <script th:src="@{/js/main.js}"></script>
 </body>
