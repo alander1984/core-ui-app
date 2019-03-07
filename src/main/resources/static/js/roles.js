@@ -1,4 +1,4 @@
-Vue.component('roles', {
+const roles = Vue.component('roles', {
 
     template:  '<div>' +
                     '<h3>Roles</h3>' +

@@ -1,4 +1,4 @@
-Vue.component('permissions', {
+const permissions = Vue.component('permissions', {
     
     template: '<div>' +
                 '<h3>Permissions</h3>' +
@@ -14,10 +14,14 @@ Vue.component('permissions', {
                         '</b-modal>' +
                 '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Permission</b-button>' +
                 '<br /><br />' +
-                '<div v-for="(item, index) in listPermissions" :key=item.index>' +
-                        '{{ index + 1 }}. {{item}} <b-button variant="danger" v-on:click="deletePermission(index)" >X</b-button>&nbsp;&nbsp;' +
-                        '<b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)" >EDIT</b-button>' +
-                    '</div>' +
+                '<table style="border: 2px solid black; width: 60%;">' +
+                    '<tr v-for="(item, index) in listPermissions" :key=item.index style="border: 1px solid black;">' +
+                        '<td>{{ index + 1 }}</td>' +
+                        '<td width=70%>{{item}}</td>' +
+                        '<td><b-button variant="danger" v-on:click="deletePermission(index)">X</b-button></td>' +
+                        '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
+                    '</tr>' +
+                '</table>' +
               '</div>',
     data(){
             return {

@@ -20,7 +20,14 @@
 </head>
 <body>
     <h2>Hellow</h2>
-    <div id="app"></div>
+    <div id="app">
+        <h4 style="color: grey;">Выберите страницу <small>  (это временная реализация отображения компонентов Vue)</small></h4>
+        <p>
+        <router-link to="/roles" style="margin-left: 15%;">Roles</router-link>
+        <router-link to="/permissions" style="margin-left: 25%;">Permissions</router-link>
+        </p>
+        <router-view style="margin-left: 20%;"></router-view>
+    </div>
     <script th:src="@{/js/permissions.js}"></script>
     <script th:src="@{/js/roles.js}"></script>
     <script th:src="@{/js/main.js}"></script>
