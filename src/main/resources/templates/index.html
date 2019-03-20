@@ -1,24 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/layout">
 <head>
   <title>Рабочее место логиста</title>
+  <link rel="stylesheet" type="text/css"
+        href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+
 </head>
+
 <body>
-<section id="main-content" layout:fragment="main-content">
-  <section id="map-wrapper" layout:fragment="map-wrapper">
-    <iframe
-        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d127924.46753760778!2d30.256686626517816!3d59.9361421495809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1552978622532"
-        width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-  </section>(
-  <section id="content-dashboard" layout:fragment="content-dashboard">
-    <h2>Real content-dashboard</h2>
+
+<th:block layout:fragment="script">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script>
+  </script>
+</th:block>
+
+  <section id="main-content" layout:fragment="main-content">
+    <section id="map-wrapper" layout:fragment="map-wrapper">
+      <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d127924.46753760778!2d30.256686626517816!3d59.9361421495809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1552978622532"
+          width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+      <i id="slide-left" class="fas fa-caret-left fa-3x"></i>
+    </section>
+
+    <!--<div id="splitter"></div>-->
+
+    <div class="content-wrapper">
+      <i id="slide-right" class="fas fa-caret-right fa-3x"></i>
+      <section id="content-dashboard" layout:fragment="content-dashboard">
+        <h2>Real content-dashboard</h2>
+      </section>
+
+      <section id="main-info" layout:fragment="main-info">
+        <h2>Real main-info</h2>
+      </section>
+
+      <section id="undistributed-claims" layout:fragment="undistributed-claims">
+        <h2>Real undistributed-claims</h2>
+      </section>
+    </div>
   </section>
-  <section id="main-info" layout:fragment="main-info">
-    <h2>Real main-info</h2>
-  </section>
-  <section id="undistributed-claims" layout:fragment="undistributed-claims">
-    <h2>Real undistributed-claims</h2>
-  </section>
-</section>
 </body>
 </html>

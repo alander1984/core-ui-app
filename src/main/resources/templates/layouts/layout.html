@@ -1,17 +1,24 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
   <meta name="ctx" th:content="@{/}"/>
   <title>Layout</title>
+
 </head>
 <body>
-  <div layout:fragment="main-content" class="main-content">
-    Place for main-content
-    <div layout:fragment="map-wrapper" class="map-wrapper">Place for map-wrapper</div>
-    <div class="content-wrapper">
-      <div layout:fragment="content-dashboard" class="content-dashboard">Place for Content dashboard</div>
-      <div layout:fragment="main-info" class="main-info">Place for Main-info</div>
-      <div layout:fragment="undistributed-claims" class="undistributed-claims">Place for Undistributed claims</div>
-    </div>
+<th:block layout:fragment="script"></th:block>
+<div layout:fragment="main-content" class="main-content">
+  Place for main-content
+  <div layout:fragment="map-wrapper" class="map-wrapper">Place for map-wrapper</div>
+
+  <div layout:fragment="content-dashboard" class="content-dashboard">Place for Content dashboard
   </div>
+  <section id="main-info" layout:fragment="main-info">
+    <h2>Real main-info from layout</h2>
+  </section>
+  <div layout:fragment="undistributed-claims" class="undistributed-claims">Place for Undistributed
+    claims
+  </div>
+</div>
 </body>
 </html>
