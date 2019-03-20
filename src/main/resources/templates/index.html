@@ -4,8 +4,21 @@
   <title>Рабочее место логиста</title>
 </head>
 <body>
-    <section layout:fragment="content">
-        <h2>Real content placeholder</h2>
-    </secrtion>
+<section id="main-content" layout:fragment="main-content">
+  <section id="map-wrapper" layout:fragment="map-wrapper">
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d127924.46753760778!2d30.256686626517816!3d59.9361421495809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1552978622532"
+        width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+  </section>(
+  <section id="content-dashboard" layout:fragment="content-dashboard">
+    <h2>Real content-dashboard</h2>
+  </section>
+  <section id="main-info" layout:fragment="main-info">
+    <h2>Real main-info</h2>
+  </section>
+  <section id="undistributed-claims" layout:fragment="undistributed-claims">
+    <h2>Real undistributed-claims</h2>
+  </section>
+</section>
 </body>
 </html>

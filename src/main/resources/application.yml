@@ -1,10 +1,10 @@
 core-ui-app:
     datasource:
-        host: 192.168.63.15
-        port: 15432
-        name: sampledb
-        username: userUD6
-        password: fXrgrCUiw7rXOXLe
+        host: localhost
+        port: 5432
+        name: cds-ui
+        username: postgres
+        password: postgres
 
 hibernate:
     temp:
