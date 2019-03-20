@@ -111,6 +111,14 @@ body {
   left: 8px;
 }
 
+#slide-down-menu-button {
+  position: fixed;
+  bottom: 8px;
+  color: #838383;
+  /*TODO Fix*/
+  left: 205px;
+}
+
 .left-menu-items {
   padding: 8px 0px 8px 8px;
   color: #838383;
