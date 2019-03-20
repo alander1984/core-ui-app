@@ -3,11 +3,13 @@ $(document).ready(function () {
   $("#slide-down-menu-button").hide();
 
   $('#slide-right').click(function () {
-    $('.content-wrapper').slideDown();
+    $('#map-wrapper').css('min-width', '100%');
+    $('.content-wrapper').css('min-width', '0%');
   });
 
   $('#slide-left').click(function () {
-    $('.map-wrapper').slideDown();
+    $('#map-wrapper').css('min-width', '2.67%');
+    $('.content-wrapper').css('min-width', '100%');
   });
 
   $("#slide-up-menu-button").click(function (e) {
