@@ -18,6 +18,15 @@
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <script type="text/javascript" th:src="@{/js/slide.js}"></script>
 </th:block>
+<div id="main">
+  <div id="mySidenav" class="sidenav">
+    <i class="fas fa-book-open fa-2x left-menu-items"></i>
+    <i class="fas fa-bars fa-2x left-menu-items"></i>
+    <i class="fas fa-globe fa-2x left-menu-items"></i>
+
+    <i id="slide-up-menu-button" class="fas fa-angle-double-right fa-2x"></i>
+    <i id="slide-down-menu-button" class="fas fa-angle-double-left fa-2x"></i>
+  </div>
 
   <section id="main-content" layout:fragment="main-content">
     <section id="map-wrapper" layout:fragment="map-wrapper">
@@ -37,15 +46,18 @@
           <i class="fas fa-bars fa-lg content-bars-icon"></i>
         </div>
       </section>
+      <div id="left-container-wrapper">
+        <section id="main-info" layout:fragment="main-info">
+          <section id="main-info-header" layout:fragment="main-info-header">main-info-header</section>
+          <section id="main-info-content" layout:fragment="main-info-content">main-info-content</section>
+        </section>
 
-      <section id="main-info" layout:fragment="main-info">
-        Real main-info
-      </section>
-
-      <section id="undistributed-claims" layout:fragment="undistributed-claims">
-        Real undistributed-claims
-      </section>
+        <section id="undistributed-claims" layout:fragment="undistributed-claims">
+          Real undistributed-claims
+        </section>
+      </div>
     </div>
   </section>
+</div>
 </body>
 </html>
