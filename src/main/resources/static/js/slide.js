@@ -22,7 +22,7 @@ $(document).ready(function () {
       map_wrapper.css('min-width', '50%');
       content_wrapper.css('min-width', '50%');
     } else {
-      map_wrapper.css('min-width', '2.67%');
+      map_wrapper.css('min-width', '3.4%');
       map_wrapper.css('width', '0');
       content_wrapper.css('min-width', '100%');
     }
