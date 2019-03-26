@@ -13,4 +13,11 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView("index");
         return modelAndView;
     }
+
+    @RequestMapping(value="/api", method = RequestMethod.GET)
+    public ModelAndView getApiView() {
+        ModelAndView modelAndView = new ModelAndView("api");
+        return modelAndView;
+    }
+
 }
