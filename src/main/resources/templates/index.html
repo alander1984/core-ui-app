@@ -1,38 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/layout">
 <head>
-    <title></title>
-    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
-    />
-    
-    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
-    <!--script src="//unpkg.com/vue@latest/dist/vue.min.js"></script-->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuex"></script>
-    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
-    <!-- версия для разработки, отображает полезные предупреждения в консоли -->
-    <!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <title>Рабочее место логиста</title>
+  <link rel="stylesheet" type="text/css"
+        href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
 
 </head>
+
 <body>
-    <h2>Hellow</h2>
-    <div id="app">
-        <h4 style="color: grey;">Выберите страницу <small>  (это временная реализация отображения компонентов Vue)</small></h4>
-        <p>
-        <router-link to="/roles" style="margin-left: 15%;">Roles</router-link>
-        <router-link to="/permissions" style="margin-left: 25%;">Permissions</router-link>
-        </p>
-        <router-view style="margin-left: 20%;"></router-view>
-    </div>
-    <script th:src="@{/js/api/bundle.js}"></script>
-    <script th:src="@{/js/store.js}"></script>
-    <script th:src="@{/js/permissions.js}"></script>
-    <script th:src="@{/js/roles.js}"></script>
-    <script th:src="@{/js/main.js}"></script>
+<th:block layout:fragment="script">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" th:src="@{/js/slide.js}"></script>
+</th:block>
+
+<section id="map-wrapper" layout:fragment="map-wrapper">
+  <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d127924.46753760778!2d30.256686626517816!3d59.9361421495809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1552978622532"
+      width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+  <i id="slide-left" class="fas fa-caret-left fa-3x"></i>
+</section>
+
+
+<section  layout:fragment="content-dashboard">
+  <div id="content-dashboard">
+    <i class="fas fa-binoculars fa-lg content-binoculars-icon"></i>
+    <i class="fas fa-bars fa-lg content-bars-icon"></i>
+    <a href="#" class="button7" style="background-color:#CCCCCC; color:#000000"><i class="fas fa-exclamation-triangle"></i>	Отправить все</a>
+  </div>
+</section>
+
+<section id="main-info-header" layout:fragment="main-info-header">main-info-header</section>
+
+<section id="main-info-content" layout:fragment="main-info-content">main-info-content</section>
+
+<section id="undistributed-claims" layout:fragment="undistributed-claims">
+  <div id="undistributed-claims-header"> <a href="#" id="reports-button" class="button7" style="background-color:#CCCCCC; color:#000000"><i class="fas fa-share-alt"></i>	Отчеты</a></div>
+  <div id="undistributed-claims-content">undistributed-claims-content</div>
+</section>
 </body>
 </html>
