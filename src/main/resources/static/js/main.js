@@ -3,7 +3,9 @@
 
 const routes = [
     { path: '/roles', component: roles},
-    { path: '/permissions', component: permissions}
+    { path: '/permissions', component: permissions},
+    { path: '/login', component: login},
+    { path: '/', name:'home'},
 ];
 
 const router = new VueRouter({
