@@ -4,12 +4,16 @@ const permissions = Vue.component('permissions', {
                 '<h3>Permissions</h3>' +
                 '<b-modal id="modalAdd" ref="modal1" title="Add Permission" @ok="handleOk" @shown="clearName">' +
                   '<form @submit.stop.prevent="handleSubmit">' +
-                    '<b-form-input type="text" placeholder="Enter permission" v-model="permission" />' +
+                    '<b-form-input type="text" placeholder="Enter permission name" v-model="permissionName" /><br />' +
+                    '<b-form-input type="text" placeholder="Enter permission code" v-model="permissionCode" />' +
                   '</form>' +
                 '</b-modal>' +
                 '<b-modal id="modalEdit" ref="modal" title="Edit Permission" @ok="handleOkEdit" @shown="iPermission">' +
                           '<form @submit.stop.prevent="handleSubmitEdit">' +
-                            '<b-form-input type="text"  v-model="permission" />' +
+                            '<h5>Name:</h5>' +
+                            '<b-form-input type="text"  v-model="permissionName" /><br />' +
+                            '<h5>Code:</h5>' +
+                            '<b-form-input type="text"  v-model="permissionCode" />' +
                           '</form>' +
                         '</b-modal>' +
                 '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Permission</b-button>' +
@@ -17,51 +21,71 @@ const permissions = Vue.component('permissions', {
                 '<table style="border: 2px solid black; width: 60%;">' +
                     '<tr v-for="(item, index) in listPermissions" :key=item.index style="border: 1px solid black;">' +
                         '<td>{{ index + 1 }}</td>' +
-                        '<td width=70%>{{item}}</td>' +
-                        '<td><b-button variant="danger" v-on:click="deletePermission(index)">X</b-button></td>' +
+                        '<td width=10%>{{item.id}}</td>' +
+                        '<td width=60%>{{item.name}}</td>' +
+                        '<td><b-button variant="danger" v-on:click="deletePermission(index, item)">X</b-button></td>' +
                         '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
                     '</tr>' +
                 '</table>' +
               '</div>',
     data(){
             return {
-                listPermissions: ['perm-one', 'perm-two', 'perm-three', 'perm-four'],
-                
+                listPermissions: [],
                 rolesPermissions: [
                     {
                         role: String,
                         permissionsForRole: []
                     }
                 ],
-                permission: '',
+                permissionId: Number,
+                permissionName: '',
+                permissionCode: '',
                 index: Number
             }
         },
     methods: {
-        deletePermission(index){
+        deletePermission(index, item){
             //alert("Удалить  № " + index);
+            CDSAPI.Permissions.deletePermission(item.id.toString()).then(response => {
+                    console.log("DELETE " + response);
+                });
             this.listPermissions.splice(index, 1);
+            
         },
         editPermission(index){
             //alert("Редактировать  № " + index);
-            this.permission = this.listPermissions[index];
+            this.permissionId = this.listPermissions[index].id;
+            this.permissionName = this.listPermissions[index].name;
+            this.permissionCode = this.listPermissions[index].code;
             this.index = index;
         },
         clearName() {
-            this.permission = '';
+            this.permissionName = '';
+            this.permissionCode = '';
         },
         handleOk(evt) {
             // Prevent modal from closing
             evt.preventDefault();
-            if (!this.permission) {
-              alert('Please enter permission');
+            if (!this.permissionName) {
+              alert('Please enter permission name');
             } else {
-              this.handleSubmit();
+                if (!this.permissionCode) {
+                    alert('Please enter permission code');
+                }else {
+                    this.handleSubmit();
+                }
             }
         },
         handleSubmit() {
-            this.listPermissions.push(this.permission);
-            this.clearName();
+            O = new Object();
+            O.code = this.permissionCode;
+            O.name = this.permissionName;
+            CDSAPI.Permissions.createOrUpdatePermission(O).then(id =>{
+                console.log("Created ID :  " + id);
+                O.id = id;
+                this.listPermissions.push(O);
+                this.clearName();
+            });
             this.$nextTick(() => {
               // Wrapped in $nextTick to ensure DOM is rendered before closing
               console.log("********   " + this.$refs.modal);
@@ -72,14 +96,27 @@ const permissions = Vue.component('permissions', {
         handleOkEdit(evt) {
             // Prevent modal from closing
             evt.preventDefault();
-            if (this.permission === '') {
-              alert('Please enter permission');
+            if (!this.permissionName) {
+              alert('Please enter permission name');
             } else {
-              this.handleSubmitEdit();
+                if (!this.permissionCode) {
+                    alert('Please enter permission code');
+                }else {
+                    this.handleSubmitEdit();
+                }
             }
+            
         },
         handleSubmitEdit() {
-            Vue.set(this.listPermissions, this.index, this.permission);
+            O = new Object();
+            O.id = this.permissionId;
+            O.code = this.permissionCode;
+            O.name = this.permissionName;
+            Vue.set(this.listPermissions, this.index, O);
+            CDSAPI.Permissions.createOrUpdatePermission(O).then(id =>{
+                console.log("Edited ID :  " + id);
+            });
+            
             this.clearName();
             this.$nextTick(() => {
               // Wrapped in $nextTick to ensure DOM is rendered before closing
@@ -88,10 +125,26 @@ const permissions = Vue.component('permissions', {
         },
         iPermission(){
             
-        }        
+        },
+        allPermissions(){
+            CDSAPI.Permissions.sendAllPermissions().then(permissions => {
+             var s = permissions.toString().split(',');
+             console.log("PERMISSION:  " + s);
+             
+             for(var i=0; i < s.length; i += 3){
+                 var permission = new Object();
+                 permission.id = s[i];
+                 permission.code = s[i+1];
+                 permission.name = s[i+2];
+                 this.listPermissions.push(permission);
+             }
+            });
+        }    
+
     },
     created(){
-       /* this.listPermissions = null; *//* Здесь запрос по списку Permissions */
+         this.allPermissions();
     }
+
     
 });
