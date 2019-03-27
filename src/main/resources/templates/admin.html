@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
+<head>
+  <title>Администрирование</title>
+</head>
+<body>
+<section layout:fragment="admin-content">
+  <div id="admin-app">
+    <h4 style="color: grey;">Выберите страницу
+      <small> (это временная реализация отображения компонентов Vue)</small>
+    </h4>
+    <p>
+      <router-link to="/roles" style="margin-left: 15%;">Roles</router-link>
+      <router-link to="/permissions" style="margin-left: 25%;">Permissions</router-link>
+    </p>
+    <router-view style="margin-left: 20%;"></router-view>
+  </div>
+</section>
+</body>
+</html>
