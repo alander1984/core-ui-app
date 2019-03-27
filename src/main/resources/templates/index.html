@@ -3,18 +3,14 @@
       layout:decorator="layouts/layout">
 <head>
   <title>Рабочее место логиста</title>
-  <link rel="stylesheet" type="text/css"
-        href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
   <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-        crossorigin="anonymous">
-
 </head>
 
 <body>
 <th:block layout:fragment="script">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="webjars/jquery/3.3.1-2/jquery.js"></script>
   <script type="text/javascript" th:src="@{/js/slide.js}"></script>
 </th:block>
 
