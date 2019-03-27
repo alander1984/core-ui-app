@@ -14,6 +14,16 @@
   <!-- версия для разработки, отображает полезные предупреждения в консоли -->
   <!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
   <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
+          type="text/javascript"></script>
+  <script type="text/javascript">
+    ymaps.ready(function () {
+      var myMap = new ymaps.Map("YMapsID", {
+        center: [59.57, 30.19],
+        zoom: 10
+      });
+    });
+  </script>
 
 </head>
 <body>
