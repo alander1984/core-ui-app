@@ -26,7 +26,7 @@ $(document).ready(function () {
       content_wrapper.css('min-width', '50%');
       myMap.container.fitToViewport();
     } else {
-      map_wrapper.css('min-width', '2.7%');
+      map_wrapper.css('min-width', '0%');
       map_wrapper.css('width', '0');
       content_wrapper.css('min-width', '100%');
       myMap.container.fitToViewport();
@@ -36,7 +36,7 @@ $(document).ready(function () {
 
   slide_up_menu_button.click(function (e) {
     slide_up_menu_button.hide();
-    $(".sidenav").width(250);
+    $(".sidenav").width(215);
     slide_down_menu_button.show("slow");
   });
 
