@@ -17,7 +17,8 @@ const roles = Vue.component('roles', {
                     '<table style="border: 2px solid black; width: 60%;">' +
                         '<tr v-for="(item, index) in rolesPermissions" :key=item.index style="border: 1px solid black;">' +
                             '<td>{{ index + 1 }}</td>' +
-                            '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.role}}</td>' +
+                            '<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
+                            '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.name}}</td>' +
                             '<td><b-button variant="danger" v-on:click="deleteRole(index)">X</b-button></td>' +
                             '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editRole(index)">EDIT</b-button></td>' +
                         '</tr>' +
@@ -62,7 +63,7 @@ const roles = Vue.component('roles', {
                 '</div>',
     data(){
             return {
-                listPermissions: [],
+                listRoles: [],
                 allPermissions: [],
                 rolesPermissions: [
                     {
@@ -85,10 +86,14 @@ const roles = Vue.component('roles', {
         },
     created(){
        /* this.listRoles = null; *//* Здесь запрос по списку ролей */
-        this.rolesPermissions = [{role:'admin', permissionsForRole:['perm1', 'perm2', 'perm4', 'perm5']},
+       /* this.rolesPermissions = [{role:'admin', permissionsForRole:['perm1', 'perm2', 'perm4', 'perm5']},
                                  {role:'user', permissionsForRole:['perm1', 'perm3', 'perm4']},
-                                 {role:'boss', permissionsForRole:['perm3', 'perm4']}];
-        this.allPermissions = ['aaaa', 'ddddd', 'zzzzz', 'ggggg'];
+                                 {role:'boss', permissionsForRole:['perm3', 'perm4']}]; */
+        this.allPermissions = ['aaaa', 'ddddd', 'zzzzz', 'ggggg']; 
+       CDSAPI.Roles.sendAllRoles().then(roles => {
+                this.rolesPermissions = roles;
+                console.log("ROLElistLength :  " + this.rolesPermissions.length);
+            });
     },
     methods: {
         permissions(index){
