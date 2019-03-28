@@ -1,5 +1,9 @@
+//Объявлена глобальной для включения автоматического слежения за размером
+// контейнера при слайде
+var myMap;
+
 ymaps.ready(function () {
-  var myMap = new ymaps.Map("YMapsID", {
+  myMap = new ymaps.Map("YMapsID", {
     center: [59.93, 30.31],
     zoom: 10
   });

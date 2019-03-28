@@ -11,9 +11,12 @@ $(document).ready(function () {
     if (map_wrapper.width() < 50) {
       map_wrapper.css('min-width', '50%');
       content_wrapper.css('min-width', '50%');
+      // Автоматическое слежение за контейнером карты
+      myMap.container.fitToViewport();
     } else {
       map_wrapper.css('min-width', '100%');
       content_wrapper.css('min-width', '0%');
+      myMap.container.fitToViewport();
     }
   });
 
@@ -21,10 +24,12 @@ $(document).ready(function () {
     if (content_wrapper.width() < 50){
       map_wrapper.css('min-width', '50%');
       content_wrapper.css('min-width', '50%');
+      myMap.container.fitToViewport();
     } else {
-      map_wrapper.css('min-width', '3.4%');
+      map_wrapper.css('min-width', '2.7%');
       map_wrapper.css('width', '0');
       content_wrapper.css('min-width', '100%');
+      myMap.container.fitToViewport();
     }
 
   });

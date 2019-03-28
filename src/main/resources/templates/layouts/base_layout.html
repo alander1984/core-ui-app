@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <meta name="ctx" th:content="@{/}"/>
+  <title>Layout</title>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap-vue/1.3.0/bootstrap-vue.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
+  <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+
+</head>
+<body>
+<div id="main">
+  <div id="mySidenav" class="sidenav">
+    <a th:href="@{/}">
+      <i class="fas fa-book-open fa-2x left-menu-items" title="Планирование"></i>
+    </a>
+    <i class="fas fa-bars fa-2x left-menu-items"></i>
+    <i class="fas fa-globe fa-2x left-menu-items"></i>
+    <a th:href="@{/admin}">
+      <i class="fas fa-cog fa-2x left-menu-items" title="Администрирование"></i>
+    </a>
+
+    <i id="slide-up-menu-button" class="fas fa-angle-double-right fa-2x"></i>
+    <i id="slide-down-menu-button" class="fas fa-angle-double-left fa-2x"></i>
+  </div>
+
+  <div layout:fragment="admin-content">Placeholder for admin content</div>
+</div>
+
+</body>
+</html>
