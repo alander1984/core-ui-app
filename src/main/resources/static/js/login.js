@@ -1,34 +1,38 @@
 /**
  * Created by Ilya on 26.03.2019.
  */
-const login = Vue.component('login', {
-        template:   '<div>' +
-                        '<p>Логин:</p>' +
-                        '<input v-model="loginUser">' +
-                        '<p>Пароль:</p>' +
-                        '<input type="password" v-model="password">' +
-                        '<button v-on:click="doLogin">Войти</button>' +
-                    '</div>',
-    data(){
-        return {
+const routes = [
+    { path: '/login',name: 'login'},
+    { path: '/', name:'home'},
+];
+
+const router = new VueRouter({
+    routes
+});
+
+const login = new Vue({
+        router,
+        el: '#loginPanel',
+        data : {
             loginUser: '',
             password: ''
-        }
-    },
+        },
+        methods: {
+                doLogin: function () {
+                    var tokenPr = CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials');
+                    tokenPr.then(tokenResponce => {
+                                console.log(tokenResponce);
+                        console.log(tokenResponce.getToken());
+                        console.log(tokenResponce.getJti());
 
-    methods: {
-        doLogin: function () {
-            var token = CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials');
-            //var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3JBdXRoIjoidGVzdF9hdXRoIiwidXNyQ3JkIjoidGVzdF9hdXRoIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTU1Mjg4NTIyNCwianRpIjoiYzcxMDZjNWQtMTNhZi00YTFiLTllYzEtMTdhMTkyMGYzODZmIiwiY2xpZW50X2lkIjoic2VydmljZS11aSJ9.klfT9j2IVzN9tPtZR_aUb6MLH9Fbb2pvDs14IyLBE_U";
-            if(token != null){
-                localStorage.setItem('user-token', token);
-                router.push('home');
-            }else{
-                alert("Non authentificate!!!")
-            }
-            console.log(this.login);
-            console.log(this.password);
+                        if(tokenResponce.getToken()){
+                            localStorage.setItem('user-token', tokenResponce.getToken());
+                            //router.push('home');
+                            console.log("Auth!!!!")
+                        }else{
+                            alert("Non authentificate!!!")
+                        }
+                    });
+                }
         }
-    }
-}
-)
+});
