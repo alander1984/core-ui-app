@@ -22,15 +22,12 @@ const login = new Vue({
                     var tokenPr = CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials');
                     tokenPr.then(tokenResponce => {
                                 console.log(tokenResponce);
-                        console.log(tokenResponce.getToken());
-                        console.log(tokenResponce.getJti());
 
                         if(tokenResponce.getToken()){
                             localStorage.setItem('user-token', tokenResponce.getToken());
-                            //router.push('home');
-                            console.log("Auth!!!!")
+                            window.location.replace(_ctx);
                         }else{
-                            alert("Non authentificate!!!")
+                            alert("Permission denied...")
                         }
                     });
                 }
