@@ -125,6 +125,8 @@ body {
 }
 
 .sidenav {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 50px;
   position: fixed;
@@ -152,23 +154,33 @@ body {
 
 #slide-up-menu-button {
   position: fixed;
-  bottom: 8px;
+  bottom: 12px;
   color: #838383;
-  left: 8px;
+  left: 14px;
 }
 
 #slide-down-menu-button {
   position: fixed;
-  bottom: 8px;
+  bottom: 12px;
   color: #838383;
   /*TODO Fix*/
-  left: 205px;
+  left: 183px;
 }
 
 .left-menu-items {
-  padding: 8px 0 8px 8px;
+  padding: 10px 0 8px 14px;
   color: #838383;
 }
+
+.left-menu-items-text {
+  margin: 8px 0px 0px 18px
+}
+
+.left-menu-items-row {
+  display: flex;
+  flex-direction: row;
+}
+
 
 .content-binoculars-icon {
   color: #838383;

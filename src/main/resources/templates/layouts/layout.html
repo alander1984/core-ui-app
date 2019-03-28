@@ -24,17 +24,29 @@
 <th:block layout:fragment="script"></th:block>
 <div id="main">
   <div id="mySidenav" class="sidenav">
-    <a th:href="@{/}">
-      <i class="fas fa-book-open fa-2x left-menu-items" title="Планирование"></i>
-    </a>
-    <i class="fas fa-bars fa-2x left-menu-items"></i>
-    <i class="fas fa-globe fa-2x left-menu-items"></i>
-    <a th:href="@{/admin}">
-      <i class="fas fa-cog fa-2x left-menu-items" title="Администрирование"></i>
-    </a>
+    <div class="left-menu-items-row">
+      <a th:href="@{/}">
+        <i class="fas fa-book-open fa-lg left-menu-items" title="Планирование"></i>
+      </a><span class="left-menu-items-text"><h6>Планирование</h6></span>
 
-    <i id="slide-up-menu-button" class="fas fa-angle-double-right fa-2x"></i>
-    <i id="slide-down-menu-button" class="fas fa-angle-double-left fa-2x"></i>
+    </div>
+    <div class="left-menu-items-row">
+      <a><i class="fas fa-bars fa-lg left-menu-items"></i></a>
+      <span class="left-menu-items-text"><h6>Список</h6></span>
+    </div>
+    <div class="left-menu-items-row">
+      <a><i class="fas fa-globe fa-lg left-menu-items"></i></a>
+      <span class="left-menu-items-text"><h6>Карта</h6></span>
+    </div>
+    <div class="left-menu-items-row">
+      <a th:href="@{/admin}">
+        <i class="fas fa-cog fa-lg left-menu-items" title="Администрирование"></i>
+      </a>
+      <span class="left-menu-items-text"><h6>Администрирование</h6></span>
+    </div>
+
+    <i id="slide-up-menu-button" class="fas fa-angle-double-right fa-lg"></i>
+    <i id="slide-down-menu-button" class="fas fa-angle-double-left fa-lg"></i>
   </div>
 
   <div id="main-content">

@@ -36,7 +36,7 @@ $(document).ready(function () {
 
   slide_up_menu_button.click(function (e) {
     slide_up_menu_button.hide();
-    $(".sidenav").width(250);
+    $(".sidenav").width(215);
     slide_down_menu_button.show("slow");
   });
 
