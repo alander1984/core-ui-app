@@ -14,8 +14,8 @@ const roles = Vue.component('roles', {
                     '</b-modal>' +
                     '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Role</b-button>' +
                     '<br /><br />' +
-                    '<table style="border: 2px solid black; width: 60%;">' +
-                        '<tr v-for="(item, index) in rolesPermissions" :key=item.index style="border: 1px solid black;">' +
+                    '<table class="table table-bordered" style="width: 70%">' +
+                        '<tr v-for="(item, index) in rolesPermissions" :key=item.index >' +
                             '<td>{{ index + 1 }}</td>' +
                             '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.role}}</td>' +
                             '<td><b-button variant="danger" v-on:click="deleteRole(index)">X</b-button></td>' +
@@ -25,7 +25,7 @@ const roles = Vue.component('roles', {
                     '<br />' +
                     '<br />' +
                     '<div v-if="show == true">' +
-                        '<table style="border: 1px solid grey; width: 70%">' +
+                        '<table class="table table-bordered">' +
                             '<tr>' + 
                                 '<td width=55% valign="top">' +
                                     '<h4>Permissions for <span style="color: red;">{{role}}</span></h4>' +

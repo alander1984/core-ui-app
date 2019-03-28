@@ -213,3 +213,15 @@ a.button7:active{
 
 }
 
+#admin-app {
+  margin-left: 50px;
+}
+
+#admin-content {
+  margin-top: 15px;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}

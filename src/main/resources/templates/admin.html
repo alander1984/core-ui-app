@@ -7,14 +7,29 @@
 <body>
 <section layout:fragment="admin-content">
   <div id="admin-app">
-    <h4 style="color: grey;">Выберите страницу
-      <small> (это временная реализация отображения компонентов Vue)</small>
-    </h4>
-    <p>
-      <router-link to="/roles" style="margin-left: 15%;">Roles</router-link>
-      <router-link to="/permissions" style="margin-left: 25%;">Permissions</router-link>
-    </p>
-    <router-view style="margin-left: 20%;"></router-view>
+    <div id="admin-header" class="navbar navbar-dark bg-dark box-shadow">
+      <h4 class="text-white">Администрирование</h4>
+    </div>
+    <div id="admin-content">
+      <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+          <div>
+            <p>
+              <router-link to="/roles" style="margin-left: 20%;">
+                <button type="button" class="btn btn-outline-info">Роли пользователей</button>
+              </router-link>
+
+              <router-link to="/permissions" style="margin-left: 28%;">
+                <button type="button" class="btn btn-outline-info">Права ролей</button>
+              </router-link>
+            </p>
+            <router-view style="margin-left: 20%;"></router-view>
+          </div>
+          <div class="col-lg-1"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 </body>

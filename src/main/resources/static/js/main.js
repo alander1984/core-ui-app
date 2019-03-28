@@ -13,7 +13,7 @@ const router = new VueRouter({
 
 var app = new Vue({
     router,
-    el: '#app',
+    el: '#admin-app',
     data: {
         message : 'This is Vue.js !!!!'
     }
