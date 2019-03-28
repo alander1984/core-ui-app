@@ -26,7 +26,7 @@ $(document).ready(function () {
       content_wrapper.css('min-width', '50%');
       myMap.container.fitToViewport();
     } else {
-      map_wrapper.css('min-width', '2.7%');
+      map_wrapper.css('min-width', '0%');
       map_wrapper.css('width', '0');
       content_wrapper.css('min-width', '100%');
       myMap.container.fitToViewport();
