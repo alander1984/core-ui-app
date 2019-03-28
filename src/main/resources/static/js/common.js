@@ -1,0 +1,1 @@
+var _ctx = $("meta[name='ctx']").attr("content")

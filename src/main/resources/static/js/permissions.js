@@ -18,8 +18,8 @@ const permissions = Vue.component('permissions', {
                         '</b-modal>' +
                 '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Permission</b-button>' +
                 '<br /><br />' +
-                '<table style="border: 2px solid black; width: 60%;">' +
-                    '<tr v-for="(item, index) in listPermissions" :key=item.index style="border: 1px solid black;">' +
+                '<table class="table table-bordered">' +
+                    '<tr v-for="(item, index) in listPermissions" :key=item.index >' +
                         '<td>{{ index + 1 }}</td>' +
                         '<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
                         '<td width=60%>{{item.name}}</td>' +

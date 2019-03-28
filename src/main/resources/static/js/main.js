@@ -3,7 +3,8 @@
 
 const routes = [
     { path: '/roles', component: roles},
-    { path: '/permissions', component: permissions}
+    { path: '/permissions', component: permissions},
+    { path: '/', name:'home'},
 ];
 
 const router = new VueRouter({
@@ -12,7 +13,7 @@ const router = new VueRouter({
 
 var app = new Vue({
     router,
-    el: '#app',
+    el: '#admin-app',
     data: {
         message : 'This is Vue.js !!!!'
     }

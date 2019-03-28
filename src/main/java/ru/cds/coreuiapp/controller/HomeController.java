@@ -14,9 +14,22 @@ public class HomeController {
         return modelAndView;
     }
 
+    //TODO Remove after merge with permission, role api
     @RequestMapping(value="/api", method = RequestMethod.GET)
     public ModelAndView getApiView() {
         ModelAndView modelAndView = new ModelAndView("api");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+    public ModelAndView getLoginView() {
+        ModelAndView modelAndView = new ModelAndView("login");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/admin", method = RequestMethod.GET)
+    public ModelAndView getAdminView() {
+        ModelAndView modelAndView = new ModelAndView("admin");
         return modelAndView;
     }
 

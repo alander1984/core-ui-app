@@ -12,6 +12,7 @@ body {
 }
 
 #main-content {
+  margin-left: 50px;
   display: flex;
   flex-direction: row;
   min-height: 100%;
@@ -77,7 +78,7 @@ body {
 }
 
 #main-info-header {
-  height: 150px;
+  height: 190px;
   box-shadow: inset 0px 0px 10px rgba(190, 190, 190, 0.9);
   background-color: #fafafa;
 }
@@ -86,6 +87,38 @@ body {
   box-shadow: inset 0px 0px 10px rgba(190, 190, 190, 0.9);
   background-color: #efefef;
   height: 100%;
+}
+
+#main-info-header-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#main-info-header-summary {
+  margin: 0px 5px 0px 5px;
+  border-radius: 2px;
+  background: rgba(190, 190, 190, 0.9);
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+#main-info-table-content-wrapper {
+  padding: 5px;
+}
+
+#main-info-header-content-table {
+  width: 100%;
+}
+
+
+#main-info-header-content-table tr {
+  height: 15px;
+}
+
+#main-info-header-summary span {
+  width: 25%;
+  text-align: center;
 }
 
 #undistributed-claims {
@@ -108,6 +141,7 @@ body {
 
 
 #slide-left {
+  margin-right: 2px;
   color: #818181;
   position: absolute;
   top: 0;
@@ -115,6 +149,7 @@ body {
 }
 
 #slide-right {
+  margin-left: 2px;
   color: #818181;
   position: absolute;
   top: 0;
@@ -122,6 +157,8 @@ body {
 }
 
 .sidenav {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 50px;
   position: fixed;
@@ -132,19 +169,6 @@ body {
   overflow-x: hidden;
   transition: 0.5s;
   /*padding-top: 60px;*/
-}
-
-.sidenav a {
-  padding: 8px 8px 8px 16px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
 }
 
 .sidenav .closebtn {
@@ -162,23 +186,33 @@ body {
 
 #slide-up-menu-button {
   position: fixed;
-  bottom: 8px;
+  bottom: 12px;
   color: #838383;
-  left: 8px;
+  left: 14px;
 }
 
 #slide-down-menu-button {
   position: fixed;
-  bottom: 8px;
+  bottom: 12px;
   color: #838383;
   /*TODO Fix*/
-  left: 205px;
+  left: 183px;
 }
 
 .left-menu-items {
-  padding: 8px 0 8px 8px;
+  padding: 10px 0 8px 14px;
   color: #838383;
 }
+
+.left-menu-items-text {
+  margin: 8px 0px 0px 18px
+}
+
+.left-menu-items-row {
+  display: flex;
+  flex-direction: row;
+}
+
 
 .content-binoculars-icon {
   color: #838383;
@@ -226,3 +260,15 @@ a.button7:active{
 
 }
 
+#admin-app {
+  margin-left: 50px;
+}
+
+#admin-content {
+  margin-top: 15px;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}

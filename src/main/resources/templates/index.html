@@ -3,25 +3,19 @@
       layout:decorator="layouts/layout">
 <head>
   <title>Рабочее место логиста</title>
-  <link rel="stylesheet" type="text/css"
-        href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
   <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-        crossorigin="anonymous">
-
 </head>
 
 <body>
 <th:block layout:fragment="script">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="webjars/jquery/3.3.1-2/jquery.js"></script>
   <script type="text/javascript" th:src="@{/js/slide.js}"></script>
 </th:block>
 
 <section id="map-wrapper" layout:fragment="map-wrapper">
-  <iframe
-      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d127924.46753760778!2d30.256686626517816!3d59.9361421495809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1552978622532"
-      width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+  <div id="YMapsID" style="width: 100%; height: 100%;"></div>
   <i id="slide-left" class="fas fa-caret-left fa-3x"></i>
 </section>
 
@@ -34,7 +28,68 @@
   </div>
 </section>
 
-<section id="main-info-header" layout:fragment="main-info-header">main-info-header</section>
+<section id="main-info-header" layout:fragment="main-info-header">
+  <div id="main-info-header-content">
+    <div id="main-info-table-content-wrapper">
+    <table id="main-info-header-content-table">
+      <tr>
+        <td><i class="fas fa-map-marker-alt"></i></td>
+        <td><span>Остановки:</span></td>
+        <td><span>0</span></td>
+        <td><i class="fas fa-users"></i></td>
+        <td><span>Водители:</span></td>
+        <td><span>0</span></td>
+      </tr>
+      <tr>
+        <td><i class="fas fa-check-square"></i> </td>
+        <td><span>Доставки:</span></td>
+        <td><span>0</span></td>
+        <td><i class="fas fa-check"></i></td>
+        <td><span>Заказы:</span></td>
+        <td><span>0</span></td>
+      </tr>
+      <tr>
+        <td><i class="far fa-lightbulb"></i></td>
+        <td><span>Новые:</span></td>
+        <td><span>0</span></td>
+        <td><i class="fas fa-exclamation-triangle"></i></td>
+        <td><span>Просрочено:</span></td>
+        <td><span>0</span></td>
+      </tr>
+      <tr>
+        <td><i class="fas fa-truck"></i></td>
+        <td><span>---</span></td>
+        <td></td>
+        <td><i class="far fa-clock"></i></td>
+        <td><span>---</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><i class="fas fa-archive"></i> </td>
+        <td><span>---</span></td>
+        <td></td>
+        <td><i class="fas fa-cube"></i> </td>
+        <td><span>---</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><i class="far fa-money-bill-alt"></i></td>
+        <td><span>---</span></td>
+        <td></td>
+        <td><i class="far fa-money-bill-alt"></i></td>
+        <td><span>---</span></td>
+        <td></td>
+      </tr>
+    </table>
+    </div>
+  </div>
+  <div id="main-info-header-summary">
+    <span id="summary-1">0</span>
+    <span id="summary-2">0</span>
+    <span id="summary-3">0</span>
+    <span id="summary-4">0</span>
+  </div>
+</section>
 
 <section id="main-info-content" layout:fragment="main-info-content">main-info-content</section>
 
