@@ -1,5 +1,3 @@
-//const Foo = { template: '<div>Foo</div'};
-//const Bar = { template: '<div>Bar</div'};
 
 const routes = [
     { path: '/roles', component: roles},
