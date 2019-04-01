@@ -4,7 +4,7 @@ body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   padding: 0;
   margin: 0;
-  overflow: auto;
+  overflow: hidden;
 }
 
 #main {
@@ -119,6 +119,28 @@ body {
 #main-info-header-summary span {
   width: 25%;
   text-align: center;
+}
+
+#main-info-content-wrapper {
+  display: flex;
+  flex-flow: column;
+  height: 69%;
+  overflow-y: scroll;
+}
+
+#accordionExample {
+  flex: 1 1 auto;
+}
+
+#main-info-content-footer {
+
+  margin-left: 25%;
+  margin-top: 1%;
+  flex: 0 1 40px;
+  /*position: absolute;*/
+  /*bottom: 5px;*/
+  /*left: 10%;*/
+  /*height: 32px;*/
 }
 
 #undistributed-claims {
