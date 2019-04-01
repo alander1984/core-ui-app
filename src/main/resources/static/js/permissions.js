@@ -21,7 +21,7 @@ const permissions = Vue.component('permissions', {
                 '<table class="table table-bordered">' +
                     '<tr v-for="(item, index) in listPermissions" :key=item.index >' +
                         '<td>{{ index + 1 }}</td>' +
-                        '<td width=10%>{{item.id}}</td>' +
+                        '<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
                         '<td width=60%>{{item.name}}</td>' +
                         '<td><b-button variant="danger" v-on:click="deletePermission(index, item)">X</b-button></td>' +
                         '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
@@ -128,6 +128,7 @@ const permissions = Vue.component('permissions', {
         },
         allPermissions(){
             CDSAPI.Permissions.sendAllPermissions().then(permissions => {
+            /*
              var s = permissions.toString().split(',');
              console.log("PERMISSION:  " + s);
              
@@ -138,6 +139,9 @@ const permissions = Vue.component('permissions', {
                  permission.name = s[i+2];
                  this.listPermissions.push(permission);
              }
+             */
+                this.listPermissions = permissions;
+                console.log("PERMISSIONS :  " + this.listPermissions.length);
             });
         }    
 

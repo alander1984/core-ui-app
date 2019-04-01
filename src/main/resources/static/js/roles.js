@@ -4,12 +4,14 @@ const roles = Vue.component('roles', {
                     '<h3>Roles</h3>' +
                     '<b-modal id="modalAdd" ref="modalAdd" title="Add Role" @ok="handleOk" @shown="clearName">' +
                       '<form @submit.stop.prevent="handleSubmit">' +
-                        '<b-form-input type="text" placeholder="Enter role" v-model="roleAdd" />' +
+                        '<b-form-input type="text" placeholder="Enter role name" v-model="roleNameAdd" /><br />' +
+                        '<b-form-input type="text" placeholder="Enter role code" v-model="roleCodeAdd" />' +
                       '</form>' +
                     '</b-modal>' +
                     '<b-modal id="modalEdit" ref="modalEdit" title="Edit Role" @ok="handleOkEdit" @shown="iRole">' +
                       '<form @submit.stop.prevent="handleSubmitEdit">' +
-                        '<b-form-input type="text"  v-model="roleAdd" />' +
+                        '<b-form-input type="text"  v-model="roleNameAdd" />' +
+                        '<b-form-input type="text"  v-model="roleCodeAdd" />' +
                       '</form>' +
                     '</b-modal>' +
                     '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Role</b-button>' +
@@ -17,8 +19,9 @@ const roles = Vue.component('roles', {
                     '<table class="table table-bordered" style="width: 70%">' +
                         '<tr v-for="(item, index) in rolesPermissions" :key=item.index >' +
                             '<td>{{ index + 1 }}</td>' +
-                            '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.role}}</td>' +
-                            '<td><b-button variant="danger" v-on:click="deleteRole(index)">X</b-button></td>' +
+                            //'<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
+                            '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.name}}</td>' +
+                            '<td><b-button variant="danger" v-on:click="deleteRole(index, item)">X</b-button></td>' +
                             '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editRole(index)">EDIT</b-button></td>' +
                         '</tr>' +
                     '</table>' +
@@ -31,10 +34,10 @@ const roles = Vue.component('roles', {
                                     '<h4>Permissions for <span style="color: red;">{{role}}</span></h4>' +
                                     '<b-button id="addPermission" variant="primary"  @click="showAllPermission">Add Permission</b-button>' +
                                     '<br /><br />' +
-                                    '<table style="border: 0; width: 40%;">' +
-                                        '<tr v-for="(item, index) in listPermissions" :key=item.index style="color: green;">' +
+                                    '<table style="border: 0; width: 100%;">' +
+                                        '<tr v-for="(item, index) in listPermissionsForRole" :key=item.index style="color: green;">' +
                                             '<td>{{ index + 1 }}.</td>' +
-                                            '<td width=70%>{{item}}</td>' +
+                                            '<td wdth=wi70%>{{item.name}}</td>' +
                                             '<td><b-button variant="danger" v-on:click="deletePermission(index)">X</b-button></td>'+
                                         '</tr>' +
                                     '</table>' +
@@ -45,10 +48,10 @@ const roles = Vue.component('roles', {
                                     '<div v-if="showPermissions == true">' +
                                         '<h4>Select permissions</h4>' +
                                         '<br /><br />' +
-                                        '<table style="border: 0; width: 40%;">' +
+                                        '<table style="border: 0; width: 100%;">' +
                                             '<tr v-for="(item, index) in allPermissions" :key=item.index style="color: navy;">' +
                                                 '<td>{{ index + 1 }}.</td>' +
-                                                '<td width=70% style="cursor: pointer" @click="addPermission(index)" >{{item}}</td>' +
+                                                '<td width=70% style="cursor: pointer" @click="addPermission(index)" >{{item.name}}</td>' +
                                             '</tr>' +
                                         '</table>' +
                                         '<br /><br />' +
@@ -62,21 +65,15 @@ const roles = Vue.component('roles', {
                 '</div>',
     data(){
             return {
-                listPermissions: [],
+                //listRoles: [],
                 allPermissions: [],
-                rolesPermissions: [
-                    {
-                        role: String,
-                        permissionsForRole: []
-                    }
-                ],
-                roleEdit: {
-                    role: '',
-                    permissionsForRole: []
-                },
+                rolesPermissions: [],
+                listPermissionsForRole: [],
+                roleEdit: {},
                 index: Number,
                 role: '',
-                roleAdd: '',
+                roleNameAdd: '',
+                roleCodeAdd: '',
                 show: false,
                 showPermissions: false,
                 color: 'maroon',
@@ -84,22 +81,29 @@ const roles = Vue.component('roles', {
             }
         },
     created(){
-       /* this.listRoles = null; *//* Здесь запрос по списку ролей */
-        this.rolesPermissions = [{role:'admin', permissionsForRole:['perm1', 'perm2', 'perm4', 'perm5']},
-                                 {role:'user', permissionsForRole:['perm1', 'perm3', 'perm4']},
-                                 {role:'boss', permissionsForRole:['perm3', 'perm4']}];
-        this.allPermissions = ['aaaa', 'ddddd', 'zzzzz', 'ggggg'];
+        CDSAPI.Permissions.sendAllPermissions().then(permissions => {
+            
+                this.allPermissions = permissions;
+                console.log("PERMISSIONS :  " + this.allPermissions.length);
+            });
+        CDSAPI.Roles.sendAllRoles().then(roles => {
+                this.rolesPermissions = roles;
+                console.log("ROLElistLength :  " + this.rolesPermissions.length);
+            });
     },
     methods: {
         permissions(index){
             this.index = index;
-            this.listPermissions = this.rolesPermissions[index].permissionsForRole;
-            this.role = this.rolesPermissions[index].role;
+            this.listPermissionsForRole = this.rolesPermissions[index].permissions;
+            this.role = this.rolesPermissions[index].name;
             this.show = true;
             this.showPermissions = false;
         },
         
-        deleteRole(index){
+        deleteRole(index, item){
+            CDSAPI.Roles.deleteRole(item.id.toString()).then(response => {
+                console.log("Role deleted With id :  " + item.id);
+            });
             this.rolesPermissions.splice(index, 1);
             this.show = false;
         },
@@ -107,45 +111,69 @@ const roles = Vue.component('roles', {
         editRole(index){
             //alert("Редакт № " + index);
             this.show = false;
-            this.roleAdd = this.rolesPermissions[index].role;
+            this.roleNameAdd = this.rolesPermissions[index].name;
+            this.roleCodeAdd = this.rolesPermissions[index].code;
             this.index = index;
         },
         
         clearName() {
-            this.roleAdd = '';
+            this.roleNameAdd = '';
+            this.roleCodeAdd = '';
         },
         handleOk(evt) {
             // Prevent modal from closing
             evt.preventDefault();
-            if (!this.roleAdd) {
-              alert('Please enter role');
+            if (!this.roleNameAdd) {
+              alert('Please enter role name');
             } else {
-              this.handleSubmit();
+              if (!this.roleCodeAdd) {
+                alert('Please enter role code');
+              }else {
+                  this.handleSubmit();
+              }  
             }
         },
         handleSubmit() {
-            this.rolesPermissions.push({role:this.roleAdd, permissionsForRole: []});
-            this.clearName();
+            r = new Object();
+            r.name = this.roleNameAdd;
+            r.code = this.roleCodeAdd;
+            r.permissions = [];
+            CDSAPI.Roles.createOrUpdateRole(r).then(id => {
+                console.log("Role saved With id :  " + id);
+                r.id = id;
+                this.rolesPermissions.push(r);
+                this.clearName();
+            });
             this.$nextTick(() => {
               // Wrapped in $nextTick to ensure DOM is rendered before closing
               this.$refs.modalAdd.hide();
-             // document.getElementById('modalAdd').style.display= 'none';
+            
             });
         },
         
         handleOkEdit(evt) {
             // Prevent modal from closing
             evt.preventDefault();
-            if (this.roleAdd === '') {
-              alert('Please enter role');
+            if (!this.roleNameAdd) {
+              alert('Please enter role name');
             } else {
-              this.handleSubmitEdit();
+              if (!this.roleCodeAdd) {
+                alert('Please enter role code');
+              }else {
+                  this.handleSubmitEdit();
+              }  
             }
         },
         handleSubmitEdit() {
-            this.roleEdit.role = this.roleAdd;
-            this.role = this.roleAdd;
-            this.roleEdit.permissionsForRole = this.rolesPermissions[this.index].permissionsForRole;
+            this.roleEdit.name = this.roleNameAdd;
+            this.roleEdit.code = this.roleCodeAdd;
+            //this.role = this.roleAdd;
+            this.roleEdit.id = this.rolesPermissions[this.index].id
+            this.roleEdit.permissions = this.rolesPermissions[this.index].permissions;
+            //console.log("ROLE-EDIT: " + JSON.stringify(this.roleEdit));
+            CDSAPI.Roles.createOrUpdateRole(this.roleEdit).then(response => {
+                console.log("Role updated  :  " + response);
+            });
             Vue.set(this.rolesPermissions, this.index, this.roleEdit);
             this.clearName();
             this.$nextTick(() => {
@@ -158,16 +186,24 @@ const roles = Vue.component('roles', {
         },
         deletePermission(index){
             //this.listPermissions.splice(index, 1);
-            this.rolesPermissions[this.index].permissionsForRole.splice(index, 1);
-            this.listPermissions = this.rolesPermissions[this.index].permissionsForRole;
+            this.rolesPermissions[this.index].permissions.splice(index, 1);
+            this.listPermissionsForRole = this.rolesPermissions[this.index].permissions;
+            CDSAPI.Roles.createOrUpdateRole(this.rolesPermissions[this.index]).then(response => {
+                console.log("Permissions deleted, Role saved  :  " + response);
+            });
         },
         addPermission(index){
             //alert(this.allPermissions[index]);
-            if (this.rolesPermissions[this.index].permissionsForRole.indexOf(this.allPermissions[index]) == -1){
-                this.rolesPermissions[this.index].permissionsForRole.push(this.allPermissions[index]);
-                this.listPermissions = this.rolesPermissions[this.index].permissionsForRole;
+            let pNames = [];
+            let p =  this.rolesPermissions[this.index].permissions;   
+            p.forEach(function(item, index, p){
+                pNames.push(item.name);
+            });
+            if (pNames.indexOf(this.allPermissions[index].name) == -1){
+                this.rolesPermissions[this.index].permissions.push(this.allPermissions[index]);
+                this.listPermissionsForeRole = this.rolesPermissions[this.index].permissions;
             }else{
-                alert(this.allPermissions[index] + " - This permission has already been added.");
+                alert(this.allPermissions[index].name + " - This permission has already been added.");
             }
 
             
@@ -176,6 +212,9 @@ const roles = Vue.component('roles', {
             this.showPermissions = true;
         },
         endShow(){
+            CDSAPI.Roles.createOrUpdateRole(this.rolesPermissions[this.index]).then(response => {
+                console.log("Role saved  :  " + response);
+            });
             this.showPermissions = false;
         },
         closePermissions(){
