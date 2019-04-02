@@ -28,7 +28,7 @@ const permissions = Vue.component('permissions', {
                     '</tr>' +
                 '</table>' +
                 '<br /><br />' +
-                '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Вернуться</button>' +
+                '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
               '</div>',
     data(){
             return {
@@ -109,7 +109,7 @@ const permissions = Vue.component('permissions', {
             }
             
         },
-        handleSubmitEdit() {
+        handleSubmitEdit() {         
             O = new Object();
             O.id = this.permissionId;
             O.code = this.permissionCode;
@@ -130,18 +130,6 @@ const permissions = Vue.component('permissions', {
         },
         allPermissions(){
             CDSAPI.Permissions.sendAllPermissions().then(permissions => {
-            /*
-             var s = permissions.toString().split(',');
-             console.log("PERMISSION:  " + s);
-             
-             for(var i=0; i < s.length; i += 3){
-                 var permission = new Object();
-                 permission.id = s[i];
-                 permission.code = s[i+1];
-                 permission.name = s[i+2];
-                 this.listPermissions.push(permission);
-             }
-             */
                 this.listPermissions = permissions;
                 console.log("PERMISSIONS :  " + this.listPermissions.length);
             });

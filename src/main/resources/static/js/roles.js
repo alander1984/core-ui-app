@@ -10,7 +10,9 @@ const roles = Vue.component('roles', {
                     '</b-modal>' +
                     '<b-modal id="modalEdit" ref="modalEdit" title="Edit Role" @ok="handleOkEdit" @shown="iRole">' +
                       '<form @submit.stop.prevent="handleSubmitEdit">' +
+                        '<h5>Name:</h5>' +
                         '<b-form-input type="text"  v-model="roleNameAdd" />' +
+                        '<h5>Code:</h5>' +
                         '<b-form-input type="text"  v-model="roleCodeAdd" />' +
                       '</form>' +
                     '</b-modal>' +
@@ -62,7 +64,7 @@ const roles = Vue.component('roles', {
                             '</table>' +
                         '</div>' +
                         '<br /><br />' +
-                    '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Вернуться</button>' +
+                    '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
                 '</div>',
     data(){
             return {
@@ -104,7 +106,7 @@ const roles = Vue.component('roles', {
         
         deleteRole(index, item){
             CDSAPI.Roles.deleteRole(item.id.toString()).then(response => {
-                console.log("Role deleted With id :  " + item.id);
+                console.log("Role deleted With id :  " + item.id + "/" + response);
             });
             this.rolesPermissions.splice(index, 1);
             this.show = false;
@@ -169,8 +171,7 @@ const roles = Vue.component('roles', {
         handleSubmitEdit() {
             this.roleEdit.name = this.roleNameAdd;
             this.roleEdit.code = this.roleCodeAdd;
-            //this.role = this.roleAdd;
-            this.roleEdit.id = this.rolesPermissions[this.index].id
+            this.roleEdit.id = this.rolesPermissions[this.index].id;
             this.roleEdit.permissions = this.rolesPermissions[this.index].permissions;
             //console.log("ROLE-EDIT: " + JSON.stringify(this.roleEdit));
             CDSAPI.Roles.createOrUpdateRole(this.roleEdit).then(response => {
