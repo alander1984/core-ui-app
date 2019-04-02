@@ -19,8 +19,7 @@ const login = new Vue({
         },
         methods: {
                 doLogin: function () {
-                    var tokenPr = CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials');
-                    tokenPr.then(tokenResponce => {
+                    CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials').then(tokenResponce => {
                                 console.log(tokenResponce);
 
                         if(tokenResponce.getToken()){
