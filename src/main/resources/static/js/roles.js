@@ -16,52 +16,53 @@ const roles = Vue.component('roles', {
                     '</b-modal>' +
                     '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Role</b-button>' +
                     '<br /><br />' +
-                    '<table class="table table-bordered" style="width: 70%">' +
-                        '<tr v-for="(item, index) in rolesPermissions" :key=item.index >' +
-                            '<td>{{ index + 1 }}</td>' +
-                            //'<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
-                            '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.name}}</td>' +
-                            '<td><b-button variant="danger" v-on:click="deleteRole(index, item)">X</b-button></td>' +
-                            '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editRole(index)">EDIT</b-button></td>' +
-                        '</tr>' +
-                    '</table>' +
-                    '<br />' +
-                    '<br />' +
-                    '<div v-if="show == true">' +
-                        '<table class="table table-bordered">' +
-                            '<tr>' + 
-                                '<td width=55% valign="top">' +
-                                    '<h4>Permissions for <span style="color: red;">{{role}}</span></h4>' +
-                                    '<b-button id="addPermission" variant="primary"  @click="showAllPermission">Add Permission</b-button>' +
-                                    '<br /><br />' +
-                                    '<table style="border: 0; width: 100%;">' +
-                                        '<tr v-for="(item, index) in listPermissionsForRole" :key=item.index style="color: green;">' +
-                                            '<td>{{ index + 1 }}.</td>' +
-                                            '<td wdth=wi70%>{{item.name}}</td>' +
-                                            '<td><b-button variant="danger" v-on:click="deletePermission(index)">X</b-button></td>'+
-                                        '</tr>' +
-                                    '</table>' +
-                                    '<br /><br />' +
-                                        '<b-button id="closePermissions" variant="primary"  @click="closePermissions">Close</b-button>' +
-                                '</td>' +
-                                '<td width=45% valign="top">' +
-                                    '<div v-if="showPermissions == true">' +
-                                        '<h4>Select permissions</h4>' +
+                        '<table class="table table-bordered" style="width: 70%">' +
+                            '<tr v-for="(item, index) in rolesPermissions" :key=item.index >' +
+                                '<td>{{ index + 1 }}</td>' +
+                                //'<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
+                                '<td width=70% @click="permissions(index)" v-bind:style="{cursor: pointer, color:color}">{{item.name}}</td>' +
+                                '<td><b-button variant="danger" v-on:click="deleteRole(index, item)">X</b-button></td>' +
+                                '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editRole(index)">EDIT</b-button></td>' +
+                            '</tr>' +
+                        '</table>' +
+                        '<br />' +
+                        '<br />' +
+                        '<div v-if="show == true">' +
+                            '<table class="table table-bordered">' +
+                                '<tr>' + 
+                                    '<td width=55% valign="top">' +
+                                        '<h4>Permissions for <span style="color: red;">{{role}}</span></h4>' +
+                                        '<b-button id="addPermission" variant="primary"  @click="showAllPermission">Add Permission</b-button>' +
                                         '<br /><br />' +
                                         '<table style="border: 0; width: 100%;">' +
-                                            '<tr v-for="(item, index) in allPermissions" :key=item.index style="color: navy;">' +
+                                            '<tr v-for="(item, index) in listPermissionsForRole" :key=item.index style="color: green;">' +
                                                 '<td>{{ index + 1 }}.</td>' +
-                                                '<td width=70% style="cursor: pointer" @click="addPermission(index)" >{{item.name}}</td>' +
+                                                '<td wdth=wi70%>{{item.name}}</td>' +
+                                                '<td><b-button variant="danger" v-on:click="deletePermission(index)">X</b-button></td>'+
                                             '</tr>' +
                                         '</table>' +
                                         '<br /><br />' +
-                                        '<b-button id="endShowPermission" variant="primary"  @click="endShow">Ok</b-button>' +
-                                    '</div>' +
-                                '</td>' +
-                            '</tr>' +
-                        '</table>' +
-                    '</div>' +
-                    '<br /><br />' +
+                                            '<b-button id="closePermissions" variant="primary"  @click="closePermissions">Close</b-button>' +
+                                    '</td>' +
+                                    '<td width=45% valign="top">' +
+                                        '<div v-if="showPermissions == true">' +
+                                            '<h4>Select permissions</h4>' +
+                                            '<br /><br />' +
+                                            '<table style="border: 0; width: 100%;">' +
+                                                '<tr v-for="(item, index) in allPermissions" :key=item.index style="color: navy;">' +
+                                                    '<td>{{ index + 1 }}.</td>' +
+                                                    '<td width=70% style="cursor: pointer" @click="addPermission(index)" >{{item.name}}</td>' +
+                                                '</tr>' +
+                                            '</table>' +
+                                            '<br /><br />' +
+                                            '<b-button id="endShowPermission" variant="primary"  @click="endShow">Ok</b-button>' +
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>' +
+                            '</table>' +
+                        '</div>' +
+                        '<br /><br />' +
+                    '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Вернуться</button>' +
                 '</div>',
     data(){
             return {
@@ -81,6 +82,7 @@ const roles = Vue.component('roles', {
             }
         },
     created(){
+        document.getElementById('routesToPages').style.display = "none";
         CDSAPI.Permissions.sendAllPermissions().then(permissions => {
             
                 this.allPermissions = permissions;
@@ -219,6 +221,10 @@ const roles = Vue.component('roles', {
         },
         closePermissions(){
             this.show = false;
+        },
+        returnToAdminPages(){
+            document.getElementById('routesToPages').style.display = "block";
+            router.push({ path: 'home' });
         }
         
 
