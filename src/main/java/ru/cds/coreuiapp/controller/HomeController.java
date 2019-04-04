@@ -26,31 +26,31 @@ public class HomeController {
         return modelAndView;
     }
     
-    @RequestMapping(value="/admin/permission", method = RequestMethod.GET)
+    @RequestMapping(value="permission", method = RequestMethod.GET)
     public ModelAndView getPermissionView() {
         ModelAndView modelAndView = new ModelAndView("permission");
         return modelAndView;
     }
     
-    @RequestMapping(value="/admin/role", method = RequestMethod.GET)
+    @RequestMapping(value="role", method = RequestMethod.GET)
     public ModelAndView getRoleView() {
         ModelAndView modelAndView = new ModelAndView("role");
         return modelAndView;
     }
     
-    @RequestMapping(value="/admin/driver", method = RequestMethod.GET)
+    @RequestMapping(value="driver", method = RequestMethod.GET)
     public ModelAndView getDriverView() {
         ModelAndView modelAndView = new ModelAndView("driver");
         return modelAndView;
     }
 
-    @RequestMapping(value="/admin/vehicle", method = RequestMethod.GET)
+    @RequestMapping(value="/vehicle", method = RequestMethod.GET)
     public ModelAndView getVehicleView() {
         ModelAndView modelAndView = new ModelAndView("vehicle");
         return modelAndView;
     }
     
-    @RequestMapping(value="/admin/transport-company", method = RequestMethod.GET)
+    @RequestMapping(value="/transport-company", method = RequestMethod.GET)
     public ModelAndView getTransportCompanyView() {
         ModelAndView modelAndView = new ModelAndView("transport-company");
         return modelAndView;
