@@ -64,7 +64,6 @@ Vue.component('roles', {
                             '</table>' +
                         '</div>' +
                         '<br /><br />' +
-                    '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
                 '</div>',
     data(){
             return {
@@ -222,10 +221,6 @@ Vue.component('roles', {
         },
         closePermissions(){
             this.show = false;
-        },
-        returnToAdminPages(){
-            //document.getElementById('routesToPages').style.display = "block";
-            router.push({ path: 'home' });
         }
         
 

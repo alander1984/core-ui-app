@@ -6,9 +6,16 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-<div id="admin-app" class="admin-app">
-<h2>Страница для работы с ролями</h2>
-</div>
+    <div id="admin-app" class="admin-app">
+    <roles></roles>
+    <div>
+      <b-link th:href="@{/admin}">Go to Admin page</b-link>
+    </div>
+    <!--button type="button" class="btn btn-outline-info">Go to Admin page</button-->
+    </div>
+    <script th:src="@{/js/api/bundle.js}"></script>
+    <script th:src="@{/js/roles.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
 </section>
 </body>
 </html>

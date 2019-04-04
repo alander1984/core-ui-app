@@ -1,4 +1,4 @@
-const permissions = Vue.component('permissions', {
+Vue.component('permissions', {
     
     template: '<div>' +
                 '<h3>Permissions</h3>' +
@@ -28,7 +28,6 @@ const permissions = Vue.component('permissions', {
                     '</tr>' +
                 '</table>' +
                 '<br /><br />' +
-                '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
               '</div>',
     data(){
             return {
@@ -134,12 +133,7 @@ const permissions = Vue.component('permissions', {
                 console.log("PERMISSIONS :  " + this.listPermissions.length);
             });
             
-        },
-        returnToAdminPages(){
-            //document.getElementById('routesToPages').style.display = "block";
-            router.push({ path: 'home' });
         }
-
     },
     created(){
          //document.getElementById('routesToPages').style.display = "none";
