@@ -16,7 +16,7 @@ public class HomeController {
 
 
     @RequestMapping(value="/planning", method = RequestMethod.GET)
-    public ModelAndView getHomeView() {
+    public ModelAndView getPlanningView() {
         ModelAndView modelAndView = new ModelAndView("planning");
         return modelAndView;
     }
