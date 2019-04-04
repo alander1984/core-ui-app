@@ -1,4 +1,4 @@
-const permissions = Vue.component('permissions', {
+Vue.component('permissions', {
     
     template: '<div>' +
                 '<h3>Permissions</h3>' +
@@ -27,8 +27,6 @@ const permissions = Vue.component('permissions', {
                         '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
                     '</tr>' +
                 '</table>' +
-                '<br /><br />' +
-                '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
               '</div>',
     data(){
             return {
@@ -134,15 +132,10 @@ const permissions = Vue.component('permissions', {
                 console.log("PERMISSIONS :  " + this.listPermissions.length);
             });
             
-        },
-        returnToAdminPages(){
-            document.getElementById('routesToPages').style.display = "block";
-            router.push({ path: 'home' });
         }
-
     },
     created(){
-         document.getElementById('routesToPages').style.display = "none";
+         //document.getElementById('routesToPages').style.display = "none";
          this.allPermissions();
     }
 

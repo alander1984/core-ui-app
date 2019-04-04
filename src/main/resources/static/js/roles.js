@@ -1,4 +1,4 @@
-const roles = Vue.component('roles', {
+Vue.component('roles', {
 
     template:  '<div>' +
                     '<h3>Roles</h3>' +
@@ -64,7 +64,6 @@ const roles = Vue.component('roles', {
                             '</table>' +
                         '</div>' +
                         '<br /><br />' +
-                    '<button type="button" class="btn btn-outline-info" @click="returnToAdminPages">Go to Admin page</button>' +
                 '</div>',
     data(){
             return {
@@ -84,7 +83,7 @@ const roles = Vue.component('roles', {
             }
         },
     created(){
-        document.getElementById('routesToPages').style.display = "none";
+        //document.getElementById('routesToPages').style.display = "none";
         CDSAPI.Permissions.sendAllPermissions().then(permissions => {
             
                 this.allPermissions = permissions;
@@ -222,10 +221,6 @@ const roles = Vue.component('roles', {
         },
         closePermissions(){
             this.show = false;
-        },
-        returnToAdminPages(){
-            document.getElementById('routesToPages').style.display = "block";
-            router.push({ path: 'home' });
         }
         
 

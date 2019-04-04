@@ -6,7 +6,7 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-  <div id="admin-app">
+  <div id="admin-app" class="admin-app">
     <div id="admin-header" class="navbar navbar-dark bg-dark box-shadow">
       <h4 class="text-white">Администрирование</h4>
     </div>
@@ -15,22 +15,18 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
           <div>
-            <p id="routesToPages">
-              <router-link to="/roles" style="margin-left: 20%;">
-                <button type="button" class="btn btn-outline-info">Роли пользователей</button>
-              </router-link>
-
-              <router-link to="/permissions" style="margin-left: 28%;">
-                <button type="button" class="btn btn-outline-info">Права ролей</button>
-              </router-link>
-            </p>
-            <router-view style="margin-left: 20%;"></router-view>
+             <a th:href="@{/role}">Роли</a><br/>
+             <a th:href="@{/permission}">Права</a><br/>
+             <a th:href="@{/driver}">Водители</a><br/>
+             <a th:href="@{/vehicle}">Транспортные средства</a><br/>
+             <a th:href="@{/transport-company}">Транспортные компании</a><br/>
           </div>
           <div class="col-lg-1"></div>
         </div>
       </div>
     </div>
   </div>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
 </section>
 </body>
 </html>

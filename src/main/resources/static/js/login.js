@@ -1,14 +1,6 @@
 /**
  * Created by Ilya on 26.03.2019.
  */
-const routes = [
-    { path: '/login',name: 'login'},
-    { path: '/', name:'home'},
-];
-
-const router = new VueRouter({
-    routes
-});
 
 const login = new Vue({
         router,
