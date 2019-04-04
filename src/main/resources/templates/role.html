@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
 <head>
   <title>Роли</title>
 </head>
 <body>
-<div id="admin-app">
-    <roles></roles>
+<section layout:fragment="admin-content">
+<div id="admin-app" class="admin-app">
+<h2>Страница для работы с ролями</h2>
 </div>
-    <script th:src="@{/js/roles.js}"></script>
-    <script th:src="@{/js/main.js}"></script>
+</section>
 </body>
 </html>
