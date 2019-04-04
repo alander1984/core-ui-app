@@ -136,13 +136,13 @@ const permissions = Vue.component('permissions', {
             
         },
         returnToAdminPages(){
-            document.getElementById('routesToPages').style.display = "block";
+            //document.getElementById('routesToPages').style.display = "block";
             router.push({ path: 'home' });
         }
 
     },
     created(){
-         document.getElementById('routesToPages').style.display = "none";
+         //document.getElementById('routesToPages').style.display = "none";
          this.allPermissions();
     }
 
