@@ -23,9 +23,12 @@
   <input type="password" v-model="password">
   <p/>
   <button v-on:click="doLogin">Войти</button>
+  <p>{{authErrorMessage}}</p>
 </div>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/api/bundle.js}"></script>
 <script th:src="@{/js/login.js}"></script>
+
+
 </body>
 </html>
