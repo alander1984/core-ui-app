@@ -14,13 +14,6 @@ public class HomeController {
         return modelAndView;
     }
 
-    //TODO Remove after merge with permission, role api
-    @RequestMapping(value="/api", method = RequestMethod.GET)
-    public ModelAndView getApiView() {
-        ModelAndView modelAndView = new ModelAndView("api");
-        return modelAndView;
-    }
-
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public ModelAndView getLoginView() {
         ModelAndView modelAndView = new ModelAndView("login");
@@ -32,5 +25,34 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView("admin");
         return modelAndView;
     }
+    
+    @RequestMapping(value="/admin/permission", method = RequestMethod.GET)
+    public ModelAndView getPermissionView() {
+        ModelAndView modelAndView = new ModelAndView("permission");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="/admin/role", method = RequestMethod.GET)
+    public ModelAndView getRoleView() {
+        ModelAndView modelAndView = new ModelAndView("role");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="/admin/driver", method = RequestMethod.GET)
+    public ModelAndView getDriverView() {
+        ModelAndView modelAndView = new ModelAndView("driver");
+        return modelAndView;
+    }
 
+    @RequestMapping(value="/admin/vehicle", method = RequestMethod.GET)
+    public ModelAndView getVehicleView() {
+        ModelAndView modelAndView = new ModelAndView("vehicle");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="/admin/transport-company", method = RequestMethod.GET)
+    public ModelAndView getTransportCompanyView() {
+        ModelAndView modelAndView = new ModelAndView("transport-company");
+        return modelAndView;
+    }
 }
