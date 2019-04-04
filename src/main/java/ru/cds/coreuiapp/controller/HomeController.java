@@ -10,7 +10,14 @@ public class HomeController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public ModelAndView getHomeView() {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("planning");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value="/planning", method = RequestMethod.GET)
+    public ModelAndView getHomeView() {
+        ModelAndView modelAndView = new ModelAndView("planning");
         return modelAndView;
     }
 
