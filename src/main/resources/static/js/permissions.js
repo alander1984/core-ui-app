@@ -27,7 +27,6 @@ Vue.component('permissions', {
                         '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
                     '</tr>' +
                 '</table>' +
-                '<br /><br />' +
               '</div>',
     data(){
             return {

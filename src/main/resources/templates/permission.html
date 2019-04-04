@@ -6,12 +6,12 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-    <div id="admin-app" class="admin-app">
-    <permissions><permissions>
+    <div id="admin-app" class="admin-app" style="overflow: auto !important; height: 90%">
+    <permissions></permissions>
+    </br ></br >
     <div>
       <b-link th:href="@{/admin}">Go to Admin page</b-link>
     </div>
-    <!--button type="button" class="btn btn-outline-info">Go to Admin page</button-->
     </div>
     <script th:src="@{/js/api/bundle.js}"></script>
     <script th:src="@{/js/permissions.js}"></script>
