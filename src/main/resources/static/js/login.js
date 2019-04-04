@@ -15,7 +15,8 @@ const login = new Vue({
         el: '#loginPanel',
         data : {
             loginUser: '',
-            password: ''
+            password: '',
+            authErrorMessage: ''
         },
         methods: {
                 doLogin: function () {
@@ -26,7 +27,7 @@ const login = new Vue({
                             localStorage.setItem('user-token', tokenResponce.getToken());
                             window.location.replace(_ctx);
                         }else{
-                            alert("Permission denied...")
+                            this.authErrorMessage = tokenResponce.getError().getErrormessage();
                         }
                     });
                 }
