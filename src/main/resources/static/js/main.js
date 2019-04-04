@@ -1,4 +1,4 @@
-
+/*
 const routes = [
     { path: '/roles', component: roles},
     { path: '/permissions', component: permissions},
@@ -8,7 +8,7 @@ const routes = [
 const router = new VueRouter({
     routes
 });
-
+*/
 var app = new Vue({
     router,
     el: '#admin-app',
