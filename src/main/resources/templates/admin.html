@@ -15,19 +15,18 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
           <div>
-            <b-nav>
-             <b-nav-item th:href="@{/role}">Роли</b-nav-item>
-             <b-nav-item th:href="@{/permission}">Права</b-nav-item>
-             <b-nav-item th:href="@{/driver}">Водители</b-nav-item>
-             <b-nav-item th:href="@{/vehicle}">Транспортные средства</b-nav-item>
-             <b-nav-item th:href="@{/transport-company}">Транспортные компании</b-nav-item>
-             </b-nav>
+             <a th:href="@{/role}">Роли</a><br/>
+             <a th:href="@{/permission}">Права</a><br/>
+             <a th:href="@{/driver}">Водители</a><br/>
+             <a th:href="@{/vehicle}">Транспортные средства</a><br/>
+             <a th:href="@{/transport-company}">Транспортные компании</a><br/>
           </div>
           <div class="col-lg-1"></div>
         </div>
       </div>
     </div>
   </div>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
 </section>
 </body>
 </html>
