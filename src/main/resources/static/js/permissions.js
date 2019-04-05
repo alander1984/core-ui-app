@@ -1,4 +1,4 @@
-const permissions = Vue.component('permissions', {
+Vue.component('permissions', {
     
     template: '<div>' +
                 '<h3>Permissions</h3>' +
@@ -18,10 +18,10 @@ const permissions = Vue.component('permissions', {
                         '</b-modal>' +
                 '<b-button id="add" variant="primary" v-b-modal.modalAdd>Add Permission</b-button>' +
                 '<br /><br />' +
-                '<table style="border: 2px solid black; width: 60%;">' +
-                    '<tr v-for="(item, index) in listPermissions" :key=item.index style="border: 1px solid black;">' +
+                '<table class="table table-bordered">' +
+                    '<tr v-for="(item, index) in listPermissions" :key=item.index >' +
                         '<td>{{ index + 1 }}</td>' +
-                        '<td width=10%>{{item.id}}</td>' +
+                        '<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
                         '<td width=60%>{{item.name}}</td>' +
                         '<td><b-button variant="danger" v-on:click="deletePermission(index, item)">X</b-button></td>' +
                         '<td><b-button variant="success" v-b-modal.modalEdit v-on:click="editPermission(index)">EDIT</b-button></td>' +
@@ -107,7 +107,7 @@ const permissions = Vue.component('permissions', {
             }
             
         },
-        handleSubmitEdit() {
+        handleSubmitEdit() {         
             O = new Object();
             O.id = this.permissionId;
             O.code = this.permissionCode;
@@ -128,21 +128,14 @@ const permissions = Vue.component('permissions', {
         },
         allPermissions(){
             CDSAPI.Permissions.sendAllPermissions().then(permissions => {
-             var s = permissions.toString().split(',');
-             console.log("PERMISSION:  " + s);
-             
-             for(var i=0; i < s.length; i += 3){
-                 var permission = new Object();
-                 permission.id = s[i];
-                 permission.code = s[i+1];
-                 permission.name = s[i+2];
-                 this.listPermissions.push(permission);
-             }
+                this.listPermissions = permissions;
+                console.log("PERMISSIONS :  " + this.listPermissions.length);
             });
-        }    
-
+            
+        }
     },
     created(){
+         //document.getElementById('routesToPages').style.display = "none";
          this.allPermissions();
     }
 

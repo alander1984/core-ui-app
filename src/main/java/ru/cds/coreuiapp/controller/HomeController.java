@@ -10,13 +10,14 @@ public class HomeController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public ModelAndView getHomeView() {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("planning");
         return modelAndView;
     }
 
-    @RequestMapping(value="/api", method = RequestMethod.GET)
-    public ModelAndView getApiView() {
-        ModelAndView modelAndView = new ModelAndView("api");
+
+    @RequestMapping(value="/planning", method = RequestMethod.GET)
+    public ModelAndView getPlanningView() {
+        ModelAndView modelAndView = new ModelAndView("planning");
         return modelAndView;
     }
 
@@ -26,4 +27,39 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/admin", method = RequestMethod.GET)
+    public ModelAndView getAdminView() {
+        ModelAndView modelAndView = new ModelAndView("admin");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="permission", method = RequestMethod.GET)
+    public ModelAndView getPermissionView() {
+        ModelAndView modelAndView = new ModelAndView("permission");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="role", method = RequestMethod.GET)
+    public ModelAndView getRoleView() {
+        ModelAndView modelAndView = new ModelAndView("role");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="driver", method = RequestMethod.GET)
+    public ModelAndView getDriverView() {
+        ModelAndView modelAndView = new ModelAndView("driver");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/vehicle", method = RequestMethod.GET)
+    public ModelAndView getVehicleView() {
+        ModelAndView modelAndView = new ModelAndView("vehicle");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="/transport-company", method = RequestMethod.GET)
+    public ModelAndView getTransportCompanyView() {
+        ModelAndView modelAndView = new ModelAndView("transport-company");
+        return modelAndView;
+    }
 }

@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+  <title>Layout</title>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap-vue/1.3.0/bootstrap-vue.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
+  <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+  <link th:href="@{/css/sidebar.css}" rel="stylesheet" media="screen">
+  <script th:src="@{/js/libs/polyfill.min.js}"></script>
+  <script src="webjars/vue/2.5.16/vue.js"></script>
+  <script src="webjars/vuex/2.5.0/dist/vuex.js"></script>
+  <script src="webjars/bootstrap-vue/1.3.0/bootstrap-vue.min.js"></script>
+  <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
+  <script src="webjars/jquery/3.3.1-2/jquery.js"></script>
+
+
+</head>
+<body>
+    <div class="menu-div">
+    <nav class="main-menu">
+
+    <div class="scrollbar" id="style-1">
+            <ul class="cul" role="tablist" data-tabs="tabs">
+                <li class="cil menu-planning">
+                    <a th:href="@{/}">
+                        <i class="fa fa-route fa-lg"></i>
+                        <span class="nav-text">Планирование</span>
+                    </a>
+                </li>
+                <li class="cil menu-monitoring">
+                    <a th:href="@{/monitoring}">
+                        <i class="fa fa-eye fa-lg"></i>
+                        <span class="nav-text">Мониторинг</span>
+                    </a>
+                </li>
+                <li class="cil menu-admin">
+                    <a th:href="@{/admin}">
+                        <i class="fa fa-tools fa-lg"></i>
+                        <span class="nav-text">Администрирование</span>
+                    </a>
+                </li>
+            </ul>
+        </div>  
+    </nav>
+    </div>
+
+<div id="main" class="container-fluid row full-div h-100"  style="padding-left: 55px;">
+
+  <div layout:fragment="admin-content">Placeholder for admin content</div>
+</div>
+
+<script th:src="@{/js/slide.js}"></script>
+
+</body>
+</html>

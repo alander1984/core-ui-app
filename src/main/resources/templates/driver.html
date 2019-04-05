@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
+<head>
+  <title>Водители</title>
+</head>
+<body>
+<section layout:fragment="admin-content">
+  <div id="driver-app" class="admin-app">
+    <div>
+      <h3>Drivers</h3>
+      <b-modal id="modalAddDriver" ref="modal1" title="Добавить водителя" @ok="handleOk"
+               @shown="clearName">
+        <form @submit.stop.prevent="handleSubmit">
+          <b-form-input type="text" placeholder="Фамилия" v-model="driverSurname"/>
+          <br/>
+          <b-form-input type="text" placeholder="Имя" v-model="driverName"/>
+          <b-form-input type="text" placeholder="Отчество" v-model="driverPatronymic"/>
+          <b-form-input type="text" placeholder="Дата рождения" v-model="driverBirthday"/>
+          <b-form-input type="text" placeholder="Логин" v-model="driverLogin"/>
+          <b-form-input type="text" placeholder="Пароль" v-model="driverPassword"/>
+        </form>
+      </b-modal>
+      <b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit"
+               @shown="iDriver">
+        <form @submit.stop.prevent="handleSubmitEdit">
+          <h6>Фамилия:</h6>
+          <b-form-input type="text" v-model="driverSurname"/>
+          <br/>
+          <h6>Имя:</h6>
+          <b-form-input type="text" v-model="driverName"/>
+          <h6>Отчество:</h6>
+          <b-form-input type="text" v-model="driverPatronymic"/>
+          <h6>Дата рождения:</h6>
+          <b-form-input type="text" v-model="driverBirthday"/>
+          <h6>Логин:</h6>
+          <b-form-input type="text" v-model="driverLogin"/>
+          <h6>Пароль:</h6>
+          <b-form-input type="text" v-model="driverPassword"/>
+        </form>
+      </b-modal>
+      <b-button id="addD" variant="primary" v-b-modal.modalAddDriver>Добавить водителя</b-button>
+      <br/><br/>
+      <table class="table table-bordered">
+        <tr v-for="(item, index) in listDrivers" :key=item.index>
+          <td>{{ index + 1 }}</td>
+          <td width=10% style="color: red; text-align: center;">{{item.surname}}</td>
+          <td width=10% style="color: red; text-align: center;">{{item.name}}</td>
+          <td width=50%>{{item.patronymic}}</td>
+          <td width=50%>{{item.birthday}}</td>
+          <td width=50%>{{item.login}}</td>
+          <td>
+            <b-button variant="danger" v-on:click="deleteDriver(index, item)">X</b-button>
+          </td>
+          <td>
+            <b-button variant="success" v-b-modal.modalEditDriver v-on:click="editDriver(index)">
+              Редактировать
+            </b-button>
+          </td>
+        </tr>
+      </table>
+      <div>
+        <b-link th:href="@{/admin}">На страницу администрирования</b-link>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/api/bundle.js}" defer></script>
+  <script th:src="@{/js/drivers.js}" defer></script>
+</section>
+</body>
+</html>
