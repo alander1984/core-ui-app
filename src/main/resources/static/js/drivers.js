@@ -156,13 +156,15 @@ Vue.component('drivers', {
     },
     handleSubmitEdit() {
       temp = new Object();
-      temp.id = this.id;
+      temp.id = this.driverId;
       temp.surname = this.driverSurname;
       temp.name = this.driverName;
       temp.patronymic = this.driverPatronymic;
       temp.birthday = this.driverBirthday;
       temp.login = this.driverLogin;
       temp.password = this.driverPassword;
+      //TODO Fix refresh bug 
+     // Vue.set(this.listDrivers, this.index, O);
       CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Edited ID :  " + id);
       });
