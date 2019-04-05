@@ -3,7 +3,6 @@
  */
 
 const login = new Vue({
-        router,
         el: '#loginPanel',
         data : {
             loginUser: '',
@@ -12,6 +11,8 @@ const login = new Vue({
         },
         methods: {
                 doLogin: function () {
+                    this.loginUser ='i.kuznetsov'
+                    this.password = '7RCuhLST'
                     CDSAPI.Token.getToken(this.loginUser, this.password, 'service-ui', 'client_credentials').then(tokenResponce => {
                                 console.log(tokenResponce);
 
