@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/layout">
+      
+    <head>
+        <title>Магазины</title>
+        <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+    </head>
+    
+    
+    <body>
+        <!--<section id="map-wrapper" layout:fragment="map-wrapper">
+            <div id="YMapsID" style="width: 100%; height: 100%;"></div> 
+            <i id="slide-left" class="fas fa-caret-left fa-3x"></i>
+        </section> -->
+        
+        <section id="main-info-content" layout:fragment="main-info-content">
+            <div id="app">
+                <stores></stores>
+            </div> 
+        </section>
+        
+        
+
+    </body>
+    
+    
+</html>
