@@ -1,28 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-      layout:decorator="layouts/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
       
     <head>
-        <title>Магазины</title>
-        <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
+        type="text/javascript"></script>
+        <script th:src="@{/js/maps/ymaps.js}"></script>
     </head>
     
     
     <body>
-        <!--<section id="map-wrapper" layout:fragment="map-wrapper">
-            <div id="YMapsID" style="width: 100%; height: 100%;"></div> 
-            <i id="slide-left" class="fas fa-caret-left fa-3x"></i>
-        </section> -->
+        <section layout:fragment="admin-content">
         
-        <section id="main-info-content" layout:fragment="main-info-content">
-            <div id="app">
+        
+            
+            <div id="admin-app" class="admin-app">
+                <h2>Страница для работы с магазинами</h2>
+                <br/><br/>
+                <div>
+                    <b-link th:href="@{/admin}">На страницу администрирования</b-link>
+                </div>
+                <br/>
+                
+                
+                    <!--<div id="map-planning" class="col-md-8 full-div">
+                        <div id="map" class="h-50 full-div">
+                            <div id="YMapsID" style="width:100%;height:200px"></div>
+                            
+                            
+                         </div>
+                     </div>-->
                 <stores></stores>
-            </div> 
+               
+                
+                
+            </div>
+            
+            <script th:src="@{/js/api/bundle.js}"></script>
+            <script th:src="@{/js/stores.js}"></script>
+            <script th:src="@{/js/main.js}"></script>
         </section>
         
-        
-
     </body>
-    
     
 </html>
