@@ -1,6 +1,71 @@
-var driverApp = new Vue({
-  el: '#driver-app',
-  data(){
+Vue.component('drivers', {
+  template:
+      '<div>'+
+      '<h3>Водители</h3>'+
+          '<b-modal id="modalAddDriver" ref="modal1" title="Добавить водителя" @ok="handleOk"'+
+      '@shown="clearName">'+
+      '<form @submit.stop.prevent="handleSubmit">'+
+      '<b-form-input type="text" placeholder="Фамилия" v-model="driverSurname"/><br/>'+
+      '<b-form-input type="text" placeholder="Имя" v-model="driverName"/><br/>'+
+      '<b-form-input type="text" placeholder="Отчество" v-model="driverPatronymic"/><br/>'+
+      '<b-form-input type="text" placeholder="Дата рождения" v-model="driverBirthday"/><br/>'+
+      '<b-form-input type="text" placeholder="Логин" v-model="driverLogin"/><br/>'+
+      '<b-form-input type="text" placeholder="Пароль" v-model="driverPassword"/>'+
+          '</form>'+
+      '</b-modal>'+
+          '<b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit"'+
+      '@shown="iDriver">'+
+          '<form @submit.stop.prevent="handleSubmitEdit">'+
+      '<h6>Фамилия:</h6>'+
+          '<b-form-input type="text" v-model="driverSurname"/>'+
+          '<h6>Имя:</h6>'+
+      '<b-form-input type="text" v-model="driverName"/>'+
+          '<h6>Отчество:</h6>'+
+      '<b-form-input type="text" v-model="driverPatronymic"/>'+
+          '<h6>Дата рождения:</h6>'+
+      '<b-form-input type="text" v-model="driverBirthday"/>'+
+          '<h6>Логин:</h6>'+
+      '<b-form-input type="text" v-model="driverLogin"/>'+
+          '<h6>Пароль:</h6>'+
+      '<b-form-input type="text" v-model="driverPassword"/>'+
+          '</form>'+
+      '</b-modal>'+
+          '<b-button id="addD" variant="primary" v-b-modal.modalAddDriver>Добавить водителя</b-button>'+
+      '<br/><br/>'+
+          '<table class="table table-bordered">'+
+          '<thead>'+
+            '<tr>'+
+                '<th>#</th>'+
+                '<th>Фамилия</th>'+
+                '<th>Имя</th>'+
+                '<th>Отчество</th>'+
+                '<th>Дата рождения</th>'+
+                '<th>Логин</th>'+
+                '<th>Пароль</th>'+
+                '<th></th>'+
+                '<th></th>'+
+            '</tr>'+
+        '</thead>'+
+      '<tr v-for="(item, index) in listDrivers" :key=item.index>'+
+          '<td>{{ index + 1 }}</td>'+
+      '<td width=10%>{{item.surname}}</td>'+
+          '<td width=10%>{{item.name}}</td>'+
+      '<td width=50%>{{item.patronymic}}</td>'+
+          '<td width=50%>{{item.birthday}}</td>'+
+      '<td width=50%>{{item.login}}</td>'+
+      '<td width=50%>{{item.password}}</td>'+
+          '<td>'+
+      '<b-button variant="danger" v-on:click="deleteDriver(index, item)">X</b-button>'+
+          '</td>'+
+      '<td>'+
+          '<b-button variant="success" v-b-modal.modalEditDriver v-on:click="editDriver(index)">'+
+      'Редактировать'+
+          '</b-button>'+
+      '</td>'+
+          '</tr>'+
+      '</table>'+
+  '</div>',
+  data() {
     return {
       listDrivers: [],
       driverId: Number,
@@ -14,16 +79,14 @@ var driverApp = new Vue({
     }
   },
   methods: {
-    deleteDriver(index, item){
-      alert("Удалить  № " + index);
-      CDSAPI.Driver.deleteDriver(item.id.toString()).then(response => {
+    deleteDriver(index, item) {
+      CDSAPI.Drivers.deleteDriver(item.id.toString()).then(response => {
         console.log("DELETE " + response);
       });
       this.listDrivers.splice(index, 1);
 
     },
-    editDriver(index){
-      alert("Редактировать  № " + index);
+    editDriver(index) {
       this.driverId = this.listDrivers[index].id;
       this.driverName = this.listDrivers[index].name;
       this.driverSurname = this.listDrivers[index].surname;
@@ -31,7 +94,6 @@ var driverApp = new Vue({
       this.driverBirthday = this.listDrivers[index].birthday;
       this.driverLogin = this.listDrivers[index].login;
       this.driverPassword = this.listDrivers[index].password;
-
 
       this.index = index;
     },
@@ -48,23 +110,27 @@ var driverApp = new Vue({
       // Prevent modal from closing
       evt.preventDefault();
       if (!this.driverName) {
-        alert('Please enter permission name');
+        alert('Введите имя водителя');
       } else {
         if (!this.driverSurname) {
-          alert('Please enter permission code');
-        }else {
+          alert('Введите фамилию водителя');
+        } else {
           this.handleSubmit();
         }
       }
     },
     handleSubmit() {
-      O = new Object();
-      O.code = this.driverSurname;
-      O.name = this.driverName;
-      CDSAPI.Driver.createOrUpdateDriver(O).then(id =>{
+      temp = new Object();
+      temp.surname = this.driverSurname;
+      temp.name = this.driverName;
+      temp.patronymic = this.driverPatronymic;
+      temp.birthday = this.driverBirthday;
+      temp.login = this.driverLogin;
+      temp.password = this.driverPassword;
+      CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Created ID :  " + id);
-        O.id = id;
-        this.listDrivers.push(O);
+        temp.id = id;
+        this.listDrivers.push(temp);
         this.clearName();
       });
       this.$nextTick(() => {
@@ -78,23 +144,28 @@ var driverApp = new Vue({
       // Prevent modal from closing
       evt.preventDefault();
       if (!this.driverName) {
-        alert('Please enter permission name');
+        alert('Введите имя водителя');
       } else {
         if (!this.driverSurname) {
-          alert('Please enter permission code');
-        }else {
+          alert('Введите фамилию водителя');
+        } else {
           this.handleSubmitEdit();
         }
       }
 
     },
     handleSubmitEdit() {
-      O = new Object();
-      O.id = this.driverId;
-      O.code = this.driverSurname;
-      O.name = this.driverName;
-      Vue.set(this.listDrivers, this.index, O);
-      CDSAPI.Permissions.createOrUpdateDriver(O).then(id =>{
+      temp = new Object();
+      temp.id = this.driverId;
+      temp.surname = this.driverSurname;
+      temp.name = this.driverName;
+      temp.patronymic = this.driverPatronymic;
+      temp.birthday = this.driverBirthday;
+      temp.login = this.driverLogin;
+      temp.password = this.driverPassword;
+      //TODO Fix refresh bug 
+     // Vue.set(this.listDrivers, this.index, O);
+      CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Edited ID :  " + id);
       });
 
@@ -104,10 +175,10 @@ var driverApp = new Vue({
         this.$refs.modal.hide();
       });
     },
-    iDriver(){
+    iDriver() {
 
     },
-    allDrivers(){
+    allDrivers() {
       CDSAPI.Drivers.sendAllDrivers().then(drivers => {
         this.listDrivers = drivers;
         console.log("Drivers is - " + this.listDrivers);
@@ -115,7 +186,7 @@ var driverApp = new Vue({
       });
     }
   },
-  created(){
+  created() {
     this.allDrivers();
   }
 });

@@ -6,9 +6,15 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-<div id="admin-app" class="admin-app">
-<h2>Страница для работы с транспортными компаниями</h2>
-</div>
+  <div id="admin-app" class="admin-app">
+    <tcs></tcs>
+  </div>
+  <div>
+    <a th:href="@{/admin}">На страницу администрирования</a>
+  </div>
+  <script th:src="@{/js/api/bundle.js}" defer></script>
+  <script th:src="@{/js/tcs.js}" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
 </section>
 </body>
 </html>
