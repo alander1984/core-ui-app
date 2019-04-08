@@ -1,8 +1,9 @@
 //Объявлена глобальной для включения автоматического слежения за размером
 // контейнера при слайде
-var myMap;
+var myMap, clickedCoords, clickedAddress;
 
 ymaps.ready(function () {
+  let clickedPlacemark;
   myMap = new ymaps.Map("YMapsID", {
     center: [59.93, 30.31],
     zoom: 10
@@ -59,5 +60,49 @@ ymaps.ready(function () {
       myMap.geoObjects.add(placemark);
       // Откроем балун на метке.
       placemark.balloon.open();
+      
+    myMap.events.add('click', function(e) {
+        clickedCoords = e.get('coords');
+        if(clickedPlacemark) {
+            clickedPlacemark.geometry.setCoordinates(clickedCoords);
+        } else {
+            clickedPlacemark = createPlacemark(clickedCoords);
+            myMap.geoObjects.add(clickedPlacemark);
+            clickedPlacemark.events.add('dragend', function() {
+                getAddress(clickedPlacemark.geometry.getCoordinates());
+            });
+            
+        }
+       getAddress(clickedCoords);
+        
+    });    
+    
+    function createPlacemark(coords) {
+        return new ymaps.Placemark(coords, {
+            iconCaption: 'поиск...'
+        }, {
+            preset: 'islands#violetDotIconWithCaption',
+            draggable: true
+        });
+    }
+    
+    function getAddress(coords) {
+        clickedPlacemark.properties.set('iconCaption', 'поиск...');
+        ymaps.geocode(coords).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+
+            clickedPlacemark.properties
+                .set({
+                    iconCaption: [
+                        firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                        firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                    ].filter(Boolean).join(', '),
+                    balloonContent: firstGeoObject.getAddressLine()
+                });
+                clickedAddress = firstGeoObject.getAddressLine();
+        });
+        
+        
+    }
 
 });
