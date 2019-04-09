@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/base_layout">
+<head>
+  <title>Рабочее место логиста</title>
+  <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
+</head>
+
+<body>
+    <section layout:fragment="admin-content">
+        <div id="main" class="container-fluid row full-div h-100">
+    
+
+    <div id="routes" class="col-md-4 full-div">
+        <div id="route-settings" class="row full-div">
+            <div class="form-inline">
+            <label>Дата: </label>
+            <input id="date" data-provide="datepicker" class="datepicker"/>
+            </div>    
+        </div>
+        <div id="route-statistics" class="row full-div">
+            Place for statistics
+        </div>
+        <div id="route-list" class="row h-100 full-div">
+            Place for list
+        </div>
+    </div>
+    <div id="map-planning" class="col-md-8 full-div">
+        <div id="map" class="h-100 full-div">
+            Сюда карта
+        </div>
+    </div>
+</div>
+        <script type="text/javascript" th:src="@{/js/monitoring.js}"></script>
+    </section>
+</body>
+</html>
