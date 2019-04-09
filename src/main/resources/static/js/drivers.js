@@ -8,9 +8,14 @@ Vue.component('drivers', {
       '<b-form-input type="text" placeholder="Фамилия" v-model="driverSurname"/><br/>'+
       '<b-form-input type="text" placeholder="Имя" v-model="driverName"/><br/>'+
       '<b-form-input type="text" placeholder="Отчество" v-model="driverPatronymic"/><br/>'+
-      '<b-form-input type="text" placeholder="Дата рождения" v-model="driverBirthday"/><br/>'+
+      '<b-form-input type="text" placeholder="Дата рождения ГГГГ-ММ-ДД" v-model="driverBirthday"/><br/>'+
       '<b-form-input type="text" placeholder="Логин" v-model="driverLogin"/><br/>'+
       '<b-form-input type="text" placeholder="Пароль" v-model="driverPassword"/>'+
+      '<label for="createVeh">Транспортные средства</label>'+
+      '<select multiple id="createVeh" class="form-control" v-model="selectedVehicles">'+
+      '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
+      'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
+      '</option></select>'+
           '</form>'+
       '</b-modal>'+
           '<b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit"'+
@@ -28,6 +33,11 @@ Vue.component('drivers', {
       '<b-form-input type="text" v-model="driverLogin"/>'+
           '<h6>Пароль:</h6>'+
       '<b-form-input type="text" v-model="driverPassword"/>'+
+      '<label for="editVeh">Транспортные средства</label>'+
+      '<select multiple id="editVeh" class="form-control" v-model="selectedEditVehicles">'+
+      '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
+      'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
+      '</option></select>'+
           '</form>'+
       '</b-modal>'+
           '<b-button id="addD" variant="primary" v-b-modal.modalAddDriver>Добавить водителя</b-button>'+
@@ -68,6 +78,9 @@ Vue.component('drivers', {
   data() {
     return {
       listDrivers: [],
+      selectedVehicles: [],
+      selectedEditVehicles: [],
+      listAllVehicles: [],
       driverId: Number,
       driverSurname: '',
       driverName: '',
@@ -127,6 +140,7 @@ Vue.component('drivers', {
       temp.birthday = this.driverBirthday;
       temp.login = this.driverLogin;
       temp.password = this.driverPassword;
+      temp.vehicles = this.selectedVehicles;
       CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Created ID :  " + id);
         temp.id = id;
@@ -163,6 +177,7 @@ Vue.component('drivers', {
       temp.birthday = this.driverBirthday;
       temp.login = this.driverLogin;
       temp.password = this.driverPassword;
+      temp.vehicles = this.selectedEditVehicles;
       //TODO Fix refresh bug 
      // Vue.set(this.listDrivers, this.index, O);
       CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
@@ -182,11 +197,16 @@ Vue.component('drivers', {
       CDSAPI.Drivers.sendAllDrivers().then(drivers => {
         this.listDrivers = drivers;
         console.log("Drivers is - " + this.listDrivers);
-        console.log("DRIVERS length is -  " + this.listDrivers.length);
+      });
+    },
+    allVehicles() {
+      CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
+        this.listAllVehicles = vehicles;
       });
     }
   },
   created() {
     this.allDrivers();
+    this.allVehicles();
   }
 });
