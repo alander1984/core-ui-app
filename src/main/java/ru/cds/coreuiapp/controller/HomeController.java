@@ -21,6 +21,13 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/monitoring", method = RequestMethod.GET)
+    public ModelAndView getMonitoringView() {
+        ModelAndView modelAndView = new ModelAndView("monitoring");
+        return modelAndView;
+    }
+
+
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public ModelAndView getLoginView() {
         ModelAndView modelAndView = new ModelAndView("login");
