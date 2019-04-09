@@ -1,9 +1,10 @@
+/*globals ymaps */
 var Stores = Vue.component ('stores', {
     
     
     template: '<div>'
 	+ '<h3>Магазины</h3>'
-	+ '<b-modal id="modalAddStore" ref="modal_add_store" title="Добавить магазин"  @ok="handleOk" @shown="clearName">'
+	+ '<b-modal id="modalAddStore" ref="modal_add_store" title="Добавить магазин"  @ok="handleOk" @hide="clearName">'
 	+	'<form @submit.stop.prevent="handleSubmit">'
 	+		'<b-form-input type="number"  v-model="storeId" style="display: none;"/>'
 	+		'<b-form-select :options="storeTypeOptions" v-model="storeType"></b-form-select><br/><br/>'
@@ -54,7 +55,8 @@ var Stores = Vue.component ('stores', {
                { value: null, text: 'Тип магазина'},
                { value: 'OFFLINE', text: 'Офлайн' },
                { value: 'ONLINE', text: 'Онлайн' }
-            ]
+            ],
+            storePlacemark : Object
         };
     },
     methods: {
@@ -76,7 +78,25 @@ var Stores = Vue.component ('stores', {
             this.storeLon = this.storesList[index].lon;
             this.storeLat = this.storesList[index].lat;
             this.storeComment = this.storesList[index].comment;
-            this.index = index;        
+            this.index = index; 
+            
+            this.storePlacemark = new ymaps.Placemark([this.storeLon, this.storeLat], {
+                        iconCaption: this.storeName,
+                        baloonContentHeader : '<a href="#">' + this.storeName + '</a>',
+                        baloonContentBody : 'Название магазина: '  + this.storeName +
+                            '<br/>Тип магазина: ' + this.storeType + 
+                            '<br/>Адрес: ' + this.storeAddress +
+                            '<br/>Код магазина: ' + this.storeCode + 
+                            '<br/>Примечание: ' + this.storeComment
+                    }, {
+                        preset: 'islands#nightIcon',
+                        draggable: true
+                    });
+                myMap.geoObjects.add(this.storePlacemark);
+            
+            
+            myMap.setCenter([this.storeLon, this.storeLat], 15);
+            console.log('YMMMM UPDATE: ' + YM);
         },
         
         handleOk(evt) {
@@ -86,17 +106,16 @@ var Stores = Vue.component ('stores', {
         },
         
         handleSubmit() {
-            console.log('###B-MODAL:' + this.storeId);
             if(this.storeId == 0) {
                 this.addStore();
             } else {
                 this.updateStore();
-            }            
+            } 
+            this.clearName();
         },
         
         clearName() {
-            console.log("CLEAR NAME ID: " + this.storeId);
-            if(this.storeId == 0) {
+            console.log('CLEAR NAME WITH ID: ' + this.storeId);
                 this.storeId = 0;
                 this.storeType = '';
                 this.storeName = '';
@@ -105,7 +124,10 @@ var Stores = Vue.component ('stores', {
                 this.storeLon = 0;
                 this.storeLat = 0;
                 this.storeComment = '';
-            }   
+                myMap.geoObjects.remove(this.storePlacemark);
+                myMap.geoObjects.remove(clickedPlacemark);
+                clickedPlacemark = null;
+               
         },
         
         addStore() {
@@ -128,6 +150,7 @@ var Stores = Vue.component ('stores', {
             this.$nextTick(() => {          
               this.$refs.modal_add_store.hide();
             });
+            this.clearName();
         },
         
         updateStore() {
@@ -156,7 +179,15 @@ var Stores = Vue.component ('stores', {
             console.log("GET ALL STORES!");
             CDSAPI.Stores.getAllStore().then(stores => {
                 this.storesList = stores;
-            });               
+//                this.storesList.forEach(function(item, i, sl) {
+//                    console.log('COORDS :' + item.lon + ',' + item.lat);
+//                    let storePlacemark = new window.ymaps.Placemark([item.lon, item.lat], {
+//                         iconCaption : item.name
+//                      });
+//                      myMap.geoObjects.add(storePlacemark);
+//                 });
+            });
+            
         },
         
         setCoords() {
@@ -166,6 +197,8 @@ var Stores = Vue.component ('stores', {
     },
     
     created() {
+        console.log('YYYYYM: ' + YM);
+        console.log('ymaps: ' + ymaps);
         this.getAllStores();
     }
 });
