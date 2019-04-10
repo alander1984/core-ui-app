@@ -5,7 +5,22 @@ body {
   padding: 0;
   margin: 0;
   overflow: hidden;
+  font-size: smaller;
 }
+
+.center-div {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.left-5 {
+    padding-left: 10px;
+}
+
+.left-10 {
+    padding-left: 10px;
+}
+
 
 .full-div {
     padding: 0;
