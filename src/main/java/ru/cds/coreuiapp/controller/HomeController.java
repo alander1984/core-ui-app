@@ -68,4 +68,10 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView("stores");
         return modelAndView;
     }
+    
+    @RequestMapping(value="/deliveries", method = RequestMethod.GET)
+    public ModelAndView getDeliveriesView() {
+        ModelAndView modelAndView = new ModelAndView("deliveries");
+        return modelAndView;
+    }
 }
