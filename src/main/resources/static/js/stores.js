@@ -4,7 +4,7 @@ var Stores = Vue.component ('stores', {
     
     template: '<div>'
 	+ '<h3>Магазины</h3>'
-	+ '<b-modal id="modalAddStore" ref="modal_add_store" title="Добавить магазин"  @ok="handleOk" @hide="clearName">'
+	+ '<b-modal id="modalAddStore" size="xl" ref="modal_add_store" title="Добавить магазин"  @ok="handleOk" @hide="clearName">'
 	+	'<form @submit.stop.prevent="handleSubmit">'
 	+		'<b-form-input type="number"  v-model="storeId" style="display: none;"/>'
 	+		'<b-form-select :options="storeTypeOptions" v-model="storeType"></b-form-select><br/><br/>'
@@ -17,6 +17,11 @@ var Stores = Vue.component ('stores', {
 	+       '<div id="addModalMapContainer" @click="setCoords"><div id="YMapsID" style="width:100%;height:300px;"></div></div>'
 	+	'</form>'
 	+ '</b-modal>'
+	+   '<b-modal id="modalConfirmationDeleteStore" ref="modal_confirmation_delete_store" centered title="Подтверждение удаления магазина" @ok="handleDeleteStore" @hide="clearName">'
+	+      '<form @submit.stop.prevent="handleSubmitDeleteStore">'
+    +           '<p>Подтвердите удаление магазина</p>'
+    +       '</form>'
+    +   '</b-modal>'
 
 	+ '<b-button id="addStoreButton" variant="primary" v-b-modal.modalAddStore>Добавить</b-button>'
 	+ '<br/><br/>'
@@ -32,7 +37,7 @@ var Stores = Vue.component ('stores', {
 	+		'<td>{{item.lon}}</td>'
 	+		'<td>{{item.lat}}</td>'
 	+		'<td>{{item.comment}}</td>'
-	+		'<td><b-button variant="danger" v-on:click="deleteStore(index, item)">X</b-button></td>'
+	+		'<td><b-button variant="danger" v-b-modal.modalConfirmationDeleteStore v-on:click="setDeletedStore(index, item)">X</b-button></td>'
 	+		'<td><b-button variant="success" v-b-modal.modalAddStore v-on:click="editStore(index)">Изменить</b-button></td>'
 	+	'</tr></tbody>'
 	+ '</table>'
@@ -43,7 +48,7 @@ var Stores = Vue.component ('stores', {
         return {
             storesList: [],
             storeId: 0,
-            storeType: '',
+            storeType: 'OFFLINE',
             storeName: '',
             storeAddress: '',
             storeCode: '',
@@ -51,8 +56,8 @@ var Stores = Vue.component ('stores', {
             storeLat: 0,
             storeComment: '',
             index: Number,
+            selectedStoreTypeOption: ['OFFLINE'],
             storeTypeOptions: [
-               { value: null, text: 'Тип магазина'},
                { value: 'OFFLINE', text: 'Офлайн' },
                { value: 'ONLINE', text: 'Онлайн' }
             ],
@@ -60,13 +65,15 @@ var Stores = Vue.component ('stores', {
         };
     },
     methods: {
-        deleteStore(index, item) {
+        deleteStore(index, id) {
             console.log("DELETE STORE")
-            CDSAPI.Stores.deleteStoreById(item.id.toString()).then(response => {
+            CDSAPI.Stores.deleteStoreById(id.toString()).then(response => {
                 console.log("DELETE RESPONSE " + response);
             });
             this.storesList.splice(index, 1);
-            
+            this.$nextTick(() => {          
+              this.$refs.modal_confirmation_delete_store.hide();
+            });
         },
         
         editStore(index) {
@@ -82,21 +89,20 @@ var Stores = Vue.component ('stores', {
             
             this.storePlacemark = new ymaps.Placemark([this.storeLon, this.storeLat], {
                         iconCaption: this.storeName,
-                        baloonContentHeader : '<a href="#">' + this.storeName + '</a>',
-                        baloonContentBody : 'Название магазина: '  + this.storeName +
+                        balloonContentHeader : '<a href="#">' + this.storeName + '</a>',
+                        balloonContentBody : 'Название магазина: '  + this.storeName +
                             '<br/>Тип магазина: ' + this.storeType + 
                             '<br/>Адрес: ' + this.storeAddress +
                             '<br/>Код магазина: ' + this.storeCode + 
                             '<br/>Примечание: ' + this.storeComment
                     }, {
                         preset: 'islands#nightIcon',
-                        draggable: true
+                        draggable: false
                     });
-                myMap.geoObjects.add(this.storePlacemark);
+                myMapStores.geoObjects.add(this.storePlacemark);
             
             
-            myMap.setCenter([this.storeLon, this.storeLat], 15);
-            console.log('YMMMM UPDATE: ' + YM);
+            myMapStores.setCenter([this.storeLon, this.storeLat], 15);
         },
         
         handleOk(evt) {
@@ -117,15 +123,15 @@ var Stores = Vue.component ('stores', {
         clearName() {
             console.log('CLEAR NAME WITH ID: ' + this.storeId);
                 this.storeId = 0;
-                this.storeType = '';
+                this.storeType = 'OFFLINE';
                 this.storeName = '';
                 this.storeAddress = '';
                 this.storeCode = '';
                 this.storeLon = 0;
                 this.storeLat = 0;
                 this.storeComment = '';
-                myMap.geoObjects.remove(this.storePlacemark);
-                myMap.geoObjects.remove(clickedPlacemark);
+                myMapStores.geoObjects.remove(this.storePlacemark);
+                myMapStores.geoObjects.remove(clickedPlacemark);
                 clickedPlacemark = null;
                
         },
@@ -140,7 +146,6 @@ var Stores = Vue.component ('stores', {
             newStore.lon = this.storeLon;
             newStore.lat = this.storeLat;
             newStore.comment = this.storeComment;
-            console.log('add store ' + newStore.lon);
             CDSAPI.Stores.createOrUpdateStore(newStore).then(id => {
                 console.log("STORE CREATED WITH ID: " + id);
                 newStore.id = id.array[0];
@@ -184,21 +189,40 @@ var Stores = Vue.component ('stores', {
 //                    let storePlacemark = new window.ymaps.Placemark([item.lon, item.lat], {
 //                         iconCaption : item.name
 //                      });
-//                      myMap.geoObjects.add(storePlacemark);
+//                      myMapStores.geoObjects.add(storePlacemark);
 //                 });
             });
             
         },
         
         setCoords() {
-            this.storeLon = clickedCoords[0];
-            this.storeLat = clickedCoords[1];
+            if(clickedCoords) {
+                this.storeLon = clickedCoords[0].toFixed(6);
+                this.storeLat = clickedCoords[1].toFixed(6);
+            }
+
+        },
+        
+        handleDeleteStore(evt) {
+            evt.preventDefault();
+            this.handleSubmitDeleteStore();
+        },
+        
+        handleSubmitDeleteStore() {
+            console.log('INDEX: ' + this.index);
+            console.log('ID: ' + this.storeId);
+            this.deleteStore(this.index, this.storeId);
+        },
+        
+        setDeletedStore(index ,item) {
+            console.log('SET DELETED STORE INDEX: ' + index);
+            console.log('SET DELETED STORE ID: ' + item.id);
+            this.index = index;
+            this.storeId = item.id;
         }
     },
     
     created() {
-        console.log('YYYYYM: ' + YM);
-        console.log('ymaps: ' + ymaps);
         this.getAllStores();
     }
 });
