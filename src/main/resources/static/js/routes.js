@@ -21,12 +21,29 @@ Vue.component('routes', {
       + '<select id="createDriver" class="form-control" v-model="selectedDrivers">\'+\n'
       + '<option v-for="driver in listAllDrivers" v-bind:value="driver">'
       + '{{ driver.surname }}  {{driver.name.charAt(0)}}.{{driver.patronymic.charAt(0)}}.'
-      + '</option></select>'
+      + '</option></select><br/>'
+      + '<div class="form-row">'
+      + '<div class="form-group col-md-6">'
+      + '<b-button id="clearAllModal"  variant="danger">Очистить все</b-button>'
+      + '</div>'
+      + '<div class="form-group col-md-3">'
+      + '<b-button id="addRouteModal" variant="success">Добавить</b-button>'
+      + '</div>'
+      + '<div class="form-group col-md-3">'
+      + '<b-button id="deleteRouteModal"  variant="danger">Удалить</b-button>'
+      + '</div>'
+      + '</div>'
       + '</form>'
       + '</b-modal>'
       + '<div id="main-info-content-header" className="row">'
+      + '<div class="form-row">'
+      + '<div class="form-group col-md-4">'
       + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут</b-button>'
+      + '</div>'
+      + '<div class="form-group col-md-4">'
       + '<b-button id="delR" variant="danger">Удалить машрут</b-button>'
+      + '</div>'
+      + '</div>'
       + '</div>'
       + '<div id = "main-info-content-wrapper" className = "row">'
       + '<div className = "col-md-12" >'
@@ -124,7 +141,8 @@ Vue.component('routes', {
           id: 2,
           name: 'Магазин 2'
         }
-      ]
+      ],
+      listAllRoutes: []
     }
   },
   methods: {
@@ -138,5 +156,34 @@ Vue.component('routes', {
     },
     clearName() {
     },
+    allRoutes() {
+      CDSAPI.RouteService.sendAllRoutes().then(routes => {
+        // this.listAllRoutes = routes;
+        console.log("listAllRoutes length is -  " + this.listAllRoutes.length);
+      });
+    },
+    allDrivers() {
+      CDSAPI.Drivers.sendAllDrivers().then(drivers => {
+        // this.listAllDrivers = drivers;
+        console.log("Drivers is - " + this.listAllDrivers);
+      });
+    },
+    allVehicles() {
+      CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
+        // this.listAllVehicles = vehicles;
+      });
+    },
+    allTCs() {
+      CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
+        // this.listAllTransportCompanies = tcs;
+        console.log("Transport Companies :  " + this.listTCs.length);
+      });
+    }
+  },
+  created() {
+    // this.allRoutes();
+    // this.allDrivers();
+    // this.allVehicles();
+    // this.allTCs();
   }
 });
