@@ -15,7 +15,15 @@
 </section>
 
 <section id="route-list" layout:fragment="route-list-section">
-  <div id="main-info-content-wrapper">
+
+    <div class="container">
+    <div id="main-info-content-header" class="row">
+        <button class="button7">Добавить машрут</button>
+        <button class="button7">Удалить машрут</button>
+      </div>
+  
+  <div id="main-info-content-wrapper" class="row">
+  <div class="col-md-12">
 
       <div class="accordion" id="accordionExample">
         <div class="card">
@@ -91,9 +99,8 @@
         </div>
       </div>
     </div>
-    <div id="main-info-content-footer">
-      <button class="button7"><i class="fas fa-plus">Добавить машрут</i></button>
     </div>
+ </div>
 </section>
 <section layout:fragment="route-settings-section">
     <div class="form-inline center-div">
