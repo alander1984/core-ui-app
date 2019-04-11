@@ -8,6 +8,17 @@ body {
   font-size: smaller;
 }
 
+.compact_i{
+    top:0px !important;
+    height:100% !important;
+}
+
+.compact_i:hover {
+    color: #3799ff !important;
+    font-weight:bold !important;
+}
+
+
 .center-div {
     margin-left: auto;
     margin-right: auto;
@@ -26,6 +37,10 @@ body {
     padding: 0;
     margin-left:0;
     margin-right:0;
+}
+
+.scrollable {
+    overlow-y: auto;
 }
 
 .button7 {

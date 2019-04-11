@@ -25,13 +25,12 @@ Vue.component('deliveries-new', {
                                 '<td></td>' +
                                 '<td>' +
                                     //'<b-button id="showItems" variant="primary"  @click="showItemsForDelivery(item.id)">Показать перечень продуктов</b-button><i class="fa fa-caret-down fa-lg"></i>' +
-                                    '<i class="fa fa-location-arrow fa-lg" style="cursor: pointer"></i>' +
-                                    '<hr>' +
-                                    '<i class="fa fa-caret-down fa-lg" style="cursor: pointer" @click="showItemsForDelivery(item.id)"></i>' +                  
+                                    '<i class="fa fa-location-arrow fa-lg compact_i w-50" style="cursor: pointer; padding-inline-start:5px; padding-inline-end:10px"></i>' +
+                                    '<i class="fa fa-clipboard-list fa-lg compact_i w-50" style="cursor: pointer; padding-inline-start:10px; padding-inline-end:5px" @click="showItemsForDelivery(item.id)"></i>' +                  
                                 '</td>' +
                             '</tr>' +
                         '</table>' +
-                        '<div v-if="showItems == true">' +
+                        '<div v-if="showInlineItems == true">' +
                             '<h4>Список продуктов</h4>' +
                             '<br /><br />' +
                             '<table class="table table-bordered" style="width: 100%">' +
@@ -63,7 +62,7 @@ Vue.component('deliveries-new', {
                 listDeliveries: [],
                 listItems: [],
                 selected: [],
-                showItems: false,
+                showInlineItems: false,
                 colorRow: 'black',
                 checked: false,
                 weight: ''
@@ -79,7 +78,6 @@ Vue.component('deliveries-new', {
     },
     methods: {
         showItemsForDelivery(id){
-            this.showItems = true;
             //alert("Item " + id);
             CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {
             
@@ -88,7 +86,7 @@ Vue.component('deliveries-new', {
             });
         },
         closeShowItemsForDelivery(){
-            this.showItems = false;
+            this.showInlineItems = false;
         },
         check(index){
                 //alert("Index: " + index + " Checked " + this.selected);
