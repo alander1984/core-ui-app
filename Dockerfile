@@ -6,7 +6,7 @@ COPY . .
 
 RUN mvn clean package -s settings.xml -B
 
-FROM tomcat:9-jre8
+FROM tomcat:9-jre8-slim
 
 ARG GIT_REPO
 ARG GIT_COMMIT
