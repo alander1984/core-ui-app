@@ -55,7 +55,7 @@ node ('internet-enabled') {
             def git_date = sh(returnStdout:true, script: "git show -s --format=%ci ${git_commit}").trim();
 
             stage ('Build Image') {
-
+                image_build_and_push(docker_image_name, docker_image_tag, is_master, GIT_REPO, git_commit, git_date)
             }
 
             stage ('Wipe') {
@@ -69,7 +69,6 @@ def image_build_and_push(docker_image_name, docker_image_tag, is_master, git_rep
     def env_vars = ["GIT_REPO=${git_repo}",
                     "GIT_COMMIT=${git_commit}",
                     "GIT_DATE='${git_date}'",
-                    "BUILD_TARGET=${BUILD_TARGET}",
                     "BRANCH_NAME=${BRANCH_NAME}"
                     ]
     build_args = env_vars.collect{arg -> '--no-cache --build-arg ' + arg}.join(' ')
