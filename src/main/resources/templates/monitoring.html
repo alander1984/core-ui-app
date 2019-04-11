@@ -5,14 +5,22 @@
   <title>Рабочее место логиста</title>
   <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
   <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
+  <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
+      type="text/javascript"></script>
+      <script th:src="@{/js/maps/ymaps_monitoring.js}"></script>
 </head>
 
 <body>
     <section layout:fragment="admin-content" class="w-100">
+        <div id="admin-app">
         <div id="main" class="container-fluid row full-div h-100">
+        
     
 
     <div id="routes" class="col-md-4 full-div">
+    
+    
         <div id="route-settings" class="row full-div">
             <div class="form-inline center-div">
             <label>Дата:   </label>
@@ -36,16 +44,25 @@
             </div>
         </div>
         <div id="route-list" class="row h-100 full-div">
-            Place for list
+            
+                <routesmonitoring></routesmonitoring>
+            
         </div>
-    </div>
-    <div id="map-planning" class="col-md-8 full-div">
+    
+    <div id="map-planning" class="col-md-8 full-div float-left">
         <div id="map" class="h-100 full-div">
-            Сюда карта
+            
+            
         </div>
     </div>
 </div>
+</div>
+</div>
+
         <script type="text/javascript" th:src="@{/js/monitoring.js}"></script>
+        <script th:src="@{/js/api/bundle.js}"></script>
+        <script th:src="@{/js/routes_monitoring.js}"></script>
+        <script th:src="@{/js/main.js}"></script>
     </section>
 </body>
 </html>
