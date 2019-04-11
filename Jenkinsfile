@@ -34,7 +34,7 @@ properties([
 node ('internet-enabled') {
     timestamps {
         ansiColor('xterm') {
-            env.DOCKER_REGISTRY = 'docker-local-customer-system.art.lmru.tech'
+            env.DOCKER_REGISTRY = 'docker-local-customer-delivery-system.art.lmru.tech'
             env.DOCKER_REGISTRY_CREDS = 'lm-sa-customer-delivery-system'
             env.settings_file = 'settings-xml'
             def GIT_REPO = scm.userRemoteConfigs[0].url
