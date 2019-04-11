@@ -40,9 +40,6 @@ Vue.component('routes', {
       + '<div class="form-group col-md-4">'
       + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут</b-button>'
       + '</div>'
-      + '<div class="form-group col-md-4">'
-      + '<b-button id="delR" variant="danger">Удалить машрут</b-button>'
-      + '</div>'
       + '</div>'
       + '</div>'
       + '<div id = "main-info-content-wrapper" className = "row">'
@@ -54,12 +51,12 @@ Vue.component('routes', {
       + '    </b-card-header>\n'
       + '    <b-collapse :id="\'accordion-\'+ index"  role="tabpanel">\n'
       + '      <b-card-body>\n'
-      + '        <div role="tablist" v-for="(route, index) in item.routes">'
+      + '        <div role="tablist" v-for="(route, index_n) in item.routes">'
       + ' <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index\" variant="outline-primary">{{route.name}}</b-button>\n'
+      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary">{{route.name}}</b-button>\n'
       + '    </b-card-header>\n'
-      + '    <b-collapse :id="\'accordion_nested-\'+ index"  role="tabpanel">\n'
+      + '    <b-collapse :id="\'accordion_nested-\'+ index_n"  role="tabpanel">\n'
       + '      <b-card-body>\n'
       + '<div class="row">'
       + 'Время : {{route.deliveryDate}}'
@@ -72,6 +69,9 @@ Vue.component('routes', {
       + '</div>'
       + '<div class="row">'
       + 'Водитель: : {{route.vehicle.drivers[0].surname}} {{route.vehicle.drivers[0].name.charAt(0)}}.{{route.vehicle.drivers[0].patronymic.charAt(0)}}'
+      + '</div>'
+      + '<div class="text-right">'
+      + '<b-button :id="\'delroute-\'+ index" v-on:click="deleteRoute(index, item, route)" variant="danger" size="sm">Удалить машрут</b-button>'
       + '</div>'
       + '</b-card-body>'
       + '</b-collapse>'
@@ -104,10 +104,19 @@ Vue.component('routes', {
     }
   },
   methods: {
+    deleteRoute(index, item, route) {
+      console.log("In delete route. Index: " + index);
+
+      CDSAPI.RouteService.deleteRoute(route.id.toString()).then(response => {
+        console.log("Route deleted With id :  " + route.id + "/" + response);
+      });
+      item.routes.splice(index, 1);
+      this.$forceUpdate();
+
+    },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
-      alert('Введите название ТК');
     },
     handleSubmit (evt) {
 
