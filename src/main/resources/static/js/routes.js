@@ -47,7 +47,7 @@ Vue.component('routes', {
       + '</div>'
       + '<div id = "main-info-content-wrapper" className = "row">'
       + '<div className = "col-md-12" >'
-      + '<div role="tablist" v-for="(item, index) in stores">\n'
+      + '<div role="tablist" v-for="(item, index) in listAllStores">\n'
       + '  <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
       + '      <b-button block href="#" v-b-toggle="\'accordion-\'+index\" variant="outline-primary">{{item.name}}</b-button>\n'
@@ -62,10 +62,16 @@ Vue.component('routes', {
       + '    <b-collapse :id="\'accordion_nested-\'+ index"  role="tabpanel">\n'
       + '      <b-card-body>\n'
       + '<div class="row">'
-      + 'TK : {{route.tc_name}}'
+      + 'Время : {{route.deliveryDate}}'
       + '</div>'
       + '<div class="row">'
-      + 'Транспорт: : {{route.ts_model}}'
+      + 'ТК: : {{route.transportcompany.name}}'
+      + '</div>'
+      + '<div class="row">'
+      + 'Транспорт: : {{route.vehicle.model}}'
+      + '</div>'
+      + '<div class="row">'
+      + 'Водитель: : {{route.vehicle.drivers[0].surname}} {{route.vehicle.drivers[0].name.charAt(0)}}.{{route.vehicle.drivers[0].patronymic.charAt(0)}}'
       + '</div>'
       + '</b-card-body>'
       + '</b-collapse>'
@@ -85,64 +91,16 @@ Vue.component('routes', {
       routeDate: '',
       driver: '',
       selectedDrivers: [],
-      listAllDrivers: [
-        {
-          name: 'Иванов',
-          surname: 'Иван',
-          patronymic: 'Иванович'
-        },
-        {
-          name: 'Петров',
-          surname: 'Петр',
-          patronymic: 'Петрович'
-        },
-      ],
+      listAllDrivers: [],
       vehicle: '',
       selectedVehicles: [],
-      listAllVehicles: [
-        {
-          model: 'Газ-3310'
-        },
-        {
-          model: 'КАМАЗ-5390'
-        }
-      ],
+      listAllVehicles: [],
       transportCompany: '',
       selectedTransportCompanies: [],
-      listAllTransportCompanies: [
-        {
-          name: 'Nawinia'
-        },
-        {
-          name: 'TransportINC'
-        }
-      ],
-      stores: [
-        {
-          id: 1,
-          name: 'Магазин 1',
-          routes: [
-            {
-              id: 1,
-              name: 'Маршрут 1',
-              tc_name: 'Nowinia',
-              ts_model: 'Газ-3310'
-            },
-            {
-              id: 2,
-              name: 'Маршрут 2',
-              tc_name: 'TransportINC',
-              ts_model: 'Камаз-5390'
-            }
+      listAllTransportCompanies: [],
+      listAllRoutes: [],
+      listAllStores: [],
 
-          ]
-        },
-        {
-          id: 2,
-          name: 'Магазин 2'
-        }
-      ],
-      listAllRoutes: []
     }
   },
   methods: {
@@ -156,34 +114,61 @@ Vue.component('routes', {
     },
     clearName() {
     },
-    allRoutes() {
-      CDSAPI.RouteService.sendAllRoutes().then(routes => {
-        // this.listAllRoutes = routes;
-        console.log("listAllRoutes length is -  " + this.listAllRoutes.length);
+    allRoutesAndStores() {
+
+      Promise.all([
+        CDSAPI.RouteService.sendAllRoutes().then(routes => {
+          this.listAllRoutes = routes;
+          // console.log("listAllRoutes length is -  " + this.listAllRoutes.length);
+        }),
+        CDSAPI.Stores.getAllStore().then(stores => {
+          this.listAllStores = stores;
+          // console.log("listAllStores length is -  " + this.listAllStores.length);
+        })
+
+      ]).then(result => {
+
+        let _listAllStores = this.listAllStores;
+        let _listAllRoutes = this.listAllRoutes;
+
+        _listAllStores.forEach(function (items, index, str) {
+          // console.log("Stores item - " + items.id + " " + items.name);
+          items.routes = [];
+          _listAllRoutes.forEach(function (itemr, index, rt) {
+            // console.log("Route item - " + itemr.id + " " + itemr.name);
+            if (items.id === itemr.store.id){
+              items.routes.push(itemr);
+            }
+          });
+        });
+
+        this.listAllStores = _listAllStores;
+        console.log("After Promisse all");
       });
+
     },
     allDrivers() {
       CDSAPI.Drivers.sendAllDrivers().then(drivers => {
-        // this.listAllDrivers = drivers;
-        console.log("Drivers is - " + this.listAllDrivers);
+        this.listAllDrivers = drivers;
+        // console.log("Drivers is - " + this.listAllDrivers);
       });
     },
     allVehicles() {
       CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
-        // this.listAllVehicles = vehicles;
+        this.listAllVehicles = vehicles;
       });
     },
     allTCs() {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
-        // this.listAllTransportCompanies = tcs;
-        console.log("Transport Companies :  " + this.listTCs.length);
+        this.listAllTransportCompanies = tcs;
+        // console.log("Transport Companies :  " + this.listTCs.length);
       });
     }
   },
   created() {
-    // this.allRoutes();
-    // this.allDrivers();
-    // this.allVehicles();
-    // this.allTCs();
+    this.allRoutesAndStores();
+    this.allDrivers();
+    this.allVehicles();
+    this.allTCs();
   }
 });
