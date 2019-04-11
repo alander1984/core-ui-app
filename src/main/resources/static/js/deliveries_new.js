@@ -1,30 +1,33 @@
 Vue.component('deliveries-new', {
     template:  '<div>' +
-                    '<h3>Новая доставка</h3>' +
-                    '<br /><br />' +
                         '<table class="table table-bordered" style="width: 100%">' +
-                            '<tr>' +
-                                '<th>№</th>' +
-                                '<th>Временное окно</th>' +
-                                '<th>Дата создания</th>' +
-                                '<th>Клиент</th>' +
+                            '<tr bgcolor="gray">' +
+                                '<th><input type="checkbox" disabled/></th>' +
+                                '<th>№ заявки</th>' +
+                                '<th>Время план</th>' +
+                                '<th>Время факт</th>' +
                                 '<th>Адрес</th>' +
-                                '<th>Заказы</th>' +
-                                '<th>Отметить</th>' +
+                                '<th>Вес</th>' +
+                                '<th>Объём</th>' +
+                                '<th>Район</th>' +
+                                '<th></th>' +
                             '</tr>' +
-                            '<tr v-for="(item, index) in listDeliveries" :key=item.index >' +
-                                '<td>{{ index + 1 }}</td>' +
-                                //'<td width=10% style="color: red; text-align: center;">{{item.id}}</td>' +
-                                '<td>{{item.timeWindow}}</td>' +
-                                '<td>{{item.createdDate}}</td>' +
-                                '<td>{{item.createUserName}}</td>' +
-                                '<td>{{item.street + " " + item.house + " " + item.flat}}</td>' +
-                                '<td>' +
-                                    '<b-button id="showItems" variant="primary"  @click="showItemsForDelivery(item.id)">Показать перечень продуктов</b-button>' +
-                                         
-                                '</td>' +
+                            '<tr v-for="(item, index) in listDeliveries" :key=item.index>' +
                                 '<td>' +
                                     '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index)" unchecked-value="not_accepted"/>' +
+                                '</td>' +
+                                '<td>{{item.id }}</td>' +
+                                '<td>{{item.deliveryDateMin + " -- " + item.deliveryDateMax}}</td>' +
+                                '<td></td>' +
+                                '<td>{{item.street + " " + item.house + " " + item.flat}}</td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td>' +
+                                    //'<b-button id="showItems" variant="primary"  @click="showItemsForDelivery(item.id)">Показать перечень продуктов</b-button><i class="fa fa-caret-down fa-lg"></i>' +
+                                    '<i class="fa fa-location-arrow fa-lg" style="cursor: pointer"></i>' +
+                                    '<hr>' +
+                                    '<i class="fa fa-caret-down fa-lg" style="cursor: pointer" @click="showItemsForDelivery(item.id)"></i>' +                  
                                 '</td>' +
                             '</tr>' +
                         '</table>' +
@@ -41,7 +44,7 @@ Vue.component('deliveries-new', {
                                     '<th>Длина</th>' +
                                     '<th>Количество</th>' +
                                 '</tr>' +
-                                '<tr v-for="(it, index2) in listItems" :key=it.index2 >' +
+                                '<tr v-for="(it, index2) in listItems" :key=it.index2 v-bind:style="{color: colorRow}">' +
                                     '<td>{{index2 + 1}}</td>' +
                                     '<td>{{it.productlmname}}</td>' +
                                     '<td>{{it.weight}}</td>' +
@@ -61,8 +64,9 @@ Vue.component('deliveries-new', {
                 listItems: [],
                 selected: [],
                 showItems: false,
-                color: 'black',
-                checked: false
+                colorRow: 'black',
+                checked: false,
+                weight: ''
                 
             }
         },
