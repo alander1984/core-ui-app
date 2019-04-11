@@ -35,7 +35,7 @@ node ('internet-enabled') {
     timestamps {
         ansiColor('xterm') {
             env.DOCKER_REGISTRY = 'docker-local-customer-delivery.art.lmru.tech'
-            env.DOCKER_REGISTRY_CREDS = 'lm-sa-legofront'
+            env.DOCKER_REGISTRY_CREDS = 'lm-sa-customer-delivery'
             env.settings_file = 'settings-xml'
             def GIT_REPO = scm.userRemoteConfigs[0].url
             def is_master = env.BRANCH_NAME == 'master'
