@@ -10,8 +10,26 @@
 <body>
 
 <section layout:fragment="map-section">
-  <div id="YMapsID" style="width:100%;height:100%"></div>
-  <script th:src="@{/js/maps/ymaps.js}"></script>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="map-tab-show" data-toggle="tab" href="#map-show" role="tab" aria-controls="map-show" aria-selected="true">Карта</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="order-tab" data-toggle="tab" href="#order" role="tab" aria-controls="order" aria-selected="false">Заказ</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="mainTabContent" >
+        <div class="tab-pane fade show active" id="map-show" role="tabpanel" aria-labelledby="map-tab-show">
+            <!-- Здесь карта -->
+            <!--div id="YMapsID" style="width:100%;height:100%"></div>
+                <script th:src="@{/js/maps/ymaps.js}"></script-->
+        </div>
+        <div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby="order-tab">
+            <!-- Здесь заказ -->
+        </div>
+    </div>
+    <div id="YMapsID" style="width:100%;height:90%"></div>
+    <script th:src="@{/js/maps/ymaps.js}"></script>
 </section>
 
 <section id="route-list" layout:fragment="route-list-section">
@@ -26,6 +44,7 @@
     </div>    
     <script type="text/javascript" th:src="@{/js/planning.js}"></script>
 </section>
+
 <section layout:fragment="orders-section">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -54,6 +73,7 @@
     </div>
     
     <script th:src="@{/js/api/bundle.js}" defer></script>
+    <script th:src="@{/js/delivery_details_new.js}" defer></script>
     <script th:src="@{/js/deliveries_new.js}" defer></script>
     <script th:src="@{/js/main.js}" defer></script>
 </section>
