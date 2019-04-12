@@ -24,7 +24,7 @@ Vue.component('routes', {
       + '</option></select><br/>'
       + '<div class="form-row">'
       + '<div class="form-group col-md-6">'
-      + '<b-button id="clearAllModal"  variant="danger">Очистить все</b-button>'
+      + '<b-button id="clearAllModal"  variant="danger" @click.prevent="clearModal()">Очистить все</b-button>'
       + '</div>'
       + '<div class="form-group col-md-3">'
       + '<b-button id="addRouteModal" variant="success">Добавить</b-button>'
@@ -47,7 +47,7 @@ Vue.component('routes', {
       + '<div role="tablist" v-for="(item, index) in listAllStores">\n'
       + '  <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion-\'+index\" variant="outline-primary">{{item.name}}</b-button>\n'
+      + '      <b-button block  v-b-toggle="\'accordion-\'+index\" variant="outline-primary" @click.prevent="storeChange(item)">{{item.name}}</b-button>\n'
       + '    </b-card-header>\n'
       + '    <b-collapse :id="\'accordion-\'+ index"  role="tabpanel">\n'
       + '      <b-card-body>\n'
@@ -71,7 +71,7 @@ Vue.component('routes', {
       + 'Водитель: : {{route.vehicle.drivers[0].surname}} {{route.vehicle.drivers[0].name.charAt(0)}}.{{route.vehicle.drivers[0].patronymic.charAt(0)}}'
       + '</div>'
       + '<div class="text-right">'
-      + '<b-button :id="\'delroute-\'+ index" v-on:click="deleteRoute(index, item, route)" variant="danger" size="sm">Удалить машрут</b-button>'
+      + '<b-button :id="\'delroute-\'+ index" v-on:click="deleteRoute(index_n, item, route)" variant="danger" size="sm">Удалить машрут</b-button>'
       + '</div>'
       + '</b-card-body>'
       + '</b-collapse>'
@@ -94,6 +94,7 @@ Vue.component('routes', {
       listAllDrivers: [],
       vehicle: '',
       store: '',
+      selectedStore: '',
       selectedVehicles: [],
       listAllVehicles: [],
       transportCompany: '',
@@ -126,20 +127,25 @@ Vue.component('routes', {
       tmp.deliveryDate = this.routeDate;
       tmp.vehicleId = this.selectedVehicles.id;
       tmp.transportcompanyId = this.selectedTransportCompanies.id;
-      ///TODO change
-      tmp.storeid = 1;
+
+      //TODO Validate
+      tmp.storeid = this.selectedStore.id;
 
       CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
         console.log("Created Route ID :  " + id);
-        this.clearName();
+        this.clearModal();
+        return id;
       });
-
 
       this.$nextTick(() => {
         // Wrapped in $nextTick to ensure DOM is rendered before closing
         this.$refs.modal1.hide();
 
       });
+    },
+    storeChange(item) {
+      this.selectedStore = item;
+      console.log("In storeChange");
     },
     onChangeTC(event){
       this.tc_vehicles = this.selectedTransportCompanies.vehicles;
@@ -149,7 +155,12 @@ Vue.component('routes', {
       this.vehicle_drivers = this.selectedVehicles.drivers;
       console.log("In  onChangeVehicle event");
     },
-    clearName() {
+    clearModal() {
+      this.routeName = '';
+      this.routeDate = '';
+      this.selectedTransportCompanies = '';
+      this.selectedVehicles = '';
+      this.selectedDrivers = '';
     },
     allRoutesAndStores() {
 
