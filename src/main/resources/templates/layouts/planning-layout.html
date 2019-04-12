@@ -58,10 +58,10 @@
     </nav>
     </div>
 
-<div id="main" class="container-fluid row full-div h-100">
+<div id="main" class="container-fluid row full-div h-100" style="padding-left: 55px;">
 
 <th:block layout:fragment="script"></th:block>
-    <div id="routes" class="col-md-4 full-div" style="padding-left: 55px;">
+    <div id="routes" class="col-md-4 full-div" >
         <div id="route-settings" class="row full-div" layout:fragment="route-settings-section">
             Place for settings
         </div>
@@ -69,17 +69,17 @@
             Place for list
         </div>
     </div>
-    <div id="map-planning" class="col-md-8 full-div">
+    <div id="map-planning" class="col-md-8 full-div" style="height:100%">
         <div id="map" class="h-50 full-div" layout:fragment="map-section">
             
         </div>
         <div id="orders-panel" class="h-50 full-div" layout:fragment="orders-section">
-        
         </div>
     </div>
 </div>
 </div>
-<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/routes.js}"></script>
+<script th:src="@{/js/planning-main.js}"></script>
 
 </body>
 </html>

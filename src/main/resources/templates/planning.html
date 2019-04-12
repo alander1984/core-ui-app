@@ -10,97 +10,32 @@
 <body>
 
 <section layout:fragment="map-section">
-  <div id="YMapsID" style="width:100%;height:100%"></div>
-  <script th:src="@{/js/maps/ymaps.js}"></script>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="map-tab-show" data-toggle="tab" href="#map-show" role="tab" aria-controls="map-show" aria-selected="true">Карта</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="order-tab" data-toggle="tab" href="#order" role="tab" aria-controls="order" aria-selected="false">Заказ</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="mainTabContent" >
+        <div class="tab-pane fade show active" id="map-show" role="tabpanel" aria-labelledby="map-tab-show">
+            <!-- Здесь карта -->
+            <!--div id="YMapsID" style="width:100%;height:100%"></div>
+                <script th:src="@{/js/maps/ymaps.js}"></script-->
+        </div>
+        <div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby="order-tab">
+            <!-- Здесь заказ -->
+        </div>
+    </div>
+    <div id="YMapsID" style="width:100%;height:90%"></div>
+    <script th:src="@{/js/maps/ymaps.js}"></script>
 </section>
 
 <section id="route-list" layout:fragment="route-list-section">
-
-    <div class="container">
-    <div id="main-info-content-header" class="row">
-        <button class="button7">Добавить машрут</button>
-        <button class="button7">Удалить машрут</button>
-      </div>
-  
-  <div id="main-info-content-wrapper" class="row">
-  <div class="col-md-12">
-
-      <div class="accordion" id="accordionExample">
-        <div class="card">
-          <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <i class="fas fa-eye-slash"></i> Леруа Мерлен <span>0/0</span>
-              </button>
-            </h5>
-          </div>
-
-          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
+        <div class="container">
+        <routes></routes>
         </div>
-        <div class="card">
-          <div class="card-header" id="headingTwo">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                <i class="fas fa-eye-slash"></i> Nawinia <span>0/0</span>
-              </button>
-            </h5>
-          </div>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                <i class="fas fa-eye-slash"></i> Vezu СПб <span>0/0</span>
-              </button>
-            </h5>
-          </div>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" id="headingFour">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                <i class="fas fa-eye-slash"></i> Vezu Мск <span>0/0</span>
-              </button>
-            </h5>
-          </div>
-          <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" id="headingFive">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                <i class="fas fa-eye-slash"></i> Vezu СПб <span>0/0</span>
-              </button>
-            </h5>
-          </div>
-          <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
- </div>
 </section>
 <section layout:fragment="route-settings-section">
     <div class="form-inline center-div">
@@ -109,6 +44,7 @@
     </div>    
     <script type="text/javascript" th:src="@{/js/planning.js}"></script>
 </section>
+
 <section layout:fragment="orders-section">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -121,9 +57,12 @@
             <a class="nav-link" id="routing-tab" data-toggle="tab" href="#routing" role="tab" aria-controls="routing" aria-selected="false">Автоматическое планирование</a>
         </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="myTabContent"  style="height: calc(100% - 30px);overflow-y: auto;">
         <div class="tab-pane fade show active" id="new-orders" role="tabpanel" aria-labelledby="new-orders-tab">
-            Сюда компонент отображения нераспределенных заявок
+            <!--Сюда компонент отображения нераспределенных заявок-->
+            <div id="admin-app" class="admin-app">
+                <deliveries-new></deliveries-new>
+            </div>
         </div>
         <div class="tab-pane fade" id="route-orders" role="tabpanel" aria-labelledby="route-orders">
             Сюда компонент отображения заявок маршрута
@@ -132,6 +71,11 @@
             Сюда компонент настроек автоматического планирования
         </div>
     </div>
+    
+    <script th:src="@{/js/api/bundle.js}" defer></script>
+    <script th:src="@{/js/delivery_details_new.js}" defer></script>
+    <script th:src="@{/js/deliveries_new.js}" defer></script>
+    <script th:src="@{/js/main.js}" defer></script>
 </section>
 
 

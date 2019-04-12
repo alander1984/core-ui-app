@@ -6,28 +6,47 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-  <div id="admin-app" class="admin-app">
     <div id="admin-header" class="navbar navbar-dark bg-dark box-shadow">
       <h4 class="text-white">Администрирование</h4>
     </div>
     <div id="admin-content">
-      <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-10">
-          <div>
-             <a th:href="@{/role}">Роли</a><br/>
-             <a th:href="@{/permission}">Права</a><br/>
-             <a th:href="@{/driver}">Водители</a><br/>
-             <a th:href="@{/vehicle}">Транспортные средства</a><br/>
-             <a th:href="@{/transport-company}">Транспортные компании</a><br/>
-             <a th:href="@{/stores}">Магазины</a><br/>
-             <a th:href="@{/deliveries}">Доставка</a><br/>
-          </div>
-          <div class="col-lg-1"></div>
-        </div>
+      
+      <div class="promoBox info-box info-ribbon">
+	       <aside><p><a th:href="@{/role}">&#9881;</a></p></aside>
+	       <h4>Роли</h4>
+	       <p>Настройка перечня ролей и относящися к ним разрешений</p>
       </div>
+
+    <div class="promoBox info-box info-ribbon">
+	   <aside><p><a th:href="@{/permission}">&#9881;</a></p></aside>
+	   <h4>Права</h4>
+	   <p>Управление перечнем прав системы. Не вносить изменения.</p>
     </div>
-  </div>
+
+    <div class="promoBox success-box info-ribbon">
+	   <aside><p><a th:href="@{/driver}">&#9881;</a></p></aside>
+	   <h4>Водители</h4>
+	   <p>Управление учетными записями водителей и их оношением к транспортным компаниям.</p>
+    </div>
+
+    <div class="promoBox success-box info-ribbon">
+	   <aside><p><a th:href="@{/vehicle}">&#9881;</a></p></aside>
+	   <h4>Транспортные средства</h4>
+	   <p>Регистрация транспортных средства а также внесение изменений в регистрационные данные</p>
+    </div>
+
+    <div class="promoBox success-box info-ribbon">
+	   <aside><p><a th:href="@{/transport-company}">&#9881;</a></p></aside>
+	   <h4>Транспортные компании</h4>
+	   <p>Реестр компаний работающих с компанией</p>
+    </div>
+
+    <div class="promoBox">
+	   <aside><p><a th:href="@{/stores}">&#9881;</a></p></aside>
+	   <h4>Магазины</h4>
+	   <p>Справочник магазинов с првязкой к географическим координатам</p>
+    </div>
+    </div>
     <script type="text/javascript" th:src="@{/js/admin.js}"></script>
 </section>
 </body>
