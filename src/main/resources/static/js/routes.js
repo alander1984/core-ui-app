@@ -1,30 +1,30 @@
 Vue.component('routes', {
   template:
       '<div>'
-      + '<b-modal id="modalAddRoute" ref="modal1" title="Добавить маршрут" @ok="handleOk">'
+      + '<b-modal id="modalAddRoute" ref="modal1" title="Добавить маршрут" @ok="handleSubmit">'
       + '<form @submit.stop.prevent="handleSubmit">'
       + '<label for="createName"  class="col-form-label">Название</label>'
       + '<b-form-input id="createName" type="text" v-model="routeName"/><br/>'
       + '<label for="createDate"  class="col-form-label">Время</label>'
       + '<b-form-input id="createDate" type="select" v-model="routeDate"/><br/>'
       + '<label for="createTC">ТК</label>'
-      + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies">\'+\n'
+      + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies" @change="onChangeTC($event)">\'+\n'
       + '<option v-for="transportCompany in listAllTransportCompanies" v-bind:value="transportCompany">'
       + '{{ transportCompany.name }}'
       + '</option></select>'
       + '<label for="createVeh">ТC</label>'
-      + '<select id="createVeh" class="form-control" v-model="selectedVehicles">\'+\n'
-      + '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'
+      + '<select id="createVeh" class="form-control" v-model="selectedVehicles" @change="onChangeVehicle($event)">\'+\n'
+      + '<option v-for="vehicle in tc_vehicles" v-bind:value="vehicle">'
       + '{{ vehicle.model }}'
       + '</option></select>'
       + '<label for="createDriver">Водитель</label>'
       + '<select id="createDriver" class="form-control" v-model="selectedDrivers">\'+\n'
-      + '<option v-for="driver in listAllDrivers" v-bind:value="driver">'
+      + '<option v-for="driver in vehicle_drivers" v-bind:value="driver">'
       + '{{ driver.surname }}  {{driver.name.charAt(0)}}.{{driver.patronymic.charAt(0)}}.'
       + '</option></select><br/>'
       + '<div class="form-row">'
       + '<div class="form-group col-md-6">'
-      + '<b-button id="clearAllModal"  variant="danger">Очистить все</b-button>'
+      + '<b-button id="clearAllModal"  variant="danger" @click.prevent="clearModal()">Очистить все</b-button>'
       + '</div>'
       + '<div class="form-group col-md-3">'
       + '<b-button id="addRouteModal" variant="success">Добавить</b-button>'
@@ -40,32 +40,38 @@ Vue.component('routes', {
       + '<div class="form-group col-md-4">'
       + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут</b-button>'
       + '</div>'
-      + '<div class="form-group col-md-4">'
-      + '<b-button id="delR" variant="danger">Удалить машрут</b-button>'
-      + '</div>'
       + '</div>'
       + '</div>'
       + '<div id = "main-info-content-wrapper" className = "row">'
       + '<div className = "col-md-12" >'
-      + '<div role="tablist" v-for="(item, index) in stores">\n'
+      + '<div role="tablist" v-for="(item, index) in listAllStores">\n'
       + '  <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion-\'+index\" variant="outline-primary">{{item.name}}</b-button>\n'
+      + '      <b-button block  v-b-toggle="\'accordion-\'+index\" variant="outline-primary" @click.prevent="storeChange(item)">{{item.name}}</b-button>\n'
       + '    </b-card-header>\n'
       + '    <b-collapse :id="\'accordion-\'+ index"  role="tabpanel">\n'
       + '      <b-card-body>\n'
-      + '        <div role="tablist" v-for="(route, index) in item.routes">'
+      + '        <div role="tablist" v-for="(route, index_n) in item.routes">'
       + ' <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index\" variant="outline-primary">{{route.name}}</b-button>\n'
+      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary">{{route.name}}</b-button>\n'
       + '    </b-card-header>\n'
-      + '    <b-collapse :id="\'accordion_nested-\'+ index"  role="tabpanel">\n'
+      + '    <b-collapse :id="\'accordion_nested-\'+ index_n"  role="tabpanel">\n'
       + '      <b-card-body>\n'
       + '<div class="row">'
-      + 'TK : {{route.tc_name}}'
+      + 'Время : {{route.deliveryDate}}'
       + '</div>'
       + '<div class="row">'
-      + 'Транспорт: : {{route.ts_model}}'
+      + 'ТК: : {{route.transportcompany.name}}'
+      + '</div>'
+      + '<div class="row">'
+      + 'Транспорт: : {{route.vehicle.model}}'
+      + '</div>'
+      + '<div class="row">'
+      + 'Водитель: : {{route.vehicle.drivers[0].surname}} {{route.vehicle.drivers[0].name.charAt(0)}}.{{route.vehicle.drivers[0].patronymic.charAt(0)}}'
+      + '</div>'
+      + '<div class="text-right">'
+      + '<b-button :id="\'delroute-\'+ index" v-on:click="deleteRoute(index_n, item, route)" variant="danger" size="sm">Удалить машрут</b-button>'
       + '</div>'
       + '</b-card-body>'
       + '</b-collapse>'
@@ -85,105 +91,119 @@ Vue.component('routes', {
       routeDate: '',
       driver: '',
       selectedDrivers: [],
-      listAllDrivers: [
-        {
-          name: 'Иванов',
-          surname: 'Иван',
-          patronymic: 'Иванович'
-        },
-        {
-          name: 'Петров',
-          surname: 'Петр',
-          patronymic: 'Петрович'
-        },
-      ],
+      listAllDrivers: [],
       vehicle: '',
+      store: '',
+      selectedStore: '',
       selectedVehicles: [],
-      listAllVehicles: [
-        {
-          model: 'Газ-3310'
-        },
-        {
-          model: 'КАМАЗ-5390'
-        }
-      ],
+      listAllVehicles: [],
       transportCompany: '',
+      tc_vehicles: [],
+      vehicle_drivers: [],
       selectedTransportCompanies: [],
-      listAllTransportCompanies: [
-        {
-          name: 'Nawinia'
-        },
-        {
-          name: 'TransportINC'
-        }
-      ],
-      stores: [
-        {
-          id: 1,
-          name: 'Магазин 1',
-          routes: [
-            {
-              id: 1,
-              name: 'Маршрут 1',
-              tc_name: 'Nowinia',
-              ts_model: 'Газ-3310'
-            },
-            {
-              id: 2,
-              name: 'Маршрут 2',
-              tc_name: 'TransportINC',
-              ts_model: 'Камаз-5390'
-            }
+      listAllTransportCompanies: [],
+      listAllRoutes: [],
+      listAllStores: [],
 
-          ]
-        },
-        {
-          id: 2,
-          name: 'Магазин 2'
-        }
-      ],
-      listAllRoutes: []
     }
   },
   methods: {
+    deleteRoute(index, item, route) {
+      CDSAPI.RouteService.deleteRoute(route.id.toString()).then(response => {
+        console.log("Route deleted With id :  " + route.id + "/" + response);
+      });
+      item.routes.splice(index, 1);
+      this.$forceUpdate();
+
+    },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
-      alert('Введите название ТК');
     },
     handleSubmit (evt) {
+      console.log("In handle submit");
+      tmp = {};
+      tmp.name = this.routeName;
+      tmp.deliveryDate = this.routeDate;
+      tmp.vehicleId = this.selectedVehicles.id;
+      tmp.transportcompanyId = this.selectedTransportCompanies.id;
 
-    },
-    clearName() {
-    },
-    allRoutes() {
-      CDSAPI.RouteService.sendAllRoutes().then(routes => {
-        // this.listAllRoutes = routes;
-        console.log("listAllRoutes length is -  " + this.listAllRoutes.length);
+      //TODO Validate
+      tmp.storeid = this.selectedStore.id;
+
+      CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
+        console.log("Created Route ID :  " + id);
+        this.clearModal();
+        return id;
+      });
+
+      this.$nextTick(() => {
+        // Wrapped in $nextTick to ensure DOM is rendered before closing
+        this.$refs.modal1.hide();
+
       });
     },
-    allDrivers() {
-      CDSAPI.Drivers.sendAllDrivers().then(drivers => {
-        // this.listAllDrivers = drivers;
-        console.log("Drivers is - " + this.listAllDrivers);
-      });
+    storeChange(item) {
+      this.selectedStore = item;
+      console.log("In storeChange");
     },
-    allVehicles() {
-      CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
-        // this.listAllVehicles = vehicles;
+    onChangeTC(event){
+      this.tc_vehicles = this.selectedTransportCompanies.vehicles;
+      console.log("In  onChangeTC event");
+    },
+    onChangeVehicle(event){
+      this.vehicle_drivers = this.selectedVehicles.drivers;
+      console.log("In  onChangeVehicle event");
+    },
+    clearModal() {
+      this.routeName = '';
+      this.routeDate = '';
+      this.selectedTransportCompanies = '';
+      this.selectedVehicles = '';
+      this.selectedDrivers = '';
+    },
+    allRoutesAndStores() {
+
+      Promise.all([
+        CDSAPI.RouteService.sendAllRoutes().then(routes => {
+          this.listAllRoutes = routes;
+          // console.log("listAllRoutes length is -  " + this.listAllRoutes.length);
+        }),
+        CDSAPI.Stores.getAllStore().then(stores => {
+          this.listAllStores = stores;
+          // console.log("listAllStores length is -  " + this.listAllStores.length);
+        })
+
+      ]).then(result => {
+
+        let _listAllStores = this.listAllStores;
+        let _listAllRoutes = this.listAllRoutes;
+
+        _listAllStores.forEach(function (items, index, str) {
+          // console.log("Stores item - " + items.id + " " + items.name);
+          items.routes = [];
+          _listAllRoutes.forEach(function (itemr, index, rt) {
+            // console.log("Route item - " + itemr.id + " " + itemr.name);
+            if (items.id === itemr.store.id){
+              items.routes.push(itemr);
+            }
+          });
+        });
+
+        this.listAllStores = _listAllStores;
+        console.log("After Promisse all");
       });
+
     },
     allTCs() {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
-        // this.listAllTransportCompanies = tcs;
-        console.log("Transport Companies :  " + this.listTCs.length);
+        this.listAllTransportCompanies = tcs;
+        console.log("Transport Companies :  " );
       });
     }
   },
   created() {
-    // this.allRoutes();
-    // this.allDrivers();
-    // this.allVehicles();
-    // this.allTCs();
+    this.allRoutesAndStores();
+    this.allTCs();
   }
 });
