@@ -1,25 +1,25 @@
 Vue.component('routes', {
   template:
       '<div>'
-      + '<b-modal id="modalAddRoute" ref="modal1" title="Добавить маршрут" @ok="handleOk">'
+      + '<b-modal id="modalAddRoute" ref="modal1" title="Добавить маршрут" @ok="handleSubmit">'
       + '<form @submit.stop.prevent="handleSubmit">'
       + '<label for="createName"  class="col-form-label">Название</label>'
       + '<b-form-input id="createName" type="text" v-model="routeName"/><br/>'
       + '<label for="createDate"  class="col-form-label">Время</label>'
       + '<b-form-input id="createDate" type="select" v-model="routeDate"/><br/>'
       + '<label for="createTC">ТК</label>'
-      + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies">\'+\n'
+      + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies" @change="onChangeTC($event)">\'+\n'
       + '<option v-for="transportCompany in listAllTransportCompanies" v-bind:value="transportCompany">'
       + '{{ transportCompany.name }}'
       + '</option></select>'
       + '<label for="createVeh">ТC</label>'
-      + '<select id="createVeh" class="form-control" v-model="selectedVehicles">\'+\n'
-      + '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'
+      + '<select id="createVeh" class="form-control" v-model="selectedVehicles" @change="onChangeVehicle($event)">\'+\n'
+      + '<option v-for="vehicle in tc_vehicles" v-bind:value="vehicle">'
       + '{{ vehicle.model }}'
       + '</option></select>'
       + '<label for="createDriver">Водитель</label>'
       + '<select id="createDriver" class="form-control" v-model="selectedDrivers">\'+\n'
-      + '<option v-for="driver in listAllDrivers" v-bind:value="driver">'
+      + '<option v-for="driver in vehicle_drivers" v-bind:value="driver">'
       + '{{ driver.surname }}  {{driver.name.charAt(0)}}.{{driver.patronymic.charAt(0)}}.'
       + '</option></select><br/>'
       + '<div class="form-row">'
@@ -93,9 +93,12 @@ Vue.component('routes', {
       selectedDrivers: [],
       listAllDrivers: [],
       vehicle: '',
+      store: '',
       selectedVehicles: [],
       listAllVehicles: [],
       transportCompany: '',
+      tc_vehicles: [],
+      vehicle_drivers: [],
       selectedTransportCompanies: [],
       listAllTransportCompanies: [],
       listAllRoutes: [],
@@ -105,8 +108,6 @@ Vue.component('routes', {
   },
   methods: {
     deleteRoute(index, item, route) {
-      console.log("In delete route. Index: " + index);
-
       CDSAPI.RouteService.deleteRoute(route.id.toString()).then(response => {
         console.log("Route deleted With id :  " + route.id + "/" + response);
       });
@@ -119,7 +120,34 @@ Vue.component('routes', {
       evt.preventDefault();
     },
     handleSubmit (evt) {
+      console.log("In handle submit");
+      tmp = {};
+      tmp.name = this.routeName;
+      tmp.deliveryDate = this.routeDate;
+      tmp.vehicleId = this.selectedVehicles.id;
+      tmp.transportcompanyId = this.selectedTransportCompanies.id;
+      ///TODO change
+      tmp.storeid = 1;
 
+      CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
+        console.log("Created Route ID :  " + id);
+        this.clearName();
+      });
+
+
+      this.$nextTick(() => {
+        // Wrapped in $nextTick to ensure DOM is rendered before closing
+        this.$refs.modal1.hide();
+
+      });
+    },
+    onChangeTC(event){
+      this.tc_vehicles = this.selectedTransportCompanies.vehicles;
+      console.log("In  onChangeTC event");
+    },
+    onChangeVehicle(event){
+      this.vehicle_drivers = this.selectedVehicles.drivers;
+      console.log("In  onChangeVehicle event");
     },
     clearName() {
     },
@@ -156,28 +184,15 @@ Vue.component('routes', {
       });
 
     },
-    allDrivers() {
-      CDSAPI.Drivers.sendAllDrivers().then(drivers => {
-        this.listAllDrivers = drivers;
-        // console.log("Drivers is - " + this.listAllDrivers);
-      });
-    },
-    allVehicles() {
-      CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
-        this.listAllVehicles = vehicles;
-      });
-    },
     allTCs() {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
         this.listAllTransportCompanies = tcs;
-        // console.log("Transport Companies :  " + this.listTCs.length);
+        console.log("Transport Companies :  " );
       });
     }
   },
   created() {
     this.allRoutesAndStores();
-    this.allDrivers();
-    this.allVehicles();
     this.allTCs();
   }
 });
