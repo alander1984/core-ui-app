@@ -85,30 +85,30 @@ var routesmonitoring = Vue.component('routesmonitoring', {
    methods : {
        getAllRoutes() {
            console.log('GET ALL MONITORING ROUTES');
-           this.routesList.push({id: 1, name: 'MARSHRUT1', vehicle: {model: 'Kalina'}, transportcompany: {name: 'TK1'}, 
-                routepoints :[
-                {id: 1, delivery: {id: 1, city: 'Samara', street: 'street', house: '55', entrance: '2', flat: '33', lon: 53.235087, lat: 50.196801}, arrivalTime: 20 },
-                {id: 2, delivery: {id: 2, city: 'Samara', street: 'street', house: '56', entrance: '2', flat: '34', lon: 53.241254, lat: 50.197461}, arrivalTime: 20 },
-                {id: 3, delivery: {id: 3, city: 'Samara', street: 'street', house: '57', entrance: '2', flat: '35', lon: 53.250664, lat: 50.214228}, arrivalTime: 20 },
-                {id: 4, delivery: {id: 4, city: 'Samara', street: 'street', house: '58', entrance: '2', flat: '36', lon: 53.258511, lat: 50.199428}, arrivalTime: 20 },
-                {id: 5, delivery: {id: 5, city: 'Samara', street: 'street', house: '59', entrance: '2', flat: '37', lon: 53.271279, lat: 50.238178}, arrivalTime: 20 }
-                ]});
-           this.routesList.push({id: 2, name: 'MARSHRUT2', vehicle: {model: 'Priora'}, transportcompany: {name: 'TK2'}, 
-                routepoints :[
-                {id: 6, delivery: {id: 6, city: 'Moscow', street: 'street', house: '11', entrance: '2', flat: '34', lon: 55.715519, lat: 37.599073}, arrivalTime: 20 },
-                {id: 7, delivery: {id: 7, city: 'Moscow', street: 'street', house: '12', entrance: '2', flat: '35', lon: 55.729976, lat: 37.695224}, arrivalTime: 20 },
-                {id: 8, delivery: {id: 8, city: 'Moscow', street: 'street', house: '13', entrance: '2', flat: '36', lon: 55.757676, lat: 37.701252}, arrivalTime: 20 },
-                {id: 9, delivery: {id: 9, city: 'Moscow', street: 'street', house: '14', entrance: '2', flat: '37', lon: 55.781367, lat: 37.627791}, arrivalTime: 20 },
-                {id: 10, delivery: {id: 10, city: 'Moscow', street: 'street', house: '15', entrance: '2', flat: '38', lon: 55.754455, lat: 37.463424}, arrivalTime: 20 }
-                ]});
+//           this.routesList.push({id: 1, name: 'MARSHRUT1', vehicle: {model: 'Kalina'}, transportcompany: {name: 'TK1'}, 
+//                routepoints :[
+//                {id: 1, delivery: {id: 1, city: 'Samara', street: 'street', house: '55', entrance: '2', flat: '33', lon: 53.235087, lat: 50.196801}, arrivalTime: 20 },
+//                {id: 2, delivery: {id: 2, city: 'Samara', street: 'street', house: '56', entrance: '2', flat: '34', lon: 53.241254, lat: 50.197461}, arrivalTime: 20 },
+//                {id: 3, delivery: {id: 3, city: 'Samara', street: 'street', house: '57', entrance: '2', flat: '35', lon: 53.250664, lat: 50.214228}, arrivalTime: 20 },
+//                {id: 4, delivery: {id: 4, city: 'Samara', street: 'street', house: '58', entrance: '2', flat: '36', lon: 53.258511, lat: 50.199428}, arrivalTime: 20 },
+//                {id: 5, delivery: {id: 5, city: 'Samara', street: 'street', house: '59', entrance: '2', flat: '37', lon: 53.271279, lat: 50.238178}, arrivalTime: 20 }
+//                ]});
+//           this.routesList.push({id: 2, name: 'MARSHRUT2', vehicle: {model: 'Priora'}, transportcompany: {name: 'TK2'}, 
+//                routepoints :[
+//                {id: 6, delivery: {id: 6, city: 'Moscow', street: 'street', house: '11', entrance: '2', flat: '34', lon: 55.715519, lat: 37.599073}, arrivalTime: 20 },
+//                {id: 7, delivery: {id: 7, city: 'Moscow', street: 'street', house: '12', entrance: '2', flat: '35', lon: 55.729976, lat: 37.695224}, arrivalTime: 20 },
+//                {id: 8, delivery: {id: 8, city: 'Moscow', street: 'street', house: '13', entrance: '2', flat: '36', lon: 55.757676, lat: 37.701252}, arrivalTime: 20 },
+//                {id: 9, delivery: {id: 9, city: 'Moscow', street: 'street', house: '14', entrance: '2', flat: '37', lon: 55.781367, lat: 37.627791}, arrivalTime: 20 },
+//                {id: 10, delivery: {id: 10, city: 'Moscow', street: 'street', house: '15', entrance: '2', flat: '38', lon: 55.754455, lat: 37.463424}, arrivalTime: 20 }
+//                ]});
             
-           console.log(this.routesList);
-           console.log(this.routesList[0].vehicle.model);
+//           console.log(this.routesList);
+//           console.log(this.routesList[0].vehicle.model);
            
-//           CDSAPI.RouteService.sendAllRoutes().then (routes => {
-//               console.log('CDSAPI send all routes monitoring');
-//               this.routesList = routes;
-//           });
+           CDSAPI.RouteService.sendAllRoutes().then (routes => {
+               console.log('CDSAPI send all routes monitoring');
+               this.routesList = routes;
+           });
        },
        
        viewRouteInfo(index) {
@@ -131,36 +131,37 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                let street = routePoint.delivery.street;
                let house = routePoint.delivery.house;
                let flat = routePoint.delivery.flat;
-               deliveryInfo.volume = 10;
-               deliveryInfo.weight = 10;
+               
                deliveryInfo.address = city + ', ' + street + ', ' + house + ', ' + flat;
                deliveryInfo.floor = 10;
                deliveryInfo.number = routePoint.delivery.id;
                deliveryInfo.arrivalTime = routePoint.arrivalTime;
                deliveryInfo.lon = routePoint.delivery.lon;
                deliveryInfo.lat = routePoint.delivery.lat;
+               
+               
+               let volume = 0;
+               let weight = 0;
+               
+               
+               let deliveryItems = [];
+               CDSAPI.Deliveries.getItemsForDelivery(routePoint.delivery.id).then(list => {
+                   console.log('GET DELIVERY ITEMS FOR DELIVERY ID: ' + routePoint.delivery.id);
+                   deliveryItems = list;
+                   console.log(deliveryItems);
+               });
+               deliveryItems.forEach(function(di, j, arrDI) {
+                   console.log('WIDTH: ' + di.width);
+                   volume = volume + di.width * di.length * di.height;
+                    weight = weight + di.weight;
+               });
+               
+               deliveryInfo.volume = volume;
+               deliveryInfo.weight = weight;
                deliveriesInfo.push(deliveryInfo);
-//               let deliveryItems = [];
-//               CDSAPI.DeliveryService.getItemsForDelivery(routePoint.delivery.id).then(list => {
-//                   deliveryItems = list;
-//               });
-//               let volume = 0; //?
-//               let weight = 0;
-//               deliveryItems.forEach(deliveryItem, i , diArr) {
-//                   weight += deliveryItem.weight;
-//               };
-//               console.log('TOTAL VOLUME: ' + volume);
-//               let deliveryIfo = Object();
-//               deliveryInfo.volume = volume;
-//               deliveryInfo.weight = weight;
-//               deliveryInfo.number = routePoint.delivery.id;
-//               deliveryInfo.address = routePoint.delivery.city + ', ' + routePoint.delivery.street + ', ' + routePoint.delivery.house + ', ' + routePoint.delivery.flat;
-//               deliveryInfo.floor = routePoint.delivery.entrance;
-//               deliveryInfo.arrivalTime = routePoint.arrivalTime;
-//               this.deliveriesInfoList.push(deliveryInfo);
-//                this.deliveriesInfoList.push({volume: 5, weight: 5, number: routePoint.delivery.id, 
-//                address: routePoint.delivery.city + ', ' + routePoint.delivery.street + ', ' + routePoint.delivery.house + ', ' + routePoint.delivery.flat, 
-//                floor: 10, arrivalTime: routePoint.arrivalTime});
+               
+
+               
            });
            return deliveriesInfo;
            
