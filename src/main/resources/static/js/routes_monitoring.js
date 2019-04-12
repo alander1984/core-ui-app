@@ -2,37 +2,71 @@ var routesmonitoring = Vue.component('routesmonitoring', {
    
    
    template : 
-   
-            '<div>' + 
-                '<b-modal id="modalRouteInfo" title="Маршрут" @hide="clearName">' + 
-                    '<p>ТК : {{transportCompanyName}}</p>' + 
-                    '<p>Машина : {{vehicleModel}}</p>' + 
-                    '<p>Водитель : </p><br/>' +
-                    '<table class="table table-hover table-sm table-bordered">' + 
-                        '<thead><tr><th scope="col">№</th><th scope="col">Время</th><th scope="col">Адрес</th><th scope="col">Вес</th><th scope="col">Объём</th><th scope="col">Этаж</th></tr></thead>' +    
-                            '<tbody><tr v-for="(item, deliveryInfoIndex) in deliveriesInfoList">' + 
-                                '<td>{{item.number}}</td>' + 
-                                '<td>{{item.arrivalTime}}</td>' +
-                                '<td>{{item.address}}</td>' + 
-                                '<td>{{item.weight}}кг</td>' +
-                                '<td>{{item.volume}}м3</td>' +
-                                '<td>{{item.floor}}</td>' +
-                            '</tr></tbody>' + 
-                    '</table>' +
-                '</b-modal>' + 
-                '<div v-for="(item, index) in routesList" :key=item.index class="card">' + 
-                    '<div class="card-body">' + 
-                        '<h5 class="mb-0">' +
-                        '   <div class=" card-text"><p class="card-text float-left">{{item.name}}</p>' + 
-                                '<div class="float-right">' +
-                                    '<b-button size="sm" v-on:click="drawRoute(index)" variant="outline-primary" class="btn"><i class="fa fa-location-arrow fa-sm" aria-hidden="true"></i></b-button><br/>' +
-                                    '<b-button size="sm" v-on:click="viewRouteInfo(index)" variant="outline-primary" v-b-modal.modalRouteInfo class="btn"><i class="fa fa-info fa-sm" aria-hidden="true"></i></b-button>' +
-                                '</div>' +
-                            '</div>' +
-                        '</h5>' +
-                    '</div>' +
+                
+                '<div id="main" class="container-fluid row full-div h-100">' +
+                '<div id="routes" class="col-md-2 full-div">' + 
+                '<div id="route-settings" class="row full-div">' + 
+                    '<div class="form-inline center-div">' + 
+                    '<label>Дата:   </label>' +
+                    '<input id="date" data-provide="datepicker" class="datepicker"/>' +
+                    '</div>' + 
                 '</div>' + 
-              '</div>',
+                '<div id="route-statistics" class="row full-div">' +
+                    '<div class="w-100">' +
+                        '<table class="w-100">' +
+                            '<tr>' +
+                                '<th><i class="fas fa-shipping-fast"></i><label class="left-10">55</label></th>' +
+                                '<th><i class="fas fa-audible"></i><label class="left-10">12</label></th>' +
+                                '<th><i class="fas fa-bacon"></i><label class="left-10">5</label></th>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<th><i class="fas fa-boxes"></i><label class="left-10">5.5</label></th>' +
+                                '<th><i class="fas fa-building"></i><label class="left-10">90</label></th>' +
+                                '<th><i class="fas fa-calendar-check"></i><label class="left-10">1.88</label></th>' +
+                            '</tr>' +
+                        '</table>' +
+                    '</div>' +
+                '</div>' +
+                '<div id="route-list" class="h-100">' +
+                
+                    '<b-modal id="modalRouteInfo" title="Маршрут" @hide="clearName">' + 
+                        '<p>ТК : {{transportCompanyName}}</p>' + 
+                        '<p>Машина : {{vehicleModel}}</p>' + 
+                        '<p>Водитель : </p><br/>' +
+                        '<table class="table table-hover table-sm table-bordered">' + 
+                            '<thead><tr><th scope="col">№</th><th scope="col">Время</th><th scope="col">Адрес</th><th scope="col">Вес</th><th scope="col">Объём</th><th scope="col">Этаж</th></tr></thead>' +    
+                                '<tbody><tr v-for="(item, deliveryInfoIndex) in deliveriesInfoList">' + 
+                                    '<td>{{item.number}}</td>' + 
+                                    '<td>{{item.arrivalTime}}</td>' +
+                                    '<td>{{item.address}}</td>' + 
+                                    '<td>{{item.weight}}кг</td>' +
+                                    '<td>{{item.volume}}м3</td>' +
+                                    '<td>{{item.floor}}</td>' +
+                                '</tr></tbody>' + 
+                        '</table>' +
+                    '</b-modal>' + 
+                    '<div v-for="(item, index) in routesList" :key=item.index class="card">' + 
+                        '<div class="card-body">' + 
+                            '<h5 class="mb-0">' +
+                            '   <div class=" card-text"><p class="card-text float-left">{{item.name}}</p>' + 
+                                    '<div class="float-right">' +
+                                        '<b-button size="sm" v-on:click="drawRoute(index)" variant="outline-primary"><i class="fa fa-location-arrow fa-sm" aria-hidden="true"></i></b-button><br/>' +
+                                        '<b-button size="sm" v-on:click="viewRouteInfo(index)" variant="outline-primary" v-b-modal.modalRouteInfo class="btn"><i class="fa fa-info fa-sm" aria-hidden="true"></i></b-button>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</h5>' +
+                        '</div>' +
+                    '</div>' + 
+                    '</div>' + 
+                    '</div>' +
+                    '<div id="map-planning" class="col-md-10 full-div">' +
+                        '<div id="map" class="h-100 full-div">' +
+                            '<div id="YMapsID" style="width:100%;height:100%"></div>' +
+                        '</div>' +
+                    '</div>' +
+                
+                '</div>',
+  //            '</div>',
    
    data() {
        return {
@@ -67,6 +101,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                 {id: 9, delivery: {id: 9, city: 'Moscow', street: 'street', house: '14', entrance: '2', flat: '37', lon: 55.781367, lat: 37.627791}, arrivalTime: 20 },
                 {id: 10, delivery: {id: 10, city: 'Moscow', street: 'street', house: '15', entrance: '2', flat: '38', lon: 55.754455, lat: 37.463424}, arrivalTime: 20 }
                 ]});
+            
            console.log(this.routesList);
            console.log(this.routesList[0].vehicle.model);
            
