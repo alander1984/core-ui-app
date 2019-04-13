@@ -1,4 +1,3 @@
-/*globals ymaps */
 var Stores = Vue.component ('stores', {
     
     
