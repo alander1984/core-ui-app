@@ -24,6 +24,10 @@ body {
     margin-right: auto;
 }
 
+.hidden {
+    display: none;
+}
+
 .left-5 {
     padding-left: 10px;
 }

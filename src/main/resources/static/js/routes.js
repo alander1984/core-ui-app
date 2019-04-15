@@ -68,7 +68,7 @@ Vue.component('routes', {
       + 'Транспорт: : {{route.vehicle.model}}'
       + '</div>'
       + '<div class="row">'
-      + 'Водитель: : {{route.vehicle.drivers[0].surname}} {{route.vehicle.drivers[0].name.charAt(0)}}.{{route.vehicle.drivers[0].patronymic.charAt(0)}}'
+      + 'Водитель: : {{route.driver.surname}} {{route.driver.name.charAt(0)}}.{{route.driver.patronymic.charAt(0)}}'
       + '</div>'
       + '<div class="text-right">'
       + '<b-button :id="\'delroute-\'+ index" v-on:click="deleteRoute(index_n, item, route)" variant="danger" size="sm">Удалить машрут</b-button>'
@@ -122,11 +122,12 @@ Vue.component('routes', {
     },
     handleSubmit (evt) {
       console.log("In handle submit");
-      tmp = {};
+      let tmp = {};
       tmp.name = this.routeName;
       tmp.deliveryDate = this.routeDate;
       tmp.vehicleId = this.selectedVehicles.id;
       tmp.transportcompanyId = this.selectedTransportCompanies.id;
+      tmp.driverId = this.selectedDrivers.id;
 
       //TODO Validate
       tmp.storeid = this.selectedStore.id;
@@ -191,7 +192,7 @@ Vue.component('routes', {
         });
 
         this.listAllStores = _listAllStores;
-        console.log("After Promisse all");
+        this.$forceUpdate();
       });
 
     },
