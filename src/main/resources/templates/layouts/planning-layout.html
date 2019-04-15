@@ -58,7 +58,7 @@
     </nav>
     </div>
 
-<div id="main" class="container-fluid row full-div h-100" style="padding-left: 55px;">
+<div id="vue-app" class="container-fluid row full-div h-100" style="padding-left: 55px;">
 
 <th:block layout:fragment="script"></th:block>
     <div id="routes" class="col-md-4 full-div" >
@@ -80,6 +80,13 @@
 </div>
 <script th:src="@{/js/routes.js}"></script>
 <script th:src="@{/js/planning-main.js}"></script>
+    <script th:src="@{/js/api/bundle.js}" defer></script>
+    <script th:src="@{/js/delivery_details_new.js}" defer></script>
+    <script th:src="@{/js/deliveries_new.js}" defer></script>
+            <script th:src="@{/js/maps/ymaps.js}"></script>
+    <script th:src="@{/js/main.js}" defer></script>
+
+    <script th:src="@{/js/planning.js}" defer></script>
 
 </body>
 </html>
