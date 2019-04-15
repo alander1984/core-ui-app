@@ -95,9 +95,9 @@ Vue.component('delivery-details-new', {
                             '</tr>' +
                         '</table>' + 
                         //'<b-button id="closeShowItems" variant="primary"  @click="closeShowItemsForDelivery()">Close</b-button>' +
-                    '</div>' +
+                    '</div>' +  
                '</div>',
-    props: ['delivery'],
+    //props: ['delivery'],
     data(){
             return {
                 listItems: [],
@@ -109,6 +109,11 @@ Vue.component('delivery-details-new', {
                 
             }
         },
+    computed:{
+        delivery: function(){
+            return this.$store.state.delivery
+        }
+    },
     created(){
         console.log("DETAILS FOR ID " + this.delivery.id);
     },

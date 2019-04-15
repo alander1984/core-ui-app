@@ -31,7 +31,7 @@ Vue.component('deliveries-new', {
                             '</tr>' +
                         '</table>' +
                         '<div v-if="showInlineItems == true">' +
-                            '<delivery-details-new v-bind:delivery="this.delivery"></delivery-details-new>' +
+                            //'<delivery-details-new></delivery-details-new>' +
                         '</div>' +
                '</div>',
     data(){
@@ -59,6 +59,7 @@ Vue.component('deliveries-new', {
         showDetailsForDelivery(item){
             this.delivery = item;
             console.log("Id --> " + this.delivery.id);
+            this.$store.commit('loadDelivery', this.delivery);
             this.showInlineItems = true;
             /*alert("Item " + id);
             CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {

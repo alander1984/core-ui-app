@@ -1,6 +1,11 @@
 const store = new Vuex.Store({
     state: {
         delivery: {}
+    },
+    mutations: {
+        loadDelivery(state, payload){
+           state.delivery = payload 
+        }
     }
 })
 var app = new Vue({
