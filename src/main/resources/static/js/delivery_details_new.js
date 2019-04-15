@@ -1,10 +1,11 @@
 Vue.component('delivery-details-new', {
     template:  '<div>' +
+                    '<div v-if="showComponent == true">' +
                     '<div width="100%">' +
                         '<b-button-group>' +
                           '<b-button :pressed="pressed" variant="warning" @click="common()">Общее</b-button>' +
                           '<b-button variant="warning" @click="details()">Детали</b-button>' +
-                          '<b-button variant="warning" @click="showItemsForDelivery()">Состав</b-button>' +
+                          '<b-button variant="warning" @click="consist()">Состав</b-button>' +
                           '<b-button variant="warning" @click="history()">История</b-button>' +
                           '<b-button variant="warning" @click="confirm()">Подтверждение</b-button>' +
                         '</b-button-group>' +
@@ -96,17 +97,18 @@ Vue.component('delivery-details-new', {
                         '</table>' + 
                         //'<b-button id="closeShowItems" variant="primary"  @click="closeShowItemsForDelivery()">Close</b-button>' +
                     '</div>' +  
+                    '</div>' + 
                '</div>',
     //props: ['delivery'],
     data(){
             return {
                 listItems: [],
                 pressed: true,
-                showItems: true,
+                showItems: false,
                 item: {},
                 indexItem: 0,
-                listItemsLength: 0
-                
+                listItemsLength: 0,
+                showComponent: false             
             }
         },
     computed:{
@@ -115,10 +117,11 @@ Vue.component('delivery-details-new', {
         }
     },
     created(){
-        console.log("DETAILS FOR ID " + this.delivery.id);
+        console.log("DETAILS FOR ID " + this.delivery.id);       
     },
     mounted() {
         Event.$on('showDelivery', (id) => {
+            this.showComponent = true;
             this.showItemsForDelivery(id);
             this.$forceUpdate();
         })
@@ -135,7 +138,7 @@ Vue.component('delivery-details-new', {
         },
         showItemsForDelivery(id){
             this.pressed = false;
-            this.showItems = true;
+            //this.showItems = true;
             CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {
             
                 this.listItems = items;
@@ -152,6 +155,10 @@ Vue.component('delivery-details-new', {
         },
         details(){
             this.pressed = false;
+        },
+        consist(){
+            this.pressed = false;
+            this.showItems = true;
         },
         history(){
             this.pressed = false;
