@@ -29,7 +29,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                 '</div>' +
                 '<div id="route-list" class="h-100">' +
                 
-                    '<b-modal id="modalRouteInfo" title="Маршрут" @hide="clearName">' + 
+                    '<b-modal id="modalRouteInfo" :title="routeName" @hide="clearName">' + 
                         '<p>ТК : {{transportCompanyName}}</p>' + 
                         '<p>Машина : {{vehicleModel}}</p>' + 
                         '<p>Водитель : </p><br/>' +
@@ -113,10 +113,13 @@ var routesmonitoring = Vue.component('routesmonitoring', {
        
        viewRouteInfo(index) {
            console.log('ITEM VIEW ROUTE INFO: ' + index);
-           this.deliveriesInfoList = this.getDeliveriesItemsByDeliveryId(this.routesList[index].routepoints);
+           if(this.routesList[index].routepoints !== undefined) {
+            this.deliveriesInfoList = this.getDeliveriesItemsByDeliveryId(this.routesList[index].routepoints);
+           }
+
            this.vehicleModel = this.routesList[index].vehicle.model;
            this.transportCompanyName = this.routesList[index].transportcompany.name;
-           
+           this.routeName = this.routesList[index].name;
            
        },
        
@@ -172,26 +175,29 @@ var routesmonitoring = Vue.component('routesmonitoring', {
            this.vehicleModel = '';
            this.transportCompanyName = '';
            this.deliveriesInfoList = [];
+           this.routeName = '';
        }, 
        
        drawRoute(index) {
            console.log('DRAW ROUTE INDEX: ' + index);
-           console.log('YMAPS: ' + ymaps);
            myMapMonitoring.geoObjects.removeAll();
-           let lineCoordinats = [];
-           myMapMonitoring.setCenter([this.routesList[index].routepoints[0].delivery.lon, this.routesList[index].routepoints[0].delivery.lat]);
-           this.routesList[index].routepoints.forEach(function(rp, i, arr) {
-              let routePoint = new ymaps.GeoObject({
-                 geometry: {
-                    type: "Point", 
-                    coordinates: [rp.delivery.lon, rp.delivery.lat] 
-                 }
-              });
-              myMapMonitoring.geoObjects.add(routePoint);
-              lineCoordinats.push([rp.delivery.lon, rp.delivery.lat]);
-           });
-           let routeLine = new ymaps.Polyline(lineCoordinats, {strokeColor: "#000000", strokeWidth: 2, strokeOpacity: 1});
-           myMapMonitoring.geoObjects.add(routeLine);
+           if(this.routesList[index].routepoints !== undefined) {
+               let lineCoordinats = [];
+               myMapMonitoring.setCenter([this.routesList[index].routepoints[0].delivery.lon, this.routesList[index].routepoints[0].delivery.lat]);
+               this.routesList[index].routepoints.forEach(function(rp, i, arr) {
+                  let routePoint = new ymaps.GeoObject({
+                     geometry: {
+                        type: "Point", 
+                        coordinates: [rp.delivery.lon, rp.delivery.lat] 
+                     }
+                  });
+                  myMapMonitoring.geoObjects.add(routePoint);
+                  lineCoordinats.push([rp.delivery.lon, rp.delivery.lat]);
+               });
+               let routeLine = new ymaps.Polyline(lineCoordinats, {strokeColor: "#000000", strokeWidth: 2, strokeOpacity: 1});
+               myMapMonitoring.geoObjects.add(routeLine);
+           }    
+
 
        }
    },
