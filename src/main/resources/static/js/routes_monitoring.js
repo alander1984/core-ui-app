@@ -184,8 +184,15 @@ var routesmonitoring = Vue.component('routesmonitoring', {
        drawRoute(index) {
            console.log('DRAW ROUTE INDEX: ' + index);
            myMapMonitoring.geoObjects.removeAll();
+           
+           let storePlacemark = new ymaps.Placemark([this.routesList[index].store.lon, this.routesList[index].store.lat], 
+                        { iconCaption: this.routesList[index].store.name },
+                        { preset: 'islands#redIcon', draggable: false });
+            myMapMonitoring.geoObjects.add(storePlacemark);
+           
            if(this.routesList[index].routepoints !== undefined) {
                let lineCoordinats = [];
+               lineCoordinats.push([this.routesList[index].store.lon, this.routesList[index].store.lat]);
                myMapMonitoring.setCenter([this.routesList[index].routepoints[0].delivery.lon, this.routesList[index].routepoints[0].delivery.lat]);
                this.routesList[index].routepoints.forEach(function(rp, i, arr) {
                   let routePoint = new ymaps.GeoObject({
