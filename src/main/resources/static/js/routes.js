@@ -122,7 +122,7 @@ Vue.component('routes', {
     },
     handleSubmit (evt) {
       console.log("In handle submit");
-      tmp = {};
+      let tmp = {};
       tmp.name = this.routeName;
       tmp.deliveryDate = this.routeDate;
       tmp.vehicleId = this.selectedVehicles.id;
