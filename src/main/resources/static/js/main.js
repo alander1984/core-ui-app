@@ -6,3 +6,10 @@ var app = new Vue({
     }
 });
 
+
+var app1 = new Vue({
+    el: '#vue-app',
+    data: {
+        message : 'This is Vue.js !!!!'
+    }
+});

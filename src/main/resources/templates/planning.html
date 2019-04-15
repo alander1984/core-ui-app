@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
 <section layout:fragment="map-section">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -21,10 +20,10 @@
     <div class="tab-content" style="width:100%;height:100%" id="mainTabContent" >
         <div class="workPanel" style="width:100%;height:100%" id="map-div" >
             <div id="YMapsID" style="width:100%;height:calc(100% - 30px)"></div>
-            <script th:src="@{/js/maps/ymaps.js}"></script>
         </div>
         <div class="workPanel hidden" id="order-div" >
-            Здесь заказ
+            Заказ
+          <delivery-details-new></delivery-details-new>
         </div>
     </div>
 </section>
@@ -39,10 +38,10 @@
         <label>Дата: </label>
         <input id="date" data-provide="datepicker" class="datepicker left-10"/>
     </div>    
-    <script type="text/javascript" th:src="@{/js/planning.js}"></script>
 </section>
 
 <section layout:fragment="orders-section">
+
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="new-orders-tab" data-toggle="tab" href="#new-orders" role="tab" aria-controls="new-orders" aria-selected="true">Нераспределенные заявки</a>
@@ -57,9 +56,7 @@
     <div class="tab-content" id="myTabContent"  style="height: calc(100% - 30px);overflow-y: auto;">
         <div class="tab-pane fade show active" id="new-orders" role="tabpanel" aria-labelledby="new-orders-tab">
             <!--Сюда компонент отображения нераспределенных заявок-->
-            <div id="admin-app" class="admin-app">
-                <deliveries-new></deliveries-new>
-            </div>
+            <deliveries-new></deliveries-new>
         </div>
         <div class="tab-pane fade" id="route-orders" role="tabpanel" aria-labelledby="route-orders">
             Сюда компонент отображения заявок маршрута
@@ -69,13 +66,7 @@
         </div>
     </div>
     
-    <script th:src="@{/js/api/bundle.js}" defer></script>
-    <script th:src="@{/js/delivery_details_new.js}" defer></script>
-    <script th:src="@{/js/deliveries_new.js}" defer></script>
-    <script th:src="@{/js/main.js}" defer></script>
-    <script th:src="@{/js/planning.js}" defer></script>
 </section>
-
 
 </body>
 </html>
