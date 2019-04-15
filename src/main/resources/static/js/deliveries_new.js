@@ -59,8 +59,12 @@ Vue.component('deliveries-new', {
         showDetailsForDelivery(item){
             this.delivery = item;
             console.log("Id --> " + this.delivery.id);
+
             this.$store.commit('loadDelivery', this.delivery);
             this.showInlineItems = true;
+
+            //this.showInlineItems = true;
+            Event.$emit('showDelivery', this.delivery.id);
             /*alert("Item " + id);
             CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {
             

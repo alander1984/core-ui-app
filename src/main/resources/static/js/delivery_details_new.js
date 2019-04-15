@@ -102,7 +102,7 @@ Vue.component('delivery-details-new', {
             return {
                 listItems: [],
                 pressed: true,
-                showItems: false,
+                showItems: true,
                 item: {},
                 indexItem: 0,
                 listItemsLength: 0
@@ -117,11 +117,26 @@ Vue.component('delivery-details-new', {
     created(){
         console.log("DETAILS FOR ID " + this.delivery.id);
     },
+    mounted() {
+        Event.$on('showDelivery', (id) => {
+            this.showItemsForDelivery(id);
+            this.$forceUpdate();
+        })
+    },
     methods: {
-        showItemsForDelivery(){
+        forceRerender() {
+        // Remove my-component from the DOM
+            this.renderComponent = false;
+        
+            this.$nextTick(() => {
+          // Add the component back in
+              this.renderComponent = true;
+            });
+        },
+        showItemsForDelivery(id){
             this.pressed = false;
             this.showItems = true;
-            CDSAPI.Deliveries.getItemsForDelivery(this.delivery.id).then(items => {
+            CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {
             
                 this.listItems = items;
                 this.listItemsLength = this.listItems.length;

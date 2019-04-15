@@ -1,11 +1,11 @@
 Vue.component('routes', {
   template:
       '<div>'
-      + '<b-modal id="modalAddRoute" ref="modal1" title="Добавить маршрут" @ok="handleSubmit">'
+      + '<b-modal id="modalAddRoute" ref="modal1" :title="\'Добавить маршрут для \'+this.selectedStore.name" @ok="handleSubmit">'
       + '<form @submit.stop.prevent="handleSubmit">'
       + '<label for="createName"  class="col-form-label">Название</label>'
       + '<b-form-input id="createName" type="text" v-model="routeName"/><br/>'
-      + '<label for="createDate"  class="col-form-label">Время</label>'
+      + '<label for="createDate"  class="col-form-label">Дата</label>'
       + '<b-form-input id="createDate" type="select" v-model="routeDate"/><br/>'
       + '<label for="createTC">ТК</label>'
       + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies" @change="onChangeTC($event)">\'+\n'
@@ -120,7 +120,7 @@ Vue.component('routes', {
       // Prevent modal from closing
       evt.preventDefault();
     },
-    handleSubmit (evt) {
+    handleSubmit(evt) {
       console.log("In handle submit");
       let tmp = {};
       tmp.name = this.routeName;
@@ -129,6 +129,11 @@ Vue.component('routes', {
       tmp.transportcompanyId = this.selectedTransportCompanies.id;
       tmp.driverId = this.selectedDrivers.id;
 
+      let tmpRoute = {};
+      tmpRoute.driver = this.selectedDrivers;
+      tmpRoute.vehicle = this.selectedVehicles;
+      tmpRoute.transportcompany = this.selectedTransportCompanies;
+      tmpRoute.store = this.selectedStore;
       //TODO Validate
       tmp.storeid = this.selectedStore.id;
 
@@ -136,23 +141,39 @@ Vue.component('routes', {
         console.log("Created Route ID :  " + id);
         this.clearModal();
         return id;
-      });
+      }).then(new_id => {
+        this.listAllStores.forEach(function (item_s, index, str) {
+          if (item_s.id === tmp.storeid) {
+            let _tmp = {};
+            _tmp.deliveryDate = tmp.deliveryDate;
+            _tmp.id = new_id;
+            _tmp.name =  tmp.name;
+            _tmp.store = tmpRoute.store;
+            _tmp.transportcompany = tmpRoute.transportcompany;
+            _tmp.vehicle = tmpRoute.vehicle;
+            _tmp.driver = tmpRoute.driver;
+            item_s.routes.push(_tmp);
+          }
+        });
 
-      this.$nextTick(() => {
-        // Wrapped in $nextTick to ensure DOM is rendered before closing
-        this.$refs.modal1.hide();
-
-      });
+      }).then(result => {
+        this.$forceUpdate();
+            this.$nextTick(() => {
+              // Wrapped in $nextTick to ensure DOM is rendered before closing
+              this.$refs.modal1.hide();
+            });
+          }
+      );
     },
     storeChange(item) {
       this.selectedStore = item;
       console.log("In storeChange");
     },
-    onChangeTC(event){
+    onChangeTC(event) {
       this.tc_vehicles = this.selectedTransportCompanies.vehicles;
       console.log("In  onChangeTC event");
     },
-    onChangeVehicle(event){
+    onChangeVehicle(event) {
       this.vehicle_drivers = this.selectedVehicles.drivers;
       console.log("In  onChangeVehicle event");
     },
@@ -185,7 +206,7 @@ Vue.component('routes', {
           items.routes = [];
           _listAllRoutes.forEach(function (itemr, index, rt) {
             // console.log("Route item - " + itemr.id + " " + itemr.name);
-            if (items.id === itemr.store.id){
+            if (items.id === itemr.store.id) {
               items.routes.push(itemr);
             }
           });
@@ -199,7 +220,6 @@ Vue.component('routes', {
     allTCs() {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
         this.listAllTransportCompanies = tcs;
-        console.log("Transport Companies :  " );
       });
     }
   },
