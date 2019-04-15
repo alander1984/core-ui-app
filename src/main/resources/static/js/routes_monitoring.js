@@ -32,7 +32,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                     '<b-modal id="modalRouteInfo" :title="routeName" @hide="clearName">' + 
                         '<p>ТК : {{transportCompanyName}}</p>' + 
                         '<p>Машина : {{vehicleModel}}</p>' + 
-                        '<p>Водитель : </p><br/>' +
+                        '<p>Водитель : {{driverName}}</p><br/>' +
                         '<table class="table table-hover table-sm table-bordered">' + 
                             '<thead><tr><th scope="col">№</th><th scope="col">Время</th><th scope="col">Адрес</th><th scope="col">Вес</th><th scope="col">Объём</th><th scope="col">Этаж</th></tr></thead>' +    
                                 '<tbody><tr v-for="(item, deliveryInfoIndex) in deliveriesInfoList">' + 
@@ -120,7 +120,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
            this.vehicleModel = this.routesList[index].vehicle.model;
            this.transportCompanyName = this.routesList[index].transportcompany.name;
            this.routeName = this.routesList[index].name;
-           
+           this.driverName = this.routesList[index].driver.surname + ' ' + this.routesList[index].driver.name + ' ' + this.routesList[index].driver.patronymic;
        },
        
        getDeliveriesItemsByDeliveryId(routePoints) {
@@ -176,6 +176,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
            this.transportCompanyName = '';
            this.deliveriesInfoList = [];
            this.routeName = '';
+           this.driverName = '';
        }, 
        
        drawRoute(index) {
