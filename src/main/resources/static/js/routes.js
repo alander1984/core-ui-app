@@ -3,10 +3,8 @@ Vue.component('routes', {
       '<div>'
       + '<b-modal id="modalAddRoute" ref="modal1" :title="\'Добавить маршрут для \'+this.selectedStore.name" @ok="handleSubmit">'
       + '<form @submit.stop.prevent="handleSubmit">'
-      + '<label for="createName"  class="col-form-label">Название</label>'
-      + '<b-form-input id="createName" type="text" v-model="routeName"/><br/>'
       + '<label for="createDate"  class="col-form-label">Дата</label>'
-      + '<b-form-input id="createDate" type="select" v-model="routeDate"/><br/>'
+      + '<b-form-input id="createDate"  v-model="routeDate" type="date"/><br/>'
       + '<label for="createTC">ТК</label>'
       + '<select id="createTC" class="form-control" v-model="selectedTransportCompanies" @change="onChangeTC($event)">\'+\n'
       + '<option v-for="transportCompany in listAllTransportCompanies" v-bind:value="transportCompany">'
@@ -38,7 +36,7 @@ Vue.component('routes', {
       + '<div id="main-info-content-header" className="row">'
       + '<div class="form-row">'
       + '<div class="form-group col-md-4">'
-      + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут</b-button>'
+      + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут {{getfullname}}</b-button>'
       + '</div>'
       + '</div>'
       + '</div>'
@@ -54,12 +52,12 @@ Vue.component('routes', {
       + '        <div role="tablist" v-for="(route, index_n) in item.routes">'
       + ' <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary">{{route.name}}</b-button>\n'
+      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary">{{route.vehicle.model}} {{route.vehicle.registrationNumber}}</b-button>\n'
       + '    </b-card-header>\n'
       + '    <b-collapse :id="\'accordion_nested-\'+ index_n"  role="tabpanel">\n'
       + '      <b-card-body>\n'
       + '<div class="row">'
-      + 'Время : {{route.deliveryDate}}'
+      + 'Дата : {{route.deliveryDate}}'
       + '</div>'
       + '<div class="row">'
       + 'ТК: : {{route.transportcompany.name}}'
@@ -87,7 +85,6 @@ Vue.component('routes', {
   data() {
     return {
       text: ``,
-      routeName: '',
       routeDate: '',
       driver: '',
       selectedDrivers: [],
@@ -107,6 +104,15 @@ Vue.component('routes', {
 
     }
   },
+  computed :{
+    getfullname : function(){
+      if (this.selectedStore !== ''){
+        return " для " + this.selectedStore.name;
+      } else {
+        return "";
+      }
+    }
+  },
   methods: {
     deleteRoute(index, item, route) {
       CDSAPI.RouteService.deleteRoute(route.id.toString()).then(response => {
@@ -123,7 +129,7 @@ Vue.component('routes', {
     handleSubmit(evt) {
       console.log("In handle submit");
       let tmp = {};
-      tmp.name = this.routeName;
+      tmp.name = '';
       tmp.deliveryDate = this.routeDate;
       tmp.vehicleId = this.selectedVehicles.id;
       tmp.transportcompanyId = this.selectedTransportCompanies.id;
@@ -167,15 +173,15 @@ Vue.component('routes', {
     },
     storeChange(item) {
       this.selectedStore = item;
-      console.log("In storeChange");
+      // console.log("In storeChange");
     },
     onChangeTC(event) {
       this.tc_vehicles = this.selectedTransportCompanies.vehicles;
-      console.log("In  onChangeTC event");
+      // console.log("In  onChangeTC event");
     },
     onChangeVehicle(event) {
       this.vehicle_drivers = this.selectedVehicles.drivers;
-      console.log("In  onChangeVehicle event");
+      // console.log("In  onChangeVehicle event");
     },
     clearModal() {
       this.routeName = '';
