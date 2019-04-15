@@ -40,7 +40,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                                     '<td>{{item.arrivalTime}}</td>' +
                                     '<td>{{item.address}}</td>' + 
                                     '<td>{{item.weight}}кг</td>' +
-                                    '<td>{{item.volume}}м3</td>' +
+                                    '<td>{{item.volume}}м<sup><small>3</small></sup></td>' +
                                     '<td>{{item.floor}}</td>' +
                                 '</tr></tbody>' + 
                         '</table>' +
@@ -120,7 +120,7 @@ var routesmonitoring = Vue.component('routesmonitoring', {
            this.vehicleModel = this.routesList[index].vehicle.model;
            this.transportCompanyName = this.routesList[index].transportcompany.name;
            this.routeName = this.routesList[index].name;
-           this.driverName = this.routesList[index].driver.surname + ' ' + this.routesList[index].driver.name + ' ' + this.routesList[index].driver.patronymic;
+           this.driverName = this.routesList[index].driver.surname + ' ' + this.routesList[index].driver.name.charAt(0) + '. ' + this.routesList[index].driver.patronymic.charAt(0) + '.';
        },
        
        getDeliveriesItemsByDeliveryId(routePoints) {
@@ -152,16 +152,18 @@ var routesmonitoring = Vue.component('routesmonitoring', {
                    console.log('GET DELIVERY ITEMS FOR DELIVERY ID: ' + routePoint.delivery.id);
                    deliveryItems = list;
                    console.log(deliveryItems);
-               });
-               deliveryItems.forEach(function(di, j, arrDI) {
-                   console.log('WIDTH: ' + di.width);
-                   volume = volume + di.width * di.length * di.height;
-                    weight = weight + di.weight;
+                   deliveryItems.forEach(function(di, j, arrDI) {
+                       console.log('WIDTH: ' + di.width);
+                       volume = volume + di.width * di.length * di.height;
+                       weight = weight + di.weight;
+                       deliveryInfo.volume = volume;
+                       deliveryInfo.weight = weight;
+                       deliveriesInfo.push(deliveryInfo);
+                   });
                });
                
-               deliveryInfo.volume = volume;
-               deliveryInfo.weight = weight;
-               deliveriesInfo.push(deliveryInfo);
+               
+               
                
 
                
