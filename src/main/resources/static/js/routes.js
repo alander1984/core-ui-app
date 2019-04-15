@@ -1,8 +1,8 @@
 Vue.component('routes', {
   template:
       '<div>'
-      + '<b-modal id="modalAddRoute" ref="modal1" :title="\'Добавить маршрут для \'+this.selectedStore.name" @ok="handleSubmit">'
-      + '<form @submit.stop.prevent="handleSubmit">'
+      + '<b-modal id="modalAddRoute" ref="modal1" :title="\'Добавить маршрут для \'+this.selectedStore.name" @ok="handleOk" @show="submitPrevent($event)">'
+      + '<form @submit.stop.prevent="handleOk">'
       + '<label for="createDate"  class="col-form-label">Дата</label>'
       + '<b-form-input id="createDate"  v-model="routeDate" type="date"/><br/>'
       + '<label for="createTC">ТК</label>'
@@ -36,7 +36,7 @@ Vue.component('routes', {
       + '<div id="main-info-content-header" className="row">'
       + '<div class="form-row">'
       + '<div class="form-group col-md-4">'
-      + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут {{getfullname}}</b-button>'
+      + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute >Добавить машрут {{getfullname}}</b-button>'
       + '</div>'
       + '</div>'
       + '</div>'
@@ -101,6 +101,10 @@ Vue.component('routes', {
       listAllTransportCompanies: [],
       listAllRoutes: [],
       listAllStores: [],
+      email : "",
+      emailBlured : false,
+      valid : false,
+      submitted : false
 
     }
   },
@@ -122,11 +126,35 @@ Vue.component('routes', {
       this.$forceUpdate();
 
     },
+    submitPrevent (bvEvt) {
+      if (!this.selectedStore){
+        alert("Выберите магазин для добавления маршрута");
+        bvEvt.preventDefault();
+      }
+    },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
+      if (this.routeDate === ''){
+        alert("Выберите дату");
+      } else {
+        if (this.selectedTransportCompanies.length === 0){
+          alert("Выберите ТК");
+        } else {
+          if (this.selectedVehicles.length === 0){
+            alert("Выберите ТС");
+          } else {
+            if (this.selectedDrivers.length === 0){
+              alert("Выберите водителя");
+            } else {
+              this.handleSubmit();
+            }
+          }
+        }
+      }
+
     },
-    handleSubmit(evt) {
+    handleSubmit() {
       console.log("In handle submit");
       let tmp = {};
       tmp.name = '';
@@ -228,6 +256,9 @@ Vue.component('routes', {
         this.listAllTransportCompanies = tcs;
       });
     }
+  },
+  mounted(){
+    $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
   },
   created() {
     this.allRoutesAndStores();
