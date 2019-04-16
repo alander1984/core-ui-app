@@ -124,6 +124,9 @@ Vue.component('delivery-details-new', {
             this.showComponent = true;
             this.showItemsForDelivery(id);
             this.$forceUpdate();
+            if ($("#order-tab")) {
+                $("#order-tab").click();
+            }
         })
     },
     methods: {

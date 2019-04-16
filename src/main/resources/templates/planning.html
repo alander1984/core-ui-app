@@ -18,12 +18,11 @@
             <a class="nav-link worktab" id="order-tab" data-toggle="tab" href="#order" role="tab" aria-controls="order" aria-selected="false" data-tab="#order-div">Заказ</a>
         </li>
     </ul>
-    <div class="tab-content" style="width:100%;height:100%; overflow-y: auto;" id="mainTabContent">
+    <div class="tab-content" style="width:100%;height:calc(100% - 30px); overflow-y: auto;" id="mainTabContent">
         <div class="workPanel" style="width:100%;height:100%" id="map-div" >
-            <div id="YMapsID" style="width:100%;height:calc(100% - 30px)"></div>
+            <div id="YMapsID" style="width:100%;height:100%"></div>
         </div>
-        <div class="workPanel hidden" id="order-div" >
-            Заказ
+        <div class="workPanel hidden" id="order-div" style="width:calc(100% - 20px)" >
           <delivery-details-new></delivery-details-new>
         </div>
     </div>

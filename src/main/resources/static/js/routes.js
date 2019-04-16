@@ -35,7 +35,7 @@ Vue.component('routes', {
       + '</b-modal>'
       + '<div id="main-info-content-header" className="row">'
       + '<div class="form-row">'
-      + '<div class="form-group col-md-4">'
+      + '<div class="form-group" style="margin-top:10px">'
       + '<b-button id="addR" variant="success" v-b-modal.modalAddRoute>Добавить машрут {{getfullname}}</b-button>'
       + '</div>'
       + '</div>'
