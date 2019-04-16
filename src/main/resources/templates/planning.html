@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/planning-layout">
+<head>
+  <title>Рабочее место логиста</title>
+  <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
+  <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
+</head>
+
+<body>
+
+<section layout:fragment="map-section">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active worktab" id="map-tab-show" data-toggle="tab" href="#map-show" role="tab" aria-controls="map-show" aria-selected="true" data-tab="#map-div">Карта</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link worktab" id="order-tab" data-toggle="tab" href="#order" role="tab" aria-controls="order" aria-selected="false" data-tab="#order-div">Заказ</a>
+        </li>
+    </ul>
+    <div class="tab-content" style="width:100%;height:calc(100% - 30px); overflow-y: auto;" id="mainTabContent">
+        <div class="workPanel" style="width:100%;height:100%" id="map-div" >
+            <div id="YMapsID" style="width:100%;height:100%"></div>
+        </div>
+        <div class="workPanel hidden" id="order-div" style="width:calc(100% - 20px)" >
+          <delivery-details-new></delivery-details-new>
+        </div>
+    </div>
+</section>
+
+<section id="route-list" layout:fragment="route-list-section">
+        <div class="container">
+        <routes></routes>
+        </div>
+</section>
+<section layout:fragment="route-settings-section">
+    <div class="form-inline center-div">
+        <label>Дата: </label>
+        <input id="date" data-provide="datepicker" class="datepicker left-10"/>
+    </div>    
+</section>
+
+<section layout:fragment="orders-section">
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="new-orders-tab" data-toggle="tab" href="#new-orders" role="tab" aria-controls="new-orders" aria-selected="true">Нераспределенные заявки</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="route-orders-tab" data-toggle="tab" href="#route-orders" role="tab" aria-controls="route-orders" aria-selected="false">Маршрут</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="routing-tab" data-toggle="tab" href="#routing" role="tab" aria-controls="routing" aria-selected="false">Автоматическое планирование</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent"  style="height: calc(100% - 30px);overflow-y: auto;">
+        <div class="tab-pane fade show active" id="new-orders" role="tabpanel" aria-labelledby="new-orders-tab">
+            <!--Сюда компонент отображения нераспределенных заявок-->
+            <deliveries-new></deliveries-new>
+        </div>
+        <div class="tab-pane fade" id="route-orders" role="tabpanel" aria-labelledby="route-orders">
+            Сюда компонент отображения заявок маршрута
+        </div>
+        <div class="tab-pane fade" id="routing" role="tabpanel" aria-labelledby="routing-tab">
+            Сюда компонент настроек автоматического планирования
+        </div>
+    </div>
+    
+</section>
+
+</body>
+</html>

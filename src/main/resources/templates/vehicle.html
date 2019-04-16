@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
+<head>
+  <title>Транспортные средства</title>
+</head>
+<body>
+<section layout:fragment="admin-content">
+  <div id="vue-app" class="admin-app">
+    <vehicles></vehicles>
+  </div>
+  <div>
+    <a th:href="@{/admin}">На страницу администрирования</a>
+  </div>
+  <script th:src="@{/js/api/bundle.js}" defer></script>
+  <script th:src="@{/js/vehicles.js}" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
+</section>
+</body>
+</html>

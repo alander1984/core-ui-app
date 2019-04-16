@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
+<head>
+  <title>Права</title>
+</head>
+<body>
+<section layout:fragment="admin-content">
+    <div id="vue-app" class="admin-app" style="overflow: auto !important; height: 90%">
+    <permissions></permissions>
+    </br ></br >
+    <div>
+      <b-link th:href="@{/admin}">Go to Admin page</b-link>
+    </div>
+    </div>
+    <script th:src="@{/js/api/bundle.js}"></script>
+    <script th:src="@{/js/permissions.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</section>
+</body>
+</html>

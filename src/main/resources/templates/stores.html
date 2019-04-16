@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/base_layout">
+      
+    <head>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
+        type="text/javascript"></script>
+        <script th:src="@{/js/maps/ymaps_stores.js}"></script>
+    </head>
+    
+    
+    <body>
+        <section layout:fragment="admin-content" class="w-100">
+        
+        
+            
+            <div id="vue-app" class="admin-app">
+                <h2>Страница для работы с магазинами</h2>
+                <br/><br/>
+                <div>
+                    <b-link th:href="@{/admin}">На страницу администрирования</b-link>
+                </div>
+                <br/>
+                <stores></stores>                   
+            </div>
+            
+            <script th:src="@{/js/api/bundle.js}"></script>
+            <script th:src="@{/js/stores.js}"></script>
+            <script th:src="@{/js/main.js}"></script>
+        </section>
+        
+    </body>
+    
+</html>

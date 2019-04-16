@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+  <title>Layout</title>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="webjars/bootstrap-vue/1.3.0/bootstrap-vue.css"/>
+  <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
+  <link th:href="@{/css/sidebar.css}" rel="stylesheet" media="screen">
+  <link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet"/>
+
+  <script src="webjars/jquery/3.3.1-2/jquery.js"></script>
+
+  <script th:src="@{/js/libs/polyfill.min.js}"></script>
+  <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="webjars/vue/2.5.16/vue.js"></script>
+  <script src="webjars/vuex/2.5.0/dist/vuex.js"></script>
+  <!--<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>-->
+  <script src="webjars/bootstrap-vue/1.3.0/bootstrap-vue.min.js"></script>
+  <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+  <!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
+  <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
+  <script th:src="@{/js/utils/bootstrap-datepicker.min.js}"></script>
+  <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
+      type="text/javascript"></script>
+  
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/api/bundle.js}"></script>
+
+</head>
+<body>
+    <div class="menu-div">
+    <nav class="main-menu">
+
+    <div class="scrollbar" id="style-1">
+            <ul class="cul" role="tablist" data-tabs="tabs">
+                <li class="cil menu-planning">
+                    <a th:href="@{/}">
+                        <i class="fa fa-route fa-lg"></i>
+                        <span class="nav-text">Планирование</span>
+                    </a>
+                </li>
+                <li class="cil menu-monitoring">
+                    <a th:href="@{/monitoring}">
+                        <i class="fa fa-eye fa-lg"></i>
+                        <span class="nav-text">Мониторинг</span>
+                    </a>
+                </li>
+                <li class="cil menu-admin">
+                    <a th:href="@{/admin}">
+                        <i class="fa fa-tools fa-lg"></i>
+                        <span class="nav-text">Администрирование</span>
+                    </a>
+                </li>
+            </ul>
+        </div>  
+    </nav>
+    </div>
+
+<div id="vue-app" class="container-fluid row full-div h-100" style="padding-left: 55px;">
+
+<th:block layout:fragment="script"></th:block>
+    <div id="routes" class="col-md-4 full-div" >
+        <div id="route-settings" class="row full-div" layout:fragment="route-settings-section">
+            Place for settings
+        </div>
+        <div id="route-list" class="row h-100 full-div" layout:fragment="route-list-section">
+            Place for list
+        </div>
+    </div>
+    <div id="map-planning" class="col-md-8 full-div" style="height:100%">
+        <div id="map" class="h-50 full-div" layout:fragment="map-section">
+            
+        </div>
+        <div id="orders-panel" class="h-50 full-div" layout:fragment="orders-section">
+        </div>
+    </div>
+</div>
+</div>
+    <script th:src="@{/js/routes.js}"></script>
+    <script th:src="@{/js/planning-main.js}"></script>
+    <script th:src="@{/js/api/bundle.js}" defer></script>
+    <script th:src="@{/js/delivery_details_new.js}" defer></script>
+    <script th:src="@{/js/deliveries_new.js}" defer></script>
+            <script th:src="@{/js/maps/ymaps.js}"></script>
+    <script th:src="@{/js/main.js}" defer></script>
+
+    <script th:src="@{/js/planning.js}" defer></script>
+
+</body>
+</html>

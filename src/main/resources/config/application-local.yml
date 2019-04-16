@@ -1,0 +1,11 @@
+core-ui-app:
+    datasource:
+        host: 127.0.0.1
+        port: 5432
+        name: lm_database
+        username: lm_user
+        password: lm_user
+
+spring:
+     profiles:
+         active: local
