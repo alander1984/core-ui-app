@@ -13,10 +13,6 @@ body {
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
-
-
-
-
 .btn-sign-in {
     color: #fff;
 	background-color: green;
@@ -29,6 +25,13 @@ body {
     border-color: black; /*set the color you want here*/
 }
 
+input:hover {
+    cursor: text;
+}
+
+.pointer-event-none{
+    pointer-events:none;
+}
 
 .btn-sign-up {
     color: #fff;
