@@ -52,7 +52,7 @@ Vue.component('routes', {
       + '        <div role="tablist" v-for="(route, index_n) in item.routes">'
       + ' <b-card no-body class="mb-1">\n'
       + '    <b-card-header header-tag="header" class="p-1" role="tab">\n'
-      + '      <b-button block href="#" v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary">{{route.vehicle.model}} {{route.vehicle.registrationNumber}}</b-button>\n'
+      + '      <b-button block v-b-toggle="\'accordion_nested-\'+index_n\" variant="outline-primary" @click.prevent="routeChange(route)">{{route.vehicle.model}} {{route.vehicle.registrationNumber}}</b-button>\n'
       + '    </b-card-header>\n'
       + '    <b-collapse :id="\'accordion_nested-\'+ index_n"  role="tabpanel">\n'
       + '      <b-card-body>\n'
@@ -168,7 +168,6 @@ Vue.component('routes', {
       tmpRoute.vehicle = this.selectedVehicles;
       tmpRoute.transportcompany = this.selectedTransportCompanies;
       tmpRoute.store = this.selectedStore;
-      //TODO Validate
       tmp.storeid = this.selectedStore.id;
 
       CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
@@ -191,7 +190,7 @@ Vue.component('routes', {
         });
 
       }).then(result => {
-        this.$forceUpdate();
+            this.$forceUpdate();
             this.$nextTick(() => {
               // Wrapped in $nextTick to ensure DOM is rendered before closing
               this.$refs.modal1.hide();
@@ -202,6 +201,14 @@ Vue.component('routes', {
     storeChange(item) {
       this.selectedStore = item;
       // console.log("In storeChange");
+    },
+    routeChange(route) {
+      // console.log("In routeChange");
+
+      let tmp = {};
+      tmp.route = route;
+      tmp.storeId = this.selectedStore.id;
+      Event.$emit('changeRoute', tmp);
     },
     onChangeTC(event) {
       this.tc_vehicles = this.selectedTransportCompanies.vehicles;
@@ -257,9 +264,9 @@ Vue.component('routes', {
       });
     }
   },
-  mounted(){
-    $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
-  },
+  // mounted(){
+  //   $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
+  // },
   created() {
     this.allRoutesAndStores();
     this.allTCs();
