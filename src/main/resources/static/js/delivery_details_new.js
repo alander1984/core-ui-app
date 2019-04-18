@@ -10,7 +10,7 @@ Vue.component('delivery-details-new', {
                           '<b-button variant="warning" @click="confirm()">Подтверждение</b-button>' +
                         '</b-button-group>' +
                     '</div><br />' +
-                    '<div id="infoDelivery" v-if="showItems == false">' +
+                    '<div id="infoDelivery" v-if="showCommon == true">' +
                         '<b-row>' +
                           '<b-col lg="6" class="pb-2"><b-button size="sm" variant="success">Статус заказа</b-button></b-col>' +
                           '<b-col lg="6" class="pb-2"><b-button size="sm" variant="warning">Смена статуса</b-button></b-col>' +
@@ -31,7 +31,7 @@ Vue.component('delivery-details-new', {
                             '<label for="external">Внешний</label>' + 
                          '</b-col>' +
                           '<b-col sm="8">' +
-                            '<b-form-input id="external" type="text" />' +
+                            '<b-form-input id="external" type="text" v-model="delivery.external"/>' +
                           '</b-col>' +
                         '</b-row>' +
                         '<b-row class="my-1">' +
@@ -96,33 +96,40 @@ Vue.component('delivery-details-new', {
                             '</tr>' +
                         '</table>' + 
                         //'<b-button id="closeShowItems" variant="primary"  @click="closeShowItemsForDelivery()">Close</b-button>' +
-                    '</div>' +  
+                    '</div>' + 
+                    '<div id="infoDetails" v-if="showDetails == true">' +
+                        '<order-details v-bind:delivery="delivery"></order-details>' +
+                    '</div>' +
                     '</div>' + 
                '</div>',
     //props: ['delivery'],
     data(){
             return {
+                delivery: {},
                 listItems: [],
                 pressed: true,
-                showItems: false,
                 item: {},
                 indexItem: 0,
                 listItemsLength: 0,
-                showComponent: false             
+                showComponent: false,
+                showCommon: true,
+                showItems: false,
+                showDetails: false
             }
         },
-    computed:{
+    /*computed:{
         delivery: function(){
             return this.$store.state.delivery
         }
-    },
+    },*/
     created(){
         console.log("DETAILS FOR ID " + this.delivery.id);       
     },
     mounted() {
-        Event.$on('showDelivery', (id) => {
+        Event.$on('showDelivery', (delivery) => {
+            this.delivery = delivery;
             this.showComponent = true;
-            this.showItemsForDelivery(id);
+            this.showItemsForDelivery(delivery.id);
             this.$forceUpdate();
             if ($("#order-tab")) {
                 $("#order-tab").click();
@@ -154,14 +161,21 @@ Vue.component('delivery-details-new', {
         },
         common(){
             this.pressed = true;
+            this.showCommon = true;
             this.showItems = false;
+            this.showDetails = false;
         },
         details(){
             this.pressed = false;
+            this.showCommon = false;
+            this.showItems = false;
+            this.showDetails = true;
         },
         consist(){
             this.pressed = false;
             this.showItems = true;
+            this.showCommon = false;
+            this.showDetails = false;
         },
         history(){
             this.pressed = false;

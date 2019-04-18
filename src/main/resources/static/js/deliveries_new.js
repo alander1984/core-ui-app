@@ -64,7 +64,7 @@ Vue.component('deliveries-new', {
             this.showInlineItems = true;
 
             //this.showInlineItems = true;
-            Event.$emit('showDelivery', this.delivery.id);
+            Event.$emit('showDelivery', this.delivery);
             /*alert("Item " + id);
             CDSAPI.Deliveries.getItemsForDelivery(id).then(items => {
             
