@@ -6,12 +6,15 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
+    <link th:href="@{/css/select2.min.css}" rel="stylesheet"/>
   <div id="vue-app" class="admin-app">
     <tcs></tcs>
   </div>
   <div>
     <a th:href="@{/admin}">На страницу администрирования</a>
   </div>
+  <script th:src="@{/js/select2/select2.min.js}"></script>
+  <script th:src="@{/js/select2/i18n/ru.js}"></script>
   <script th:src="@{/js/api/bundle.js}" defer></script>
   <script th:src="@{/js/tcs.js}" defer></script>
   <script th:src="@{/js/main.js}" defer></script>
