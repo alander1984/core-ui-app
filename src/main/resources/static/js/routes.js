@@ -93,6 +93,7 @@ Vue.component('routes', {
       store: '',
       selectedStore: '',
       selectedVehicles: [],
+      selectedRoute: '',
       listAllVehicles: [],
       transportCompany: '',
       tc_vehicles: [],
@@ -205,6 +206,8 @@ Vue.component('routes', {
     routeChange(route) {
       // console.log("In routeChange");
 
+      this.selectedRoute = route;
+
       let tmp = {};
       tmp.route = route;
       tmp.storeId = this.selectedStore.id;
@@ -262,11 +265,26 @@ Vue.component('routes', {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
         this.listAllTransportCompanies = tcs;
       });
-    }
+    },
   },
-  // mounted(){
-  //   $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
-  // },
+  mounted(){
+
+    Event.$on('deliverySelect', () => {
+      // console.log("In deliverySelect event ");
+
+      //Check the store and route is selected
+      if (this.selectedRoute === '' || this.selectedStore === ''){
+        alert("Выберите магазин и маршрут");
+      } else {
+        let tmp = {};
+        tmp.route = this.selectedRoute;
+        tmp.store = this.selectedStore;
+
+        Event.$emit('addDeliveryByDD', tmp);
+      }
+
+    });
+  },
   created() {
     this.allRoutesAndStores();
     this.allTCs();

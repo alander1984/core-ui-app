@@ -13,7 +13,7 @@ Vue.component('deliveries-new', {
         '<th>Район</th>' +
         '<th></th>' +
         '</tr>' +
-        '<tr v-for="(item, index) in listDeliveries" :key=item.index>' +
+        '<tr draggable="true" @dragend="dragFinish(item, $event)" v-for="(item, index) in listDeliveries" :key=item.index >' +
         '<td>' +
         '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index)" unchecked-value="not_accepted"/>' +
         '</td>' +
@@ -43,6 +43,7 @@ Vue.component('deliveries-new', {
             delivery: {},
             selectedRoute: {},
             selectedStoreId: '',
+            draggableDelivery: {},
             showInlineItems: false,
             colorRow: 'black',
             checked: false,
@@ -63,7 +64,11 @@ Vue.component('deliveries-new', {
             console.log("In changeRoute event ");
             this.selectedRoute = tmp.route;
             this.selectedStoreId = tmp.storeId;
-        })
+        });
+      Event.$on('addDeliveryByDD', (tmp) => {
+        // console.log("In addDeliveryByDD event.Selected Delivery id is - " + tmp);
+        this.addUndistributedClaimsToRouteByDD(tmp);
+      });
     },
     methods: {
         showDetailsForDelivery(item){
@@ -138,12 +143,40 @@ Vue.component('deliveries-new', {
                         console.log("Updated Route ID :  " + id);
                         return id;
                     });
-
                 }
-
             }
+        },
 
+      addUndistributedClaimsToRouteByDD(tmp) {
+        // console.log("I'm ready to adding delivery!");
 
-        }
+        let _tmp = {};
+        let routerPoints = [];
+
+        _tmp.id = tmp.route.id;
+        _tmp.name = '';
+        _tmp.deliveryDate = tmp.route.deliveryDate;
+
+        let _tmpRoutePoint = {};
+        _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
+        //TODO Set "right" arrivalTime
+        _tmpRoutePoint.arrivalTime = 1000000;
+        //TODO Set "right" pos
+        _tmpRoutePoint.pos = 1;
+        routerPoints.push(_tmpRoutePoint);
+
+        _tmp.routerPoints = routerPoints;
+
+        CDSAPI.RouteService.createOrUpdateRoute(_tmp).then(id => {
+          console.log("Updated Route ID :  " + id);
+          return id;
+        });
+
+      },
+
+      dragFinish(item, ev) {
+        this.draggableDelivery = item;
+        Event.$emit('deliverySelect', );
+      },
     }
 });
