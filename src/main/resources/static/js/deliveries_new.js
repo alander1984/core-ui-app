@@ -13,7 +13,7 @@ Vue.component('deliveries-new', {
         '<th>Район</th>' +
         '<th></th>' +
         '</tr>' +
-        '<tr draggable="true" @dragend="dragFinish(item, $event)" v-for="(item, index) in listDeliveries" :key=item.index >' +
+        '<tr draggable="true" @dragend="dragFinish(item, $event)" @dragstart="dragStart( $event)" v-for="(item, index) in listDeliveries" :key=item.index >' +
         '<td>' +
         '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index)" unchecked-value="not_accepted"/>' +
         '</td>' +
@@ -140,15 +140,41 @@ Vue.component('deliveries-new', {
                     tmp.routerPoints = routerPoints;
 
                     CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
-                        console.log("Updated Route ID :  " + id);
                         return id;
+                    }).then(id => {
+
+                      let request = {};
+                      // Use 1 for set "APPROWED" status.
+                      request.status = 1;
+                      request.list = [];
+
+                      selectedDeliveries.forEach(function (item) {
+                        request.list.push(item.id);
+                      });
+
+                      CDSAPI.Deliveries.changeStatusDelivery(request).then( result =>  {
+                        console.log("Changing deliveries status - " + result);
+                      });
+                      return id;
+                    }).then(id => {
+
+                      var i;
+                      var tmp_list = this.listDeliveries;
+                      for (i = tmp_list.length - 1; i >= 0; i -= 1) {
+                        selectedDeliveries.forEach(function (itemS, indexS, objectS) {
+                          if (tmp_list[i]!== undefined && tmp_list[i].id === itemS.id) {
+                            tmp_list.splice(i, 1);
+                          }
+                        });
+                      }
+                      this.listDeliveries = tmp_list;
+                      this.$forceUpdate();
                     });
                 }
             }
         },
 
       addUndistributedClaimsToRouteByDD(tmp) {
-        // console.log("I'm ready to adding delivery!");
 
         let _tmp = {};
         let routerPoints = [];
@@ -167,16 +193,39 @@ Vue.component('deliveries-new', {
 
         _tmp.routerPoints = routerPoints;
 
+        let currentDeliveryId = this.draggableDelivery.id;
+
         CDSAPI.RouteService.createOrUpdateRoute(_tmp).then(id => {
-          console.log("Updated Route ID :  " + id);
+
+          let request = {};
+          // Use 1 for set "APPROWED" status.
+          request.status = 1;
+          request.list = [];
+          request.list.push(currentDeliveryId);
+
+          CDSAPI.Deliveries.changeStatusDelivery(request).then(result => {
+            console.log("Changing deliveries status - " + result);
+          });
           return id;
+        }).then(id => {
+          return id;
+        }).then(id => {
+          this.listDeliveries.forEach(function (item, index, object) {
+            if (item.id === currentDeliveryId) {
+              object.splice(index, 1);
+            }
+          });
+          this.$forceUpdate();
         });
-
       },
-
       dragFinish(item, ev) {
         this.draggableDelivery = item;
+        ev.target.style.backgroundColor = "";
         Event.$emit('deliverySelect', );
       },
+      dragStart(ev) {
+          ev.target.style.backgroundColor = "#3ddb4a";
+      }
+
     }
 });
