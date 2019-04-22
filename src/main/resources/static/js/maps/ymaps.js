@@ -1,5 +1,8 @@
 //Объявлена глобальной для включения автоматического слежения за размером
 // контейнера при слайде
+
+var deliveriesPlacemarks = [];
+
 ymaps.ready(function () {
   myMap = new ymaps.Map("YMapsID", {
     center: [59.93, 30.31],
