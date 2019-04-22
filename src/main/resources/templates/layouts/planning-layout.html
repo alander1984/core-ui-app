@@ -5,9 +5,11 @@
   <title>Layout</title>
   <link type="text/css" rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
   <link type="text/css" rel="stylesheet" href="webjars/bootstrap-vue/1.3.0/bootstrap-vue.css"/>
+  <link type="text/css" rel="stylesheet" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
   <link th:href="@{/css/main.css}" rel="stylesheet" media="screen">
   <link th:href="@{/css/sidebar.css}" rel="stylesheet" media="screen">
   <link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet"/>
+  <link th:href="@{/css/select2.min.css}" rel="stylesheet"/>
 
   <script src="webjars/jquery/3.3.1-2/jquery.js"></script>
 
@@ -20,10 +22,14 @@
   <!-- версия для разработки, отображает полезные предупреждения в консоли -->
   <!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
   <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
+  <script src="webjars/jquery-ui/1.12.1/jquery-ui.js"></script>
   <script th:src="@{/js/utils/bootstrap-datepicker.min.js}"></script>
+  <script th:src="@{/js/select2/select2.min.js}"></script>
+  <script th:src="@{/js/select2/i18n/ru.js}"></script>
   <script
       src="https://api-maps.yandex.ru/2.1/?apikey=a20d2871-c2d6-41f7-995a-6ac629285923&lang=ru_RU&mode=debug"
       type="text/javascript"></script>
+  <link th:href="@{/css/lm.css}" rel="stylesheet" media="screen">
   
     <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/api/bundle.js}"></script>

@@ -12,10 +12,28 @@ Vue.component('drivers', {
       '<b-form-input type="text" placeholder="Логин" v-model="driverLogin"/><br/>'+
       '<b-form-input type="text" placeholder="Пароль" v-model="driverPassword"/>'+
       '<label for="createVeh">Транспортные средства</label>'+
-      '<select multiple id="createVeh" class="form-control" v-model="selectedVehicles">'+
+      '<select id="createVeh" class="form-control" v-model="selVehicle" style="width: 100%" v-select="createVeh" v-on:change="addVeh()">'+
       '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
       'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
       '</option></select>'+
+      '<br/><br/>'+
+      '<div v-if="this.selectedVehicles.length > 0">' +
+      '<table class="table table-bordered">'+
+      '<thead>'+
+      '<tr>'+
+      '<th>Транспортное средство</th>'+
+      '<th>Добавить</th>'+
+      '</tr>'+
+      '</thead>'+
+      
+      '<tr v-for="(item, index) in selectedVehicles" :key=item.index>'+
+      '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
+      '<td width=20%>' +
+        '<input type="checkbox" id="checkbox" v-model="selected[index]" v-on:change="check(index, item)" unchecked-value="not_accepted"/>' +
+      '</td>'+
+      '</tr>'+
+      '</table>'+
+      '</div>'+
           '</form>'+
       '</b-modal>'+
           '<b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit"'+
@@ -34,10 +52,28 @@ Vue.component('drivers', {
           '<h6>Пароль:</h6>'+
       '<b-form-input type="text" v-model="driverPassword"/>'+
       '<label for="editVeh">Транспортные средства</label>'+
-      '<select multiple id="editVeh" class="form-control" v-model="selectedEditVehicles">'+
+      '<select id="editVeh" class="form-control" v-model="selVehicle" style="width: 100%" v-select="editVeh" v-on:change="sel()">'+
       '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
       'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
       '</option></select>'+
+      '<div v-if="this.selectedEditVehicles.length > 0">' +
+      '<br/><br/>'+
+      '<table class="table table-bordered">'+
+      '<thead>'+
+      '<tr>'+
+      '<th>Транспортное средство</th>'+
+      '<th>Добавить</th>'+
+      '</tr>'+
+      '</thead>'+
+      
+      '<tr v-for="(item, index) in selectedEditVehicles" :key=item.index>'+
+      '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
+      '<td width=20%>' +
+        '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index, item)" unchecked-value="not_accepted"/>' +
+      '</td>'+
+      '</tr>'+
+      '</table>'+
+      '</div>'+
           '</form>'+
       '</b-modal>'+
           '<b-button id="addD" variant="primary" v-b-modal.modalAddDriver>Добавить водителя</b-button>'+
@@ -80,6 +116,8 @@ Vue.component('drivers', {
       listDrivers: [],
       selectedVehicles: [],
       selectedEditVehicles: [],
+      selVehicle: {},
+      selected: [],
       listAllVehicles: [],
       driverId: Number,
       driverSurname: '',
@@ -133,6 +171,12 @@ Vue.component('drivers', {
       }
     },
     handleSubmit() {
+      var s = this.selected;
+       this.selectedVehicles.forEach(function(item, i, object){
+            item.add = false;
+            //console.log(s[i] + "----" + i);
+            item.add = s[i];
+      });
       temp = new Object();
       temp.surname = this.driverSurname;
       temp.name = this.driverName;
@@ -140,6 +184,12 @@ Vue.component('drivers', {
       temp.birthday = this.driverBirthday;
       temp.login = this.driverLogin;
       temp.password = this.driverPassword;
+      this.selectedVehicles.forEach(function(item, i, object){
+            if(!item.add){
+                object.splice(i, 1);
+            }
+      });
+        console.log("Осталось :  " + this.selectedVehicles.length);
       temp.vehicles = this.selectedVehicles;
       CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Created ID :  " + id);
@@ -147,6 +197,7 @@ Vue.component('drivers', {
         this.listDrivers.push(temp);
         this.clearName();
       });
+      this.selected.splice(1, this.selected.length);
       this.$nextTick(() => {
         // Wrapped in $nextTick to ensure DOM is rendered before closing
         console.log("********   " + this.$refs.modal);
@@ -169,6 +220,12 @@ Vue.component('drivers', {
 
     },
     handleSubmitEdit() {
+      var s = this.selected;
+       this.selectedEditVehicles.forEach(function(item, i, object){
+            item.add = false;
+            //console.log(s[i] + "----" + i);
+            item.add = s[i];
+      });
       temp = new Object();
       temp.id = this.driverId;
       temp.surname = this.driverSurname;
@@ -177,13 +234,19 @@ Vue.component('drivers', {
       temp.birthday = this.driverBirthday;
       temp.login = this.driverLogin;
       temp.password = this.driverPassword;
+      this.selectedEditVehicles.forEach(function(item, i, object){
+            if(!item.add){
+                object.splice(i, 1);
+            }
+      });
+        console.log("Осталось :  " + this.selectedEditVehicles.length);
       temp.vehicles = this.selectedEditVehicles;
       //TODO Fix refresh bug 
      // Vue.set(this.listDrivers, this.index, O);
       CDSAPI.Drivers.createOrUpdateDriver(temp).then(id => {
         console.log("Edited ID :  " + id);
       });
-
+      this.selected.splice(1, this.selected.length);
       this.clearName();
       this.$nextTick(() => {
         // Wrapped in $nextTick to ensure DOM is rendered before closing
@@ -203,10 +266,37 @@ Vue.component('drivers', {
       CDSAPI.Vehicles.sendAllVehicles().then(vehicles => {
         this.listAllVehicles = vehicles;
       });
+    },
+    sel(){
+        //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
+        var id = this.selVehicle.id;
+        let m = this.selectedEditVehicles.filter(function(o){
+            return o.id == id 
+        });
+        if(m.length == 0) {
+            this.selectedEditVehicles.push(this.selVehicle);
+        }
+
+    },
+    addVeh(){
+        //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
+        var id = this.selVehicle.id;
+        let m = this.selectedVehicles.filter(function(o){
+            return o.id == id 
+        });
+        if(m.length == 0) {
+            this.selectedVehicles.push(this.selVehicle);
+        }
     }
+
   },
   created() {
     this.allDrivers();
     this.allVehicles();
+  },
+  mounted(){
+      $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+    $("select").select2();
+    
   }
 });

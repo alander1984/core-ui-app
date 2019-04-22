@@ -1,8 +1,8 @@
 Vue.component('deliveries-new', {
     template:  '<div>' +
-        '<b-row class="mt-1 mb-1"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="success">Отправить в автоматическое планирование</b-button></b-row>'
-        + '<table class="table table-bordered" style="width: 100%">' +
-        '<tr bgcolor="gray">' +
+        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="success">Отправить в автоматическое планирование</b-button></b-row>'
+        + '<table class="table table-lm" style="width: 100%">' +
+        '<tr>' +
         '<th><input type="checkbox" disabled/></th>' +
         '<th>№ заявки</th>' +
         '<th>Время план</th>' +
@@ -13,7 +13,7 @@ Vue.component('deliveries-new', {
         '<th>Район</th>' +
         '<th></th>' +
         '</tr>' +
-        '<tr v-for="(item, index) in listDeliveries" :key=item.index>' +
+        '<tr draggable="true" @dragend="dragFinish(item, $event)" @dragstart="dragStart( $event)" v-for="(item, index) in listDeliveries" :key=item.index >' +
         '<td>' +
         '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index)" unchecked-value="not_accepted"/>' +
         '</td>' +
@@ -43,6 +43,7 @@ Vue.component('deliveries-new', {
             delivery: {},
             selectedRoute: {},
             selectedStoreId: '',
+            draggableDelivery: {},
             showInlineItems: false,
             colorRow: 'black',
             checked: false,
@@ -63,7 +64,11 @@ Vue.component('deliveries-new', {
             console.log("In changeRoute event ");
             this.selectedRoute = tmp.route;
             this.selectedStoreId = tmp.storeId;
-        })
+        });
+      Event.$on('addDeliveryByDD', (tmp) => {
+        // console.log("In addDeliveryByDD event.Selected Delivery id is - " + tmp);
+        this.addUndistributedClaimsToRouteByDD(tmp);
+      });
     },
     methods: {
         showDetailsForDelivery(item){
@@ -135,15 +140,92 @@ Vue.component('deliveries-new', {
                     tmp.routerPoints = routerPoints;
 
                     CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
-                        console.log("Updated Route ID :  " + id);
                         return id;
+                    }).then(id => {
+
+                      let request = {};
+                      // Use 1 for set "APPROWED" status.
+                      request.status = 1;
+                      request.list = [];
+
+                      selectedDeliveries.forEach(function (item) {
+                        request.list.push(item.id);
+                      });
+
+                      CDSAPI.Deliveries.changeStatusDelivery(request).then( result =>  {
+                        console.log("Changing deliveries status - " + result);
+                      });
+                      return id;
+                    }).then(id => {
+
+                      var i;
+                      var tmp_list = this.listDeliveries;
+                      for (i = tmp_list.length - 1; i >= 0; i -= 1) {
+                        selectedDeliveries.forEach(function (itemS, indexS, objectS) {
+                          if (tmp_list[i]!== undefined && tmp_list[i].id === itemS.id) {
+                            tmp_list.splice(i, 1);
+                          }
+                        });
+                      }
+                      this.listDeliveries = tmp_list;
+                      this.$forceUpdate();
                     });
-
                 }
-
             }
+        },
 
+      addUndistributedClaimsToRouteByDD(tmp) {
 
-        }
+        let _tmp = {};
+        let routerPoints = [];
+
+        _tmp.id = tmp.route.id;
+        _tmp.name = '';
+        _tmp.deliveryDate = tmp.route.deliveryDate;
+
+        let _tmpRoutePoint = {};
+        _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
+        //TODO Set "right" arrivalTime
+        _tmpRoutePoint.arrivalTime = 1000000;
+        //TODO Set "right" pos
+        _tmpRoutePoint.pos = 1;
+        routerPoints.push(_tmpRoutePoint);
+
+        _tmp.routerPoints = routerPoints;
+
+        let currentDeliveryId = this.draggableDelivery.id;
+
+        CDSAPI.RouteService.createOrUpdateRoute(_tmp).then(id => {
+
+          let request = {};
+          // Use 1 for set "APPROWED" status.
+          request.status = 1;
+          request.list = [];
+          request.list.push(currentDeliveryId);
+
+          CDSAPI.Deliveries.changeStatusDelivery(request).then(result => {
+            console.log("Changing deliveries status - " + result);
+          });
+          return id;
+        }).then(id => {
+          return id;
+        }).then(id => {
+          this.listDeliveries.forEach(function (item, index, object) {
+            if (item.id === currentDeliveryId) {
+              object.splice(index, 1);
+            }
+          });
+          this.$forceUpdate();
+        });
+      },
+      dragFinish(item, ev) {
+        this.draggableDelivery = item;
+        ev.target.style.backgroundColor = "";
+        Event.$emit('deliverySelect', );
+      },
+      dragStart(ev) {
+          ev.target.style.backgroundColor = "#3ddb4a";
+      }
+
     }
 });
