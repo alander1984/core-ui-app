@@ -61,12 +61,16 @@ node ('internet-enabled') {
 
 
                 configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './admin.conf')]) {
-
-                docker.image('bitnami/kubectl').args('-v admin.conf:/etc/kubernetes/admin.conf') {
-                        sh "cluster-info"
+                    docker {
+                        image 'bitnami/kubectl'
+                        args '-v admin.conf:/etc/kubernetes/admin.conf'
+                    }
+                    steps {
+                        sh 'cluster-info'
                     }
                 }
             }
+
             stage ('Wipe') {
                 cleanWs();
             }
