@@ -58,8 +58,11 @@ node ('internet-enabled') {
                 image_build_and_push(docker_image_name, docker_image_tag, is_master, GIT_REPO, git_commit, git_date)
             }
             stage ('Deploy to kubernets') {
-                docker.image('bitnami/kubectl').inside() {
-                    configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './config')]) {
+
+
+                configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './admin.conf')]) {
+
+                docker.image('bitnami/kubectl').args('-v admin.conf:/etc/kubernetes/admin.conf') {
                         sh "cluster-info"
                     }
                 }
