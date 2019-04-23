@@ -284,6 +284,23 @@ Vue.component('routes', {
       }
 
     });
+
+    Event.$on('addRoutePointPos', (tmp) => {
+      let tmp_routePoint = tmp.route.routerPoints[0];
+
+      this.listAllStores.forEach(function (item) {
+        if (item.id === tmp.storeId){
+          item.routes.forEach(function (item_r, index_r) {
+            if (item_r.id === tmp.route.id) {
+              item.routes[index_r].routepoints.push(tmp_routePoint);
+            }
+          });
+        }
+      });
+
+      this.$forceUpdate();
+
+    });
   },
   created() {
     this.allRoutesAndStores();
