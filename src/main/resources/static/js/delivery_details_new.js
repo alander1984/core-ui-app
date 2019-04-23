@@ -19,12 +19,12 @@ Vue.component('delivery-details-new', {
                         '<hr color="black" size="2">' +
                         '<h6>Детальная информация</h6>' +
                         '<b-row class="my-1">' +
-                          '<b-col sm="2">' +
-                            '<label for="numberDelivery">Номер  заказа</label>' +
-                          '</b-col>' +
-                          '<b-col sm="8">' +
-                            '<b-form-input id="numberDelivery" type="text" v-model="delivery.id" disabled/>' +
-                          '</b-col>' +
+                            '<div class="form-label-group-lm">' +
+                            '<input v-model="delivery.id" type="text" id="numberDelivery" class="form-control" placeholder="Номер  заказа"' +
+                                   'required="" autofocus="">' +
+                            '<label class="pointer-event-none" for="numberDelivery">Номер  заказа</label>' +
+                        '</div>' +
+
                         '</b-row>' +
                         '<b-row class="my-1">' +
                         '<b-col sm="2">' +

@@ -53,9 +53,19 @@ node ('internet-enabled') {
 
             def git_commit = sh(returnStdout:true, script: 'git log -1 --format=%h').trim();
             def git_date = sh(returnStdout:true, script: "git show -s --format=%ci ${git_commit}").trim();
-
+            def workspace = pwd()
+            
             stage ('Build Image') {
                 image_build_and_push(docker_image_name, docker_image_tag, is_master, GIT_REPO, git_commit, git_date)
+            }
+
+            stage ('Deploy to kubernets') {
+                configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './.kube/config')]) {
+                    sh "sed -i 's#JENKINS_DOCKER_REGISTRY#${env.DOCKER_REGISTRY}#' ./ci/*.yaml"
+                    sh "sed -i 's#JENKINS_DOCKER_IMAGE_NAME#${docker_image_name}#' ./ci/*.yaml"
+                    sh "sed -i 's#JENKINS_DOCKER_IMAGE_TAG#${docker_image_tag}#' ./ci/*.yaml"
+                    sh "docker run --rm  --net=host -v ${workspace}/.kube:/config/.kube -v ${workspace}/ci:/ci -e KUBECONFIG=/config/.kube/config bitnami/kubectl apply -f /ci"
+                }
             }
 
             stage ('Wipe') {

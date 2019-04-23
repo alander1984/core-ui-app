@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cds-ui
+  labels:
+    app: cds-ui
+    tier: frontend 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cds-ui
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: cds-ui
+        tier: frontend
+    spec:
+      containers:
+      - name: ui
+        image: JENKINS_DOCKER_REGISTRY/JENKINS_DOCKER_IMAGE_NAME:JENKINS_DOCKER_IMAGE_TAG
+        ports:
+        - name: tomcathttp 
+          containerPort: 8080
