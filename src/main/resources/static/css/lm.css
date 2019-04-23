@@ -58,6 +58,54 @@
 :root  {
   --mainText: #303335;
   --primary-lm: #5cbf14;
+  --primary-lm-hovered: #28a745;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-lm);
+    border-color: var(--primary-lm);
+    padding-top: 6px;/*12*/
+    padding-bottom: 6px;/*12*/
+    font-family: Roboto;
+    font-size: 12px;/*16*/
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: 1.2px;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-transform: uppercase;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: var(--primary-lm-hovered);
+    border-color: var(--primary-lm-hovered);
+}
+
+.nav-link {
+    height:30px;/*64*/
+    font-family: Roboto;
+    font-size: 12px;/*16*/
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.38;
+    letter-spacing: 1.2px;
+    text-align: center;
+    padding-top: 6px; /*21*/
+    padding-bottom: 6px;/*21*/
+    text-transform: uppercase;
+    color: color: rgba(33, 51, 68, 0.56);
+}
+
+.nav-link.active {
+    color: var(--primary-lm)!important;
+    border-bottom-color: var(--primary-lm)!important;
+    border-bottom-width: 3px!important;
 }
 
 .table-lm {
@@ -66,7 +114,7 @@
 
 .table-lm tr td {
   font-family: Roboto;
-  font-size: 16px;
+  font-size: 12px; /*16*/
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -81,7 +129,7 @@
 
 .table-lm tr th {
 font-family: Roboto;
-  font-size: 12px;
+  font-size: 10px; /**/
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;

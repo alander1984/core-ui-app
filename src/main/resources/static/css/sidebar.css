@@ -112,7 +112,8 @@ width:255px;
 display:table;
 border-collapse:collapse;
 border-spacing:0;
-color:#8a8a8a;
+/*color:#8a8a8a;*/
+color: #303335;
 font-size: 13px;
 text-decoration:none;
 -webkit-transform:translateZ(0) scale(1,1);

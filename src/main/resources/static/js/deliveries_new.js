@@ -1,6 +1,6 @@
 Vue.component('deliveries-new', {
     template:  '<div>' +
-        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="success">Отправить в автоматическое планирование</b-button></b-row>'
+        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="primary" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="primary">Отправить в автоматическое планирование</b-button></b-row>'
         + '<table class="table table-lm" style="width: 100%">' +
         '<tr>' +
         '<th><input type="checkbox" disabled/></th>' +
