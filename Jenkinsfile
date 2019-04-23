@@ -83,7 +83,7 @@ def image_build_and_push(docker_image_name, docker_image_tag, is_master, git_rep
                     ]
     build_args = env_vars.collect{arg -> '--no-cache --build-arg ' + arg}.join(' ')
     configFileProvider([configFile(fileId: "${env.settings_file}", targetLocation: './settings.xml')]) {
-        def image = docker.build("${env.DOCKER_REGISTRY}/cds/${docker_image_name}:${docker_image_tag}", build_args + " .")
+        def image = docker.build("${env.DOCKER_REGISTRY}/${docker_image_name}:${docker_image_tag}", build_args + " .")
         try {
             docker.withRegistry("https://${env.DOCKER_REGISTRY}", "$DOCKER_REGISTRY_CREDS") {
                 image.push(docker_image_tag)
