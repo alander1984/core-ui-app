@@ -59,7 +59,7 @@
   --mainText: #303335;
   --primary-lm: #5cbf14;
   --primary-lm-hovered: #28a745;
-  --input-padding-x: 1.5rem;
+  --input-padding-x: 0.5rem;
   --input-padding-y: .75rem;
 }
 
@@ -114,11 +114,13 @@
   margin-bottom: 0;
   /* Override default `<label>` margin */
   line-height: 1.5;
-  font-size: 16px;
+  font-size: larger;
   color: #495057;
   border: 1px solid transparent;
   /*border-radius: .25rem;*/
   transition: all .1s ease-in-out;
+  padding-left: 17px;
+  text-transform: uppercase;
 }
 
 .form-label-group-lm input::-webkit-input-placeholder {
@@ -158,6 +160,7 @@
   padding-left: 10px;
   padding-right: 10px;
   left: 20px;
+  text-transform: none;
 }
 
 .nav-link {
