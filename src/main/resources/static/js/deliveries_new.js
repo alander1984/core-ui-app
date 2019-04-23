@@ -1,6 +1,6 @@
 Vue.component('deliveries-new', {
     template:  '<div>' +
-        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="success">Отправить в автоматическое планирование</b-button></b-row>'
+        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="primary" class="mr-3 ml-3" @click="addUndistributedClaimsToRoute()">Добавить в маршрут</b-button><b-button size="sm" variant="primary">Отправить в автоматическое планирование</b-button></b-row>'
         + '<table class="table table-lm" style="width: 100%">' +
         '<tr>' +
         '<th><input type="checkbox" disabled/></th>' +
@@ -178,17 +178,22 @@ Vue.component('deliveries-new', {
 
         let _tmp = {};
         let routerPoints = [];
+        let pos = 0;
 
         _tmp.id = tmp.route.id;
         _tmp.name = '';
         _tmp.deliveryDate = tmp.route.deliveryDate;
 
+        tmp.route.routepoints.forEach(function (item) {
+          if (pos <= item.pos)
+            pos = item.pos + 1;
+        });
+
         let _tmpRoutePoint = {};
         _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
         //TODO Set "right" arrivalTime
         _tmpRoutePoint.arrivalTime = 1000000;
-        //TODO Set "right" pos
-        _tmpRoutePoint.pos = 1;
+        _tmpRoutePoint.pos = pos;
         routerPoints.push(_tmpRoutePoint);
 
         _tmp.routerPoints = routerPoints;
@@ -216,6 +221,10 @@ Vue.component('deliveries-new', {
             }
           });
           this.$forceUpdate();
+          let aft_ch_route = {};
+          aft_ch_route.storeId = tmp.store.id;
+          aft_ch_route.route = _tmp;
+          Event.$emit('addRoutePointPos', aft_ch_route);
         });
       },
       dragFinish(item, ev) {
