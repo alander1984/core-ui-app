@@ -60,13 +60,12 @@ node ('internet-enabled') {
             }
 
             stage ('Deploy to kubernets') {
-/*                configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './.kube/config')]) {
+                configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './.kube/config')]) {
+                    sh "sed -i.bak 's#JENKINS_DOCKER_REGISTRY#${env.DOCKER_REGISTRY}#' ./ci/*.yaml"
+                    sh "sed -i.bak 's#JENKINS_DOCKER_IMAGE_NAME#${docker_image_name}#' ./ci/*.yaml"
+                    sh "sed -i.bak 's#JENKINS_DOCKER_REGISTRY#${docker_image_tag}#' ./ci/*.yaml"
                     sh "docker run --rm  --net=host -v ${workspace}/.kube:/config/.kube -e KUBECONFIG=/config/.kube/config bitnami/kubectl cluster-info"
-                }*/
-                 docker.image('bitnami/kubectl').withRun('--rm -v ${workspace}/.kube:/config/.kube -e KUBECONFIG=/config/.kube/config --net=host') { c ->
-                    sh "cluster-info"
-                 }
-
+                }
             }
 
             stage ('Wipe') {
