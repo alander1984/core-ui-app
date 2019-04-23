@@ -63,8 +63,8 @@ node ('internet-enabled') {
                 configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './.kube/config')]) {
                     sh "sed -i.bak 's#JENKINS_DOCKER_REGISTRY#${env.DOCKER_REGISTRY}#' ./ci/*.yaml"
                     sh "sed -i.bak 's#JENKINS_DOCKER_IMAGE_NAME#${docker_image_name}#' ./ci/*.yaml"
-                    sh "sed -i.bak 's#JENKINS_DOCKER_REGISTRY#${docker_image_tag}#' ./ci/*.yaml"
-                    sh "docker run --rm  --net=host -v ${workspace}/.kube:/config/.kube -e KUBECONFIG=/config/.kube/config bitnami/kubectl apply -f ./ci"
+                    sh "sed -i.bak 's#JENKINS_DOCKER_IMAGE_TAG#${docker_image_tag}#' ./ci/*.yaml"
+                    sh "docker run --rm  --net=host -v ${workspace}/.kube:/config/.kube -e KUBECONFIG=/config/.kube/config bitnami/kubectl apply -f ${workspace}/ci"
                 }
             }
 
