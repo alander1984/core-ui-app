@@ -4,7 +4,7 @@ WORKDIR /opt/app
 
 COPY . .
 
-RUN mvn clean package -s settings.xml -B
+RUN mvn clean package -s settings.xml -B -DskipTests
 
 FROM tomcat:9-jre8-slim
 
