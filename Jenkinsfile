@@ -57,6 +57,19 @@ node ('internet-enabled') {
             stage ('Build Image') {
                 image_build_and_push(docker_image_name, docker_image_tag, is_master, GIT_REPO, git_commit, git_date)
             }
+            stage ('Deploy to kubernets') {
+
+
+                configFileProvider([configFile(fileId: 'kubernets-config', targetLocation: './admin.conf')]) {
+                    docker {
+                        image 'bitnami/kubectl'
+                        args '-v admin.conf:/etc/kubernetes/admin.conf'
+                    }
+                    steps {
+                        sh 'cluster-info'
+                    }
+                }
+            }
 
             stage ('Wipe') {
                 cleanWs();
