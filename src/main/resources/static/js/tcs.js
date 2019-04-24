@@ -8,24 +8,25 @@ Vue.component('tcs', {
       '<b-form-input id="createCode" type="text" placeholder="Код" v-model="tcCode"/><br/>'+
       '<b-form-input id="createName"  type="text" placeholder="Название" v-model="tcName"/>'+
       '<label for="createVeh">Транспортные средства</label>'+
-      '<select id="createVeh" class="form-control" v-model="selectedVehicle" style="width: 100%" v-select="createVeh" v-on:change="addVeh()">'+
+      '<select id="createVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="createVeh">' + // v-on:change="addVeh()">'+
       '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
       'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
-      '</option></select>'+
+      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><input type="checkbox" id="checkbox" v-model="selected" v-on:change="addVeh()" unchecked-value="not_accepted"/>' +
+      //'<input type="checkbox" id="checkbox" v-model="selected" v-on:change="addVeh()" unchecked-value="not_accepted"/>' +
       '<div v-if="this.selectedVehicles.length > 0">' +
       '<br/><br/>'+
       '<table class="table table-bordered">'+
       '<thead>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
-      '<th>Добавить</th>'+
+      '<th>Удалить</th>'+
       '</tr>'+
       '</thead>'+
       
       '<tr v-for="(item, index) in selectedVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
       '<td width=20%>' +
-        '<input type="checkbox" id="checkbox" v-model="selected[index]" v-on:change="check(index, item)" unchecked-value="not_accepted"/>' +
+        '<b-button variant="danger" @click="deleteVeh(index)">X</b-button>' +
       '</td>'+
       '</tr>'+
       '</table>'+
@@ -40,24 +41,25 @@ Vue.component('tcs', {
       '<h6>Название:</h6>'+
       '<b-form-input type="text" v-model="tcName"/><br/>'+
       '<label for="editVeh">Транспортные средства</label>'+
-      '<select id="editVeh" class="form-control" v-model="selectedVehicle" style="width: 100%" v-select="editVeh" v-on:change="sel()">'+
+      '<select id="editVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="editVeh">' + // v-on:change="sel()">'+
       '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
       'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
-      '</option></select>'+ 
+      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
+      '<input type="checkbox" id="checkbox2" v-model="selected" v-on:change="sel()" unchecked-value="not_accepted"/>' +
       '<div v-if="this.selectedEditVehicles.length > 0">' +
         '<br/><br/>'+
       '<table class="table table-bordered">'+
       '<thead>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
-      '<th>Добавить</th>'+
+      '<th>Удалить</th>'+
       '</tr>'+
       '</thead>'+
       
       '<tr v-for="(item, index) in selectedEditVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
       '<td width=20%>' +
-        '<input type="checkbox" id="checkbox1" v-model="selected[index]" v-on:change="check(index, item)" unchecked-value="not_accepted"/>' +
+        '<b-button variant="danger" @click="deleteEditVeh(index)">X</b-button>' +
       '</td>'+
       '</tr>'+
       '</table>'+
@@ -96,7 +98,7 @@ Vue.component('tcs', {
       listTCs: [],
       selectedVehicles: [],
       selectedEditVehicles: [],
-      selected: [],
+      selected: false,
       selectedVehicle: {},
       listAllVehicles: [],
       tcId: Number,
@@ -118,7 +120,8 @@ Vue.component('tcs', {
       this.tcId = this.listTCs[index].id;
       this.tcName = this.listTCs[index].name;
       this.tcCode = this.listTCs[index].code;
-      // this.vehicles= this.selectedEditVehicles;
+      this.selectedEditVehicles = this.listTCs[index].vehicles;
+      console.log("ТС-ва: " + this.selectedEditVehicles.length + "---" + this.listTCs[index].vehicles.length);
       this.index = index;
     },
     clearName() {
@@ -139,20 +142,9 @@ Vue.component('tcs', {
       }
     },
     handleSubmit() {
-       var s = this.selected;
-       this.selectedVehicles.forEach(function(item, i, object){
-            item.add = false;
-            //console.log(s[i] + "----" + i);
-            item.add = s[i];
-      });
       temp = new Object();
       temp.code = this.tcCode;
       temp.name = this.tcName;
-      this.selectedVehicles.forEach(function(item, i, object){
-            if(!item.add){
-                object.splice(i, 1);
-            }
-      });
         console.log("Осталось :  " + this.selectedVehicles.length);
       temp.vehicles = this.selectedVehicles;
       CDSAPI.TransportCompanies.createOrUpdateTransportCompany(temp).then(id => {
@@ -161,7 +153,7 @@ Vue.component('tcs', {
         this.listTCs.push(temp);
         this.clearName();
       });
-      this.selected.splice(1, this.selected.length);
+      //this.selectedVehicles.splice(1, this.selectedVehicles.length);
       this.$nextTick(() => {
         // Wrapped in $nextTick to ensure DOM is rendered before closing
         console.log("********   " + this.$refs.modal);
@@ -184,29 +176,19 @@ Vue.component('tcs', {
 
     },
     handleSubmitEdit() {
-       var s = this.selected;
-       this.selectedEditVehicles.forEach(function(item, i, object){
-            item.add = false;
-            //console.log(s[i] + "----" + i);
-            item.add = s[i];
-      });
       temp = new Object();
       temp.id = this.tcId;
       temp.code = this.tcCode;
       temp.name = this.tcName;
-      this.selectedEditVehicles.forEach(function(item, i, object){
-            if(!item.add){
-                object.splice(i, 1);
-            }
-      });
-        console.log("Осталось :  " + this.selectedEditVehicles.length);
+        //console.log("Осталось :  " + this.selectedEditVehicles.length);
       temp.vehicles = this.selectedEditVehicles;
       //TODO Fix refresh bug 
-      //Vue.set(this.listTCs, this.index, O);
+      Vue.set(this.listTCs, this.index, temp);
+      console.log("Машины :  " + this.listTCs[this.index].vehicles.length);
       CDSAPI.TransportCompanies.createOrUpdateTransportCompany(temp).then(id => {
         console.log("Edited ID :  " + id);
       }); 
-      this.selected.splice(1, this.selected.length);
+    //  this.selectedEditVehicles.splice(1, this.selectedEditVehicles.length);
       this.clearName();
       this.$nextTick(() => {
         // Wrapped in $nextTick to ensure DOM is rendered before closing
@@ -229,8 +211,17 @@ Vue.component('tcs', {
         console.log("Vehicles length is -  " + this.listAllVehicles.length);
       });
     },
-    check(index, item){
-       // alert("Index: " + index + " Checked " + this.selected + " Item: " + item.model);
+    check(){
+        //alert(" Checked " + this.selectedVehicle.id + " --- " + this.selected);
+        this.selectedVehicles.push(this.selectedVehicle);
+    },
+    deleteVeh(index){
+        this.selectedVehicles.splice(index, 1);
+        this.selected = false;
+    },
+    deleteEditVeh(index){
+        this.selectedEditVehicles.splice(index, 1);
+        this.selected = false;
     },
     sel(){
         //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
@@ -242,7 +233,7 @@ Vue.component('tcs', {
             
             this.selectedEditVehicles.push(this.selectedVehicle);
         }
-
+        this.selected = false;
     },
     addVeh(){
         //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
@@ -254,7 +245,7 @@ Vue.component('tcs', {
             
             this.selectedVehicles.push(this.selectedVehicle);
         }
-
+        this.selected = false;
     }
   },
   created() {
@@ -264,5 +255,6 @@ Vue.component('tcs', {
   mounted(){
       $.fn.modal.Constructor.prototype._enforceFocus = function() {};
       $("select").select2();
+      $("div.modal-content").removeAttr("tabindex");
   }
-});
+  });
