@@ -74,9 +74,6 @@ Vue.component('deliveries-new', {
         // console.log("In addDeliveryByDD event.Selected Delivery id is - " + tmp);
         this.addUndistributedClaimsToRouteByDD(tmp);
       });
-      Event.$on('changeStore', () => {
-        this.drawAllUnclaimedDeliveries();
-      });
     },
     methods: {
         showDetailsForDelivery(item){
@@ -292,6 +289,8 @@ Vue.component('deliveries-new', {
 
             routesPlacemarks.push(routePlacemark);
             myMap.geoObjects.add(routePlacemark);
+
+            myMap.setBounds(myMap.geoObjects.getBounds());
           });
       });
       },
