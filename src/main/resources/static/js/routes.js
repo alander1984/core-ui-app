@@ -202,6 +202,7 @@ Vue.component('routes', {
     storeChange(item) {
       this.selectedStore = item;
       // console.log("In storeChange");
+      Event.$emit('changeStore', );
     },
     routeChange(route) {
       // console.log("In routeChange");
