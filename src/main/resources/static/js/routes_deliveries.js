@@ -1,16 +1,17 @@
 var routesdeliveries = Vue.component('routesdeliveries', {
     
-    
+    //v-sortable:route.routepoints
     template : 
     
     '<div>' +
         '<b-row class="mt-1 mb-1"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="deleteDeliveries()">Удалить из маршрута</b-button></b-row>' +
-        '<table id="sortable" class="table table-hover table-sm table-bordered" style="width: 100%;">' + 
-            '<thead><tr><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th></tr></thead>' + 
-            '<tbody>' + 
-                '<tr v-for="(item, index) in route.routepoints" :key = item.index>' + 
+        '<table id="routes_deliveries_table"  class="table table-lm" style="width: 100%;">' + 
+            '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th></thead>' + 
+            '<tbody v-sortable:routepoints>' + 
+            // '<tbody>' + 
+                '<tr  draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" :key = item.index>' + 
                     '<td><input type="checkbox" id="checkbox2"/></td>' +
-                    '<td>{{item.delivery.id}}</td>' + 
+                    '<td>{{item.delivery.id}} </td>' + 
                     '<td>{{item.delivery.street + " " + item.delivery.house + " " + item.delivery.flat}}</td>' + 
                     '<td>Вес</td>' + 
                     '<td>Объём</td>' + 
@@ -30,7 +31,8 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             storeId : 0,
             checked : false,
             delivery : {},
-            deliveriesCoordinates : []
+            deliveriesCoordinates : [],
+            routepoints : []
         };
     },
     
@@ -76,23 +78,87 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             
             
             
+            
+            
+        },
+        
+        dragstart: function(item, e, index) {
+            console.log('DRAGSTART');
+            $('#routes_deliveries_table tr').each(function(){
+                 
+                 var tdcontent=$(this).text(); //get content
+                  
+                 console.log('content='+tdcontent);  
+            }) ;
+            e.target.style.backgroundColor = "#3ddb4a";
+            console.log(this.routepoints);
+        },
+        
+        dragend: function(item, e, index) {
+            e.target.style.backgroundColor = "";
+            let deliveriesIdList = []
+            console.log('DRAGEND');
+            $('#routes_deliveries_table tr').each(function(){
+                var tdcontent=$(this).text(); //get content
+                let properties = tdcontent.split(' ');
+                deliveriesIdList.push(properties[0]);   
+                
+            });
+            
+            let rPoints = this.routepoints;
+            deliveriesIdList.forEach(function(item, i, arr) {
+                let rp = rPoints.filter(obj => {
+                    return obj.delivery.id === Number(item);
+                    
+                })
+                console.log('RRRRPPPP');
+                console.log(rp);
+                rp[0].pos = i + 1;
+            });
+            
+            console.log('AFTER CHANGING POSITIONS');
+            console.log(this.routepoints);
+            console.log(this.route.routepoints);
+            CDSAPI.RouteService.createOrUpdateRoute(this.route).then( id => {
+                console.log("ROUTES-DELIVERIES COMPONENT ROUTE UPDATED WITH ID = " + id);
+            });
+            
+            
         }
     },
     
+    
+    
     mounted() {
         Event.$on('changeRoute', (tmp) => {
-            console.log("In changeRoute event ");
             this.route = tmp.route;
+            this.routepoints = tmp.route.routepoints;
             console.log(this.route);
             this.selectedStoreId = tmp.storeId;
             this.deliveriesCoordinates = [];
             if(tmp.route.routepoints !== undefined) {
                 this.drawDeliveries(tmp.route.routepoints);
             }
-            
-            
+//            $('tbody').sortable( {
+//                sort: function(e, item) {
+//                    
+//                },
+//                update: function(e, item) {
+//                    console.log('ON UPDATE');
+//                    console.log(e);
+//                    console.log(item);
+//                    app1.$refs.rd.helloW();
+//                }
+//            });
+            console.log('MOUNTED_ROUTE_POINTS');
+            this.routepoints.forEach(function(rp, i ,arr) {
+                console.log('ID: ' + rp.id + ' STREET' + rp.delivery.street);
+            });
+            console.log('MOUNTED_ROUTE_POINTS');
         })
     },
+    
+   
     
     created() {
         console.log('ROUTES-DELIVERY COMPONENT CREATED');
@@ -101,7 +167,5 @@ var routesdeliveries = Vue.component('routesdeliveries', {
     
 });
 
-$( function() {
-    $( "#sortable" ).sortable();
-    $( "#sortable" ).disableSelection();
-  } );
+ 
+
