@@ -60,6 +60,11 @@ Vue.component('deliveries-new', {
         });
     },
     mounted() {
+
+        document.querySelector('#new-orders-tab').addEventListener('click', e => {
+          this.drawAllUnclaimedDeliveries();
+        });
+
         Event.$on('changeRoute', (tmp) => {
             console.log("In changeRoute event ");
             this.selectedRoute = tmp.route;
