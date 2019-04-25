@@ -5,3 +5,5 @@ window.Event = new Vue();
 $.fn.datepicker.defaults.format = "dd.mm.yyyy";
 
 
+
+

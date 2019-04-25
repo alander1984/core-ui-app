@@ -60,6 +60,11 @@ Vue.component('deliveries-new', {
         });
     },
     mounted() {
+
+        document.querySelector('#new-orders-tab').addEventListener('click', e => {
+          this.drawAllUnclaimedDeliveries();
+        });
+
         Event.$on('changeRoute', (tmp) => {
             console.log("In changeRoute event ");
             this.selectedRoute = tmp.route;
@@ -234,7 +239,50 @@ Vue.component('deliveries-new', {
       },
       dragStart(ev) {
           ev.target.style.backgroundColor = "#3ddb4a";
-      }
+      },
+      drawAllUnclaimedDeliveries (){
+        console.log("In drawAllUnclaimedDeliveries method");
 
+        routesPlacemarks.forEach( function(gp, i, arr) {
+          myMap.geoObjects.remove(gp);
+        });
+
+        myMap.geoObjects.removeAll();
+        routesPlacemarks = [];
+
+        this.listDeliveries.forEach(function (del) {
+
+
+          let sumWeight = 0;
+          CDSAPI.Deliveries.getItemsForDelivery(del.id).then(items => {
+
+            items.forEach(function (del_item) {
+              sumWeight += del_item.weight;
+            });
+            return sumWeight;
+          }).then(sumWeight => {
+
+            let routePlacemark = new ymaps.Placemark([del.lon, del.lat],
+                {
+                  iconContent: del.id,
+                  balloonContentHeader: "Информация о доставке",
+                  balloonContent: "<button type=\"button\" class=\"btn btn-primary \">Добавить в маршрут</button>"
+                },
+            );
+
+            if (sumWeight >= 300 && sumWeight < 1000) {
+              routePlacemark.options.set('preset', 'islands#orangeIcon');
+            }
+            if (sumWeight > 1000) {
+              routePlacemark.options.set('preset', 'islands#blackIcon');
+            }
+
+            routesPlacemarks.push(routePlacemark);
+            myMap.geoObjects.add(routePlacemark);
+
+            myMap.setBounds(myMap.geoObjects.getBounds(),{ checkZoomRange: true });
+          });
+      });
+      },
     }
 });
