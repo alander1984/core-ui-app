@@ -1,14 +1,12 @@
 var routesdeliveries = Vue.component('routesdeliveries', {
     
-    //v-sortable:route.routepoints
     template : 
     
     '<div>' +
         '<b-row class="mt-1 mb-1"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="deleteDeliveries()">Удалить из маршрута</b-button></b-row>' +
         '<table id="routes_deliveries_table"  class="table table-lm" style="width: 100%;">' + 
-            '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th></thead>' + 
+            '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th><th scope="col"></th><th scope="col"></th></thead>' + 
             '<tbody v-sortable:routepoints>' + 
-            // '<tbody>' + 
                 '<tr  draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" :key = item.index>' + 
                     '<td><input type="checkbox" id="checkbox2"/></td>' +
                     '<td>{{item.delivery.id}} </td>' + 
@@ -18,7 +16,9 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                     '<td>{{route.transportcompany.name}}</td>' + 
                     '<td>{{item.delivery.zone}}</td>' + 
                     '<td>{{route.vehicle.model}} - {{route.vehicle.registrationNumber}}</td>' +
-                    '<td><i class="fa fa-clipboard-list fa-lg compact_i w-50" @click="showDetailsForDelivery(item)" style="cursor: pointer; padding-inline-start:10px; padding-inline-end:5px"></i></td>' +
+                    '<td><i class="fa fa-clipboard-list fa-lg compact_i w-50" @click="showDetailsForDelivery(item)" style="cursor: pointer; padding-inline-start:10px; padding-inline-end:5px"></i></td>' + 
+                    '<td><i class="fa fa-arrow-up fa-lg compact_i w-50" @click="moveUpRoutePoint(item, index)" style="cursor: pointer; padding-inline-start:10px; padding-inline-end:5px"></i></td>' +
+                    '<td><i class="fa fa-arrow-down fa-lg compact_i w-50" @click="moveDownRoutePoint(item, index)"  style="cursor: pointer; padding-inline-start:10px; padding-inline-end:5px"></i></td>' + 
                 '</tr>' + 
             '</tbody>' + 
         '</table>' +
@@ -76,28 +76,16 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                 
             } );
             
-            
-            
-            
-            
         },
         
         dragstart: function(item, e, index) {
             console.log('DRAGSTART');
-            $('#routes_deliveries_table tr').each(function(){
-                 
-                 var tdcontent=$(this).text(); //get content
-                  
-                 console.log('content='+tdcontent);  
-            }) ;
             e.target.style.backgroundColor = "#3ddb4a";
-            console.log(this.routepoints);
         },
         
         dragend: function(item, e, index) {
             e.target.style.backgroundColor = "";
             let deliveriesIdList = []
-            console.log('DRAGEND');
             $('#routes_deliveries_table tr').each(function(){
                 var tdcontent=$(this).text(); //get content
                 let properties = tdcontent.split(' ');
@@ -110,20 +98,57 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                 let rp = rPoints.filter(obj => {
                     return obj.delivery.id === Number(item);
                     
-                })
-                console.log('RRRRPPPP');
-                console.log(rp);
+                });
                 rp[0].pos = i + 1;
             });
             
-            console.log('AFTER CHANGING POSITIONS');
-            console.log(this.routepoints);
-            console.log(this.route.routepoints);
-            CDSAPI.RouteService.createOrUpdateRoute(this.route).then( id => {
+            this.saveRoutePointsOrder(this.route);
+//            this.routepoints.sort(function(a, b) {
+//                    return a.pos - b.pos;
+//            });
+            
+            this.$forceUpdate();
+            
+        },
+        
+        moveUpRoutePoint(item, index) {
+            console.log('MOVE UP ROUTE POINT WITH INDEX ' + index);
+            if(item.pos !== 1) {
+                let previousRoutePoint = this.routepoints.filter(obj => {
+                    return obj.pos === (item.pos - 1);
+                    
+                });
+                item.pos = item.pos - 1;
+                previousRoutePoint[0].pos = previousRoutePoint[0].pos + 1;
+                this.routepoints.sort(function(a, b) {
+                    return a.pos - b.pos;
+                });
+                this.saveRoutePointsOrder(this.route);
+                this.$forceUpdate();
+            }
+        },
+        
+        moveDownRoutePoint(item, index) {
+            console.log('MOVE DOWN ROUTE POINT WITH INDEX ' + index);
+            if(item.pos !== this.routepoints.length ) {
+                let previousRoutePoint = this.routepoints.filter( obj => {
+                   return obj.pos === (item.pos + 1);
+                });
+                item.pos = item.pos + 1;
+                previousRoutePoint[0].pos = previousRoutePoint[0].pos - 1;
+                this.routepoints.sort(function(a, b) {
+                    return a.pos - b.pos;
+                });
+                this.saveRoutePointsOrder(this.route);
+                this.$forceUpdate();
+            }
+            
+        },
+        
+        saveRoutePointsOrder(route) {
+            CDSAPI.RouteService.createOrUpdateRoute(route).then( id => {
                 console.log("ROUTES-DELIVERIES COMPONENT ROUTE UPDATED WITH ID = " + id);
             });
-            
-            
         }
     },
     
@@ -139,23 +164,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             if(tmp.route.routepoints !== undefined) {
                 this.drawDeliveries(tmp.route.routepoints);
             }
-//            $('tbody').sortable( {
-//                sort: function(e, item) {
-//                    
-//                },
-//                update: function(e, item) {
-//                    console.log('ON UPDATE');
-//                    console.log(e);
-//                    console.log(item);
-//                    app1.$refs.rd.helloW();
-//                }
-//            });
-            console.log('MOUNTED_ROUTE_POINTS');
-            this.routepoints.forEach(function(rp, i ,arr) {
-                console.log('ID: ' + rp.id + ' STREET' + rp.delivery.street);
-            });
-            console.log('MOUNTED_ROUTE_POINTS');
-        })
+        });
     },
     
    
