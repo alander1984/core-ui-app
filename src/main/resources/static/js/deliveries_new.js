@@ -259,38 +259,28 @@ Vue.component('deliveries-new', {
             items.forEach(function (del_item) {
               sumWeight += del_item.weight;
             });
-            // console.log("sumWeight is  :  " + sumWeight);
             return sumWeight;
           }).then(sumWeight => {
 
-            let routePlacemark;
+            let routePlacemark = new ymaps.Placemark([del.lon, del.lat],
+                {
+                  iconContent: del.id,
+                  balloonContentHeader: "Информация о доставке",
+                  balloonContent: "<button type=\"button\" class=\"btn btn-primary \">Добавить в маршрут</button>"
+                },
+            );
 
-            if (sumWeight < 300) {
-              routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                  { iconCaption: 'delivery#'+del.id },
-                  { preset: 'islands#icon',
-                    draggable: false });
-            } else {
-              // alert(sumWeight > 300 && sumWeight < 1000);
-              if (sumWeight >= 300 && sumWeight < 1000) {
-                routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                    { iconCaption: 'delivery#'+del.id },
-                    { preset: 'islands#icon',
-                      iconColor: 'orange',
-                      draggable: false });
-              } else {
-                routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                    { iconCaption: 'delivery#'+del.id },
-                    { preset: 'islands#icon',
-                      iconColor: 'black',
-                      draggable: false });
-              }
+            if (sumWeight >= 300 && sumWeight < 1000) {
+              routePlacemark.options.set('preset', 'islands#orangeIcon');
+            }
+            if (sumWeight > 1000) {
+              routePlacemark.options.set('preset', 'islands#blackIcon');
             }
 
             routesPlacemarks.push(routePlacemark);
             myMap.geoObjects.add(routePlacemark);
 
-            myMap.setBounds(myMap.geoObjects.getBounds());
+            myMap.setBounds(myMap.geoObjects.getBounds(),{ checkZoomRange: true });
           });
       });
       },
