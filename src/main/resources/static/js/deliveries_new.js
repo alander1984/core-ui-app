@@ -138,11 +138,13 @@ Vue.component('deliveries-new', {
                         //TODO Set "right" arrivalTime
                         _tmpRoutePoint.arrivalTime = 1000000;
                         _tmpRoutePoint.pos = index;
+                        //Устанавливаем id=0 для создания нового RoutePoint
+                        _tmpRoutePoint.id = 0;
 
                         routerPoints.push(_tmpRoutePoint);
                     });
 
-                    tmp.routerPoints = routerPoints;
+                    tmp.routepoints = routerPoints;
 
                     CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
                         return id;
@@ -189,19 +191,24 @@ Vue.component('deliveries-new', {
         _tmp.name = '';
         _tmp.deliveryDate = tmp.route.deliveryDate;
 
-        tmp.route.routepoints.forEach(function (item) {
-          if (pos <= item.pos)
-            pos = item.pos + 1;
-        });
+        //TODO prevent undefined value
+        if (tmp.route.routepoints !== undefined){
+          tmp.route.routepoints.forEach(function (item) {
+            if (pos <= item.pos)
+              pos = item.pos + 1;
+          });
+        }
 
         let _tmpRoutePoint = {};
         _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
         //TODO Set "right" arrivalTime
         _tmpRoutePoint.arrivalTime = 1000000;
         _tmpRoutePoint.pos = pos;
+        //Устанавливаем id=0 для создания нового RoutePoint
+        _tmpRoutePoint.id = 0;
         routerPoints.push(_tmpRoutePoint);
 
-        _tmp.routerPoints = routerPoints;
+        _tmp.routepoints = routerPoints;
 
         let currentDeliveryId = this.draggableDelivery.id;
 
@@ -216,8 +223,6 @@ Vue.component('deliveries-new', {
           CDSAPI.Deliveries.changeStatusDelivery(request).then(result => {
             console.log("Changing deliveries status - " + result);
           });
-          return id;
-        }).then(id => {
           return id;
         }).then(id => {
           this.listDeliveries.forEach(function (item, index, object) {
@@ -266,7 +271,7 @@ Vue.component('deliveries-new', {
                 {
                   iconContent: del.id,
                   balloonContentHeader: "Информация о доставке",
-                  balloonContent: "<button type=\"button\" class=\"btn btn-primary \">Добавить в маршрут</button>"
+                  balloonContent: "<button type=\"button\" class=\"btn btn-primary \" id='balloonDeliveryAddButton'>Добавить в маршрут</button>"
                 },
             );
 

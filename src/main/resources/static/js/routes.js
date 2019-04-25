@@ -285,15 +285,21 @@ Vue.component('routes', {
       }
 
     });
-
+    //Обновляем список RoutePoint после добавление в delivery-new
     Event.$on('addRoutePointPos', (tmp) => {
-      let tmp_routePoint = tmp.route.routerPoints[0];
+      let tmp_routePoint = tmp.route.routepoints[0];
 
       this.listAllStores.forEach(function (item) {
         if (item.id === tmp.storeId){
           item.routes.forEach(function (item_r, index_r) {
             if (item_r.id === tmp.route.id) {
-              item.routes[index_r].routepoints.push(tmp_routePoint);
+              //TODO Prevent undefinded value
+              if (item.routes[index_r].routepoints === undefined){
+                item.routes[index_r].routepoints = [];
+                item.routes[index_r].routepoints.push(tmp_routePoint);
+              } else {
+                item.routes[index_r].routepoints.push(tmp_routePoint);
+              }
             }
           });
         }
