@@ -7,6 +7,7 @@
 <body>
 <section layout:fragment="admin-content">
   <link th:href="@{/css/select2.min.css}" rel="stylesheet"/>
+  <link th:href="@{/css/lm.css}" rel="stylesheet" media="screen">
   <script th:src="@{/js/select2/select2.min.js}"></script>
   <script th:src="@{/js/select2/i18n/ru.js}"></script>
   <div id="vue-app" class="admin-app">
@@ -15,9 +16,10 @@
   <div>
     <a th:href="@{/admin}">На страницу администрирования</a>
   </div>
-  <script th:src="@{/js/api/bundle.js}" defer></script>
+  <script src="webjars/cds-web-api/0.0.3-SNAPSHOT/api/bundle.js"></script>
   <script th:src="@{/js/vehicles.js}" defer></script>
   <script th:src="@{/js/main.js}" defer></script>
+  <script th:src="@{/js/planning.js}" defer></script>
 </section>
 </body>
 </html>

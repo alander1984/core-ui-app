@@ -2,30 +2,46 @@ Vue.component('drivers', {
   template:
       '<div>'+
       '<h3>Водители</h3>'+
-          '<b-modal id="modalAddDriver" ref="modal1" title="Добавить водителя" @ok="handleOk"'+
+          '<b-modal id="modalAddDriver" ref="modal1" title="Добавить водителя" @ok="handleOk" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="clearName">'+
       '<form @submit.stop.prevent="handleSubmit">'+
-      '<b-form-input type="text" placeholder="Фамилия" v-model="driverSurname"/><br/>'+
-      '<b-form-input type="text" placeholder="Имя" v-model="driverName"/><br/>'+
-      '<b-form-input type="text" placeholder="Отчество" v-model="driverPatronymic"/><br/>'+
-      '<b-form-input type="text" placeholder="Дата рождения ГГГГ-ММ-ДД" v-model="driverBirthday"/><br/>'+
-      '<b-form-input type="text" placeholder="Логин" v-model="driverLogin"/><br/>'+
-      '<b-form-input type="text" placeholder="Пароль" v-model="driverPassword"/>'+
+        '<div class="form-label-group-lm">' +
+          '<input id="surname" type="text" placeholder="Фамилия" v-model="driverSurname" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="surname">Фамилия</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="nameD" type="text" placeholder="Имя" v-model="driverName" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="nameD">Имя</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="patronymicD" type="text" placeholder="Отчество" v-model="driverPatronymic" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="patronymicD">Отчество</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="birthday" type="text" placeholder="Дата рождения ГГГГ-ММ-ДД" v-model="driverBirthday" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="birthday">Дата рождения ГГГГ-ММ-ДД</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="login" type="text" placeholder="Логин" v-model="driverLogin" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="login">Логин</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="password" type="text" placeholder="Пароль" v-model="driverPassword" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="password">Пароль</label>' +
+        '</div>' +
       '<label for="createVeh">Транспортные средства</label>'+
       '<select id="createVeh" class="form-control" v-model="selVehicle" style="width: 90%" v-select="createVeh">'+
       '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
       'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><input type="checkbox" id="checkbox" v-model="selected" v-on:change="addVeh()" unchecked-value="not_accepted"/>' +
+      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
+      '<b-button class="btn-primary" @click="addVeh()">+</b-button>' +
       '<br/><br/>'+
       '<div v-if="this.selectedVehicles.length > 0">' +
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=90%>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
       '<th>Удалить</th>'+
       '</tr>'+
-      '</thead>'+
-      
       '<tr v-for="(item, index) in selectedVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
       '<td width=20%>' +
@@ -36,36 +52,46 @@ Vue.component('drivers', {
       '</div>'+
           '</form>'+
       '</b-modal>'+
-          '<b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit"'+
+      '<b-modal id="modalEditDriver" ref="modal" title="Редактирование водителя" @ok="handleOkEdit" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="iDriver">'+
-          '<form @submit.stop.prevent="handleSubmitEdit">'+
-      '<h6>Фамилия:</h6>'+
-          '<b-form-input type="text" v-model="driverSurname"/>'+
-          '<h6>Имя:</h6>'+
-      '<b-form-input type="text" v-model="driverName"/>'+
-          '<h6>Отчество:</h6>'+
-      '<b-form-input type="text" v-model="driverPatronymic"/>'+
-          '<h6>Дата рождения:</h6>'+
-      '<b-form-input type="text" v-model="driverBirthday"/>'+
-          '<h6>Логин:</h6>'+
-      '<b-form-input type="text" v-model="driverLogin"/>'+
-          '<h6>Пароль:</h6>'+
-      '<b-form-input type="text" v-model="driverPassword"/>'+
+       '<form @submit.stop.prevent="handleSubmitEdit">'+
+         '<div class="form-label-group-lm">' +
+          '<input id="surnameEdit" type="text" placeholder="Фамилия" v-model="driverSurname" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="surnameEdit">Фамилия</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="nameDEdit" type="text" placeholder="Имя" v-model="driverName" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="nameDEdit">Имя</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="patronymicDEdit" type="text" placeholder="Отчество" v-model="driverPatronymic" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="patronymicDEdit">Отчество</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="birthdayEdit" type="text" placeholder="Дата рождения ГГГГ-ММ-ДД" v-model="driverBirthday" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="birthdayEdit">Дата рождения ГГГГ-ММ-ДД</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="loginEdit" type="text" placeholder="Логин" v-model="driverLogin" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="loginEdit">Логин</label>' +
+        '</div>' +
+        '<div class="form-label-group-lm">' +
+          '<input id="passwordEdit" type="text" placeholder="Пароль" v-model="driverPassword" class="form-control"/><br/>'+
+          '<label class="pointer-event-none" for="passwordEdit">Пароль</label>' +
+        '</div>' +
       '<label for="editVeh">Транспортные средства</label>'+
       '<select id="editVeh" class="form-control" v-model="selVehicle" style="width: 90%" v-select="editVeh">'+
       '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
       'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><input type="checkbox" id="checkbox2" v-model="selected" v-on:change="sel()" unchecked-value="not_accepted"/>' +
+      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
+      '<b-button class="btn-primary" @click="sel()">+</b-button>' +
       '<div v-if="this.selectedEditVehicles.length > 0">' +
       '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=90%>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
       '<th>Удалить</th>'+
       '</tr>'+
-      '</thead>'+
-      
       '<tr v-for="(item, index) in selectedEditVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
       '<td width=20%>' +
@@ -76,10 +102,9 @@ Vue.component('drivers', {
       '</div>'+
           '</form>'+
       '</b-modal>'+
-          '<b-button id="addD" variant="primary" v-b-modal.modalAddDriver>Добавить водителя</b-button>'+
+          '<button id="addD" class="btn-primary" v-b-modal.modalAddDriver>Добавить водителя</button>'+
       '<br/><br/>'+
-          '<table class="table table-bordered">'+
-          '<thead>'+
+          '<table class="table-lm table-bordered" width=70%>'+
             '<tr>'+
                 '<th>#</th>'+
                 '<th>Фамилия</th>'+
@@ -91,22 +116,21 @@ Vue.component('drivers', {
                 '<th></th>'+
                 '<th></th>'+
             '</tr>'+
-        '</thead>'+
       '<tr v-for="(item, index) in listDrivers" :key=item.index>'+
-          '<td>{{ index + 1 }}</td>'+
-      '<td width=10%>{{item.surname}}</td>'+
-          '<td width=10%>{{item.name}}</td>'+
-      '<td width=50%>{{item.patronymic}}</td>'+
-          '<td width=50%>{{item.birthday}}</td>'+
-      '<td width=50%>{{item.login}}</td>'+
-      '<td width=50%>{{item.password}}</td>'+
+          '<td width=5%>{{ index + 1 }}</td>'+
+      '<td width=13%>{{item.surname}}</td>'+
+          '<td width=13%>{{item.name}}</td>'+
+      '<td width=13%>{{item.patronymic}}</td>'+
+          '<td width=13%>{{item.birthday}}</td>'+
+      '<td width=13%>{{item.login}}</td>'+
+      '<td width=13%>{{item.password}}</td>'+
           '<td>'+
       '<b-button variant="danger" v-on:click="deleteDriver(index, item)">X</b-button>'+
           '</td>'+
       '<td>'+
-          '<b-button variant="success" v-b-modal.modalEditDriver v-on:click="editDriver(index)">'+
+          '<button class="btn-primary" v-b-modal.modalEditDriver v-on:click="editDriver(index)">'+
       'Редактировать'+
-          '</b-button>'+
+          '</button>'+
       '</td>'+
           '</tr>'+
       '</table>'+
