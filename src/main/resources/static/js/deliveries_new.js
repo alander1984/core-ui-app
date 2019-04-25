@@ -131,13 +131,26 @@ Vue.component('deliveries-new', {
                     tmp.deliveryDate = this.selectedRoute.deliveryDate;
 
                     let routerPoints = [];
+                    //Получаем pos из существующих точек у маршрута
+
+                    let pos = 0;
+                    //TODO prevent undefined value
+                    if (this.selectedRoute.routepoints !== undefined){
+                      this.selectedRoute.routepoints.forEach(function (item) {
+                        if (pos <= item.pos)
+                          pos = item.pos + 1;
+                      });
+                    }
+
+
 
                     selectedDeliveries.forEach(function (item, index) {
                         let _tmpRoutePoint = {};
                         _tmpRoutePoint.deliveryId = item.id;
                         //TODO Set "right" arrivalTime
                         _tmpRoutePoint.arrivalTime = 1000000;
-                        _tmpRoutePoint.pos = index;
+                        //Берем pos из ранее определенного и увеличиваем для следующей итерации цикла
+                        _tmpRoutePoint.pos = pos++;
                         //Устанавливаем id=0 для создания нового RoutePoint
                         _tmpRoutePoint.id = 0;
 
