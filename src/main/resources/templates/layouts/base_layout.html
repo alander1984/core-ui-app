@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
+    <script th:src="@{/js/common.js}"></script>
 <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
   <title>Layout</title>
     <link type="text/css" rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
@@ -20,7 +21,7 @@
   <script th:src="@{/js/utils/bootstrap-datepicker.min.js}"></script>
   <link rel="stylesheet" type="text/css" href="webjars/jquery-ui/1.12.1/jquery-ui.css"/>
   <link rel="stylesheet" href="webjars/font-awesome/5.8.1/css/all.css"/>
-    <script th:src="@{/js/common.js}"></script>
+<!--    <script th:src="@{/js/common.js}"></script>-->
     <script src="webjars/cds-web-api/0.0.3-SNAPSHOT/api/bundle.js"></script>
 
 </head>
