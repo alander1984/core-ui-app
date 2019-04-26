@@ -73,13 +73,13 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             this.routepoints.forEach(function(item , i, arr) {
                item.pos = i + 1; 
             });
-            this.route.routepoints = this.routepoints;
-            this.saveRoutePointsOrder(this.route);
-            Event.$emit('refreshNewDeliveries' , this.route);
+            this.route.routepoints = this.routepoints;  
             
-            
-            
-            
+            CDSAPI.RouteService.createOrUpdateRoute(this.route).then( id => {
+                console.log("ROUTES-DELIVERIES COMPONENT ROUTE UPDATED WITH ID = " + id);
+                Event.$emit('refreshNewDeliveries' , this.route);
+            });
+
         },
         
         changeCheckedRoutePointsList(id) {

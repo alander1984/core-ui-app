@@ -78,6 +78,17 @@ Vue.component('deliveries-new', {
       Event.$on('refreshDeliveryPlacemarkers', () => {
         this.drawAllUnclaimedDeliveries();
       });
+      
+      Event.$on('refreshNewDeliveries', (tmp) => {
+          console.log('!!!!!!!!!!!!!!DELETE DELIVERIES FROM ROUTE EVENT!!!!!');
+          
+          CDSAPI.Deliveries.sendNewDeliveries().then(deliveries => {
+
+            this.listDeliveries = deliveries;
+            this.delivery = this.listDeliveries[0];
+            console.log("Deliveries :  "  + this.listDeliveries.length);
+        });
+      });
     },
     methods: {
         showDetailsForDelivery(item){
