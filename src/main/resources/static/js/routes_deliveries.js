@@ -3,7 +3,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
     template : 
     
     '<div>' +
-        '<b-row class="mt-1 mb-1"><b-button size="sm" variant="success" class="mr-3 ml-3" @click="deleteDeliveries()">Удалить из маршрута</b-button></b-row>' +
+        '<b-row class="mt-1 mb-1" style="width:100%"><b-button size="sm" variant="primary" class="mr-3 ml-3" @click="deleteDeliveries()">Удалить из маршрута</b-button></b-row>' +
         '<table id="routes_deliveries_table"  class="table table-lm" style="width: 100%;">' + 
             '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th><th scope="col"></th><th scope="col"></th></thead>' + 
             '<tbody v-sortable:routepoints>' + 
@@ -189,6 +189,13 @@ var routesdeliveries = Vue.component('routesdeliveries', {
     
     
     mounted() {
+        //Обноляем маркеры на карте при переходе на вкладку "Маршрут"
+        document.querySelector('#route-orders-tab').addEventListener('click', e => {
+            if(this.routepoints.length !== 0) {
+                this.drawDeliveries(this.routepoints);
+            }
+        });
+
         Event.$on('changeRoute', (tmp) => {
             this.route = tmp.route;
             this.routepoints = tmp.route.routepoints;
@@ -198,7 +205,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             if(tmp.route.routepoints !== undefined) {
                 this.drawDeliveries(tmp.route.routepoints);
             }
-        }),
+        });
             //Обновляем модель данных после добавления точек маршрута в deliveries-new
             Event.$on('afterAddRoutePoints', (tmp) => {
                 this.route = tmp.route;
@@ -211,7 +218,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                 // };
                 //Обновлем таблицу
                 this.$forceUpdate();
-            })
+            });
     },
 
   updated() {
