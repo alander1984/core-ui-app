@@ -7,8 +7,8 @@ var routesdeliveries = Vue.component('routesdeliveries', {
         '<table id="routes_deliveries_table"  class="table table-lm" style="width: 100%;">' + 
             '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th><th scope="col"></th><th scope="col"></th></thead>' + 
             '<tbody v-sortable:routepoints>' + 
-                '<tr  draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" :key = item.index>' + 
-                    '<td><input type="checkbox" id="checkbox2"/></td>' +
+                '<tr draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" :key = item.pos>' + 
+                    '<td><input type="checkbox" id="checkbox2" v-model="selectedRoutePoints[item.delivery.id]" unchecked-value="not_accepted"/></td>' +
                     '<td>{{item.delivery.id}} </td>' + 
                     '<td>{{item.delivery.street + " " + item.delivery.house + " " + item.delivery.flat}}</td>' + 
                     '<td>Вес</td>' + 
@@ -32,7 +32,8 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             checked : false,
             delivery : {},
             deliveriesCoordinates : [],
-            routepoints : []
+            routepoints : [],
+            selectedRoutePoints : []
         };
     },
     
@@ -57,6 +58,36 @@ var routesdeliveries = Vue.component('routesdeliveries', {
         
         deleteDeliveries() {
             console.log('DELETE DELIVERIES');
+            console.log(this.selectedRoutePoints);
+            let tmpRoutePointsList = this.routepoints;
+            let tmpSelectedRoutePoints = this.selectedRoutePoints;
+            Object.keys(tmpSelectedRoutePoints).map(function(key , index) {
+               if(tmpSelectedRoutePoints[key]) {
+                   tmpRoutePointsList = tmpRoutePointsList.filter(function(obj) {
+                       return obj.delivery.id !== Number(key);
+                   });
+               } 
+            });
+            this.selectedRoutePoints = {};
+            this.routepoints = tmpRoutePointsList;
+            this.routepoints.forEach(function(item , i, arr) {
+               item.pos = i + 1; 
+            });
+            this.route.routepoints = this.routepoints;
+            this.saveRoutePointsOrder(this.route);
+            Event.$emit('refreshNewDeliveries' , this.route);
+            
+            
+            
+            
+        },
+        
+        changeCheckedRoutePointsList(id) {
+            if(this.selectedFlag) {
+                console.log('FLAG IS TRUE');
+            } else if(!this.selectedFlag){
+                console.log('FLAG IS FALSE');
+            }
         },
         
         drawDeliveries(routepoints) {
@@ -103,11 +134,12 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             });
             
             this.saveRoutePointsOrder(this.route);
-//            this.routepoints.sort(function(a, b) {
-//                    return a.pos - b.pos;
-//            });
             
-            this.$forceUpdate();
+            this.routepoints.sort(function(a, b) {
+                    return a.pos - b.pos;
+            });
+            
+         
             
         },
         
@@ -124,7 +156,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                     return a.pos - b.pos;
                 });
                 this.saveRoutePointsOrder(this.route);
-                this.$forceUpdate();
+               
             }
         },
         
@@ -140,7 +172,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                     return a.pos - b.pos;
                 });
                 this.saveRoutePointsOrder(this.route);
-                this.$forceUpdate();
+                
             }
             
         },
@@ -149,7 +181,9 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             CDSAPI.RouteService.createOrUpdateRoute(route).then( id => {
                 console.log("ROUTES-DELIVERIES COMPONENT ROUTE UPDATED WITH ID = " + id);
             });
-        }
+        },
+        
+        
     },
     
     
@@ -165,6 +199,13 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                 this.drawDeliveries(tmp.route.routepoints);
             }
         });
+    },
+    
+    updated() {
+        
+        console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
+        console.log(this.routepoints);
+        console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
     },
     
    
