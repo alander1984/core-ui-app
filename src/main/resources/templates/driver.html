@@ -6,7 +6,6 @@
 </head>
 <body>
 <section layout:fragment="admin-content">
-    <link th:href="@{/css/select2.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/lm.css}" rel="stylesheet" media="screen">
   <div id="vue-app" class="admin-app">
   <drivers></drivers>
@@ -15,8 +14,6 @@
         <a th:href="@{/admin}">На страницу администрирования</a>
     </div>
     
-  <script th:src="@{/js/select2/select2.min.js}"></script>
-  <script th:src="@{/js/select2/i18n/ru.js}"></script>
   <script th:src="@{/js/drivers.js}" defer></script>
   <script th:src="@{/js/main.js}" defer></script>
 </section>

@@ -71,8 +71,12 @@ Vue.component('deliveries-new', {
             this.selectedStoreId = tmp.storeId;
         });
       Event.$on('addDeliveryByDD', (tmp) => {
-        // console.log("In addDeliveryByDD event.Selected Delivery id is - " + tmp);
         this.addUndistributedClaimsToRouteByDD(tmp);
+      });
+
+      //По событию обновлям маркеры нераспределенных заявок на карте
+      Event.$on('refreshDeliveryPlacemarkers', () => {
+        this.drawAllUnclaimedDeliveries();
       });
     },
     methods: {
@@ -177,6 +181,7 @@ Vue.component('deliveries-new', {
                       });
                       return id;
                     }).then(id => {
+                      //Обновляем текущий список доставок, чтобы убрать элементы из таблицы
 
                       var i;
                       var tmp_list = this.listDeliveries;
@@ -189,6 +194,13 @@ Vue.component('deliveries-new', {
                       }
                       this.listDeliveries = tmp_list;
                       this.$forceUpdate();
+
+                      //Создаем event для обновления информации по маршруту в компоненте routes
+                      let aft_ch_route = {};
+                      aft_ch_route.storeId = this.selectedStoreId;
+                      aft_ch_route.route = tmp;
+                      Event.$emit('addRoutePointPos', aft_ch_route);
+
                     });
                 }
             }
@@ -214,6 +226,7 @@ Vue.component('deliveries-new', {
 
         let _tmpRoutePoint = {};
         _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
+        _tmpRoutePoint.delivery = this.draggableDelivery;
         //TODO Set "right" arrivalTime
         _tmpRoutePoint.arrivalTime = 1000000;
         _tmpRoutePoint.pos = pos;
@@ -247,6 +260,7 @@ Vue.component('deliveries-new', {
           let aft_ch_route = {};
           aft_ch_route.storeId = tmp.store.id;
           aft_ch_route.route = _tmp;
+          //Создаем event для обновления информации по маршруту в компоненте routes
           Event.$emit('addRoutePointPos', aft_ch_route);
         });
       },
@@ -258,6 +272,8 @@ Vue.component('deliveries-new', {
       dragStart(ev) {
           ev.target.style.backgroundColor = "#3ddb4a";
       },
+
+      //Отрисовываем доставки на карте
       drawAllUnclaimedDeliveries (){
         console.log("In drawAllUnclaimedDeliveries method");
 

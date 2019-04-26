@@ -32,11 +32,20 @@ Vue.component('vehicles', {
           '</ul>' +
           '<div class="tab-content" style="width:100%;  overflow-y: auto;" id="mainTabContent">' +
             '<div class="workPanel" style="width:100%;" id="driver-div" aria-labelledby="driver-tab-show">' +
-                  '<label for="createDriver">Водители</label>'+
-                  '<select id="createDriver" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="createDriver">' + 
-                  '<option v-for="driver in listAllDrivers" v-bind:value="driver">'+
-                  '{{ driver.surname }}  {{ driver.name }}'+
-                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary" id="add" @click="addDrv()">+</b-button>' +
+                '<table>' +
+                    '<tr>' +
+                        '<td width=90%>' +
+                              '<label for="createDriver">Водители</label>'+ 
+                              '<select id="createDriver" class="form-control" v-model="selectedDriver"  v-select="createDriver">' + 
+                              '<option v-for="driver in listAllDrivers" v-bind:value="driver">'+
+                              '{{ driver.surname }}  {{ driver.name }}'+
+                              '</option></select>'+
+                        '</td>' +
+                        '<td width=10% style="vertical-align: bottom;">' +
+                              '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="addDrv()">+</b-button>' +
+                        '</td>' +
+                    '</tr>' +
+                '</table>' +
                   '<div v-if="this.selectedDrivers.length > 0">' +
                       '<br/><br/>'+
                       '<table class="table-lm table-bordered" width=90%>'+
@@ -46,7 +55,7 @@ Vue.component('vehicles', {
                       '</tr>'+
                       
                       '<tr v-for="(item, index) in selectedDrivers" :key=item.index>'+
-                      '<td width=80%> {{ item.surname }}, Модель: {{ item.name }}</td>'+
+                      '<td width=80%> {{ item.surname }}  {{ item.name }}</td>'+
                       '<td width=20%>' +
                         '<b-button variant="danger" @click="deleteDrv(index)">X</b-button>' +
                       '</td>'+
@@ -56,11 +65,20 @@ Vue.component('vehicles', {
             '</div>' +
             '<div class="workPanel hidden" id="tcm-div" style="width:100%;" aria-labelledby="tcm-tab">' +
                 //'Транспортные компании' +
-                    '<label for="createTC">Транспортные компании</label>'+
-                  '<select id="createTC" class="form-control" v-model="selectedTC" style="width: 90%" v-select="createTC">' + 
-                  '<option v-for="tc in listAllTC" v-bind:value="tc">'+
-                  '{{ tc.name }}  Код: {{ tc.code }}'+
-                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="addTC()">+</b-button>' +
+                '<table>' +
+                    '<tr>' +
+                        '<td width=90%>' +
+                            '<label for="createTC">Транспортные компании</label>'+
+                          '<select id="createTC" class="form-control" v-model="selectedTC" v-select="createTC">' + 
+                          '<option v-for="tc in listAllTC" v-bind:value="tc">'+
+                          '{{ tc.name }}  Код: {{ tc.code }}'+
+                          '</option></select>'+ 
+                        '</td>' +
+                        '<td width=10% style="vertical-align: bottom;">' +  
+                          '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="addTC()">+</b-button>' +
+                        '</td>' +
+                    '</tr>' +
+               '</table>' +
                   '<div v-if="this.selectedTCs.length > 0">' +
                       '<br/><br/>'+
                       '<table class="table-lm table-bordered" width=90%>'+
@@ -110,13 +128,21 @@ Vue.component('vehicles', {
           '</ul>' +
           '<div class="tab-content" style="width:100%;  overflow-y: auto;" id="mainTabContentEdit">' +
                 '<div class="workPanel" style="width:100%;" id="driver-div-edit" aria-labelledby="driver-tab-show-edit">' +
-          
-                  '<label for="editDrv">Водители</label>'+
-                  '<select id="editDrv" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="editDrv">' + 
-                  '<option v-for="driver1 in listAllDrivers" v-bind:value="driver1">'+
-                  '{{ driver1.surname }}  {{ driver1.name }}'+
-                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
-                  '<b-button class="btn-primary"  @click="editDrv()">+</b-button>' +
+                   '<table>' +
+                        '<tr>' +
+                            '<td width=90%>' +
+                              '<label for="editDrv">Водители</label>'+
+                              '<select id="editDrv" class="form-control" v-model="selectedDriver"  v-select="editDrv">' + 
+                              '<option v-for="driver1 in listAllDrivers" v-bind:value="driver1">'+
+                              '{{ driver1.surname }}  {{ driver1.name }}'+
+                              '</option></select>'+ 
+                            '</td>' +
+                            '<td width=10% style="vertical-align: bottom;">' +   
+                              '<span>&nbsp;&nbsp;&nbsp;</span>' +
+                              '<b-button class="btn-primary"  @click="editDrv()">+</b-button>' +
+                          '</td>' +
+                        '</tr>' +
+                  '</table>' +
                   '<div v-if="this.selectedEditDrivers.length > 0">' +
                         '<br/><br/>'+
                       '<table class="table-lm table-bordered" width=90%>'+
@@ -135,11 +161,20 @@ Vue.component('vehicles', {
                '</div>' +
                '<div class="workPanel hidden" id="tcm-div-edit" style="width:100%;" aria-labelledby="tcm-tab-edit">' +
                 //'Транспортные компании Edit' +
-                    '<label for="editTC">Транспортные компании</label>'+
-                  '<select id="editTC" class="form-control" v-model="selectedTC" style="width: 90%" v-select="editTC">' + 
-                  '<option v-for="tc in listAllTC" v-bind:value="tc">'+
-                  '{{ tc.name }}  Код: {{ tc.code }}'+
-                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="editTC()">+</b-button>' +
+                    '<table>' +
+                        '<tr>' +
+                            '<td width=90%>' +
+                                '<label for="editTC">Транспортные компании</label>'+
+                              '<select id="editTC" class="form-control" v-model="selectedTC" v-select="editTC">' + 
+                              '<option v-for="tc in listAllTC" v-bind:value="tc">'+
+                              '{{ tc.name }}  Код: {{ tc.code }}'+
+                              '</option></select>'+ 
+                            '</td>' +
+                            '<td width=10% style="vertical-align: bottom;">' +   
+                              '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="editTC()">+</b-button>' +
+                            '</td>' +
+                        '</tr>' +
+                  '</table>' +            
                   '<div v-if="this.selectedEditTCs.length > 0">' +
                       '<br/><br/>'+
                       '<table class="table-lm table-bordered" width=90%>'+
@@ -200,7 +235,6 @@ Vue.component('vehicles', {
       selectedDrivers: [],
       selectedDriver: {},
       selectedTC: {},
-      selected: false,
       vehicleId: Number,
       vehicleReg: '',
       vehicleModel: '',
@@ -335,7 +369,7 @@ Vue.component('vehicles', {
             
             this.selectedDrivers.push(this.selectedDriver);
         }
-        //this.selected = false;
+        console.log("ВОДИТЕЛИ: " + JSON.stringify(this.selectedDrivers));
     },
     deleteDrv(index){
         this.selectedDrivers.splice(index, 1);

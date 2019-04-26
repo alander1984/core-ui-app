@@ -127,12 +127,16 @@ Vue.component('routes', {
       this.$forceUpdate();
 
     },
+
+    //Проверяем что выбран магазин для добавления к нему маршрута
     submitPrevent (bvEvt) {
       if (!this.selectedStore){
         alert("Выберите магазин для добавления маршрута");
         bvEvt.preventDefault();
       }
     },
+
+    //Валидация полей перед созданием маршрута
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
@@ -153,8 +157,9 @@ Vue.component('routes', {
           }
         }
       }
-
     },
+
+    //Создание маршрута
     handleSubmit() {
       console.log("In handle submit");
       let tmp = {};
@@ -191,6 +196,7 @@ Vue.component('routes', {
         });
 
       }).then(result => {
+        //обновляем модель данных
             this.$forceUpdate();
             this.$nextTick(() => {
               // Wrapped in $nextTick to ensure DOM is rendered before closing
@@ -199,29 +205,33 @@ Vue.component('routes', {
           }
       );
     },
+
+    // Изменение активного (выбранного) магазина
     storeChange(item) {
       this.selectedStore = item;
       // console.log("In storeChange");
       Event.$emit('changeStore', );
     },
+
+    // Изменение активного (выбранного) маршрута
     routeChange(route) {
-      // console.log("In routeChange");
-
       this.selectedRoute = route;
-
       let tmp = {};
       tmp.route = route;
       tmp.storeId = this.selectedStore.id;
       Event.$emit('changeRoute', tmp);
     },
+
     onChangeTC(event) {
       this.tc_vehicles = this.selectedTransportCompanies.vehicles;
       // console.log("In  onChangeTC event");
     },
+
     onChangeVehicle(event) {
       this.vehicle_drivers = this.selectedVehicles.drivers;
       // console.log("In  onChangeVehicle event");
     },
+
     clearModal() {
       this.routeName = '';
       this.routeDate = '';
@@ -229,8 +239,9 @@ Vue.component('routes', {
       this.selectedVehicles = '';
       this.selectedDrivers = '';
     },
-    allRoutesAndStores() {
 
+    //Инициализация списка магазинов listAllStores с информацией по маршрутам
+    allRoutesAndStores() {
       Promise.all([
         CDSAPI.RouteService.sendAllRoutes().then(routes => {
           this.listAllRoutes = routes;
@@ -262,6 +273,7 @@ Vue.component('routes', {
       });
 
     },
+    //Получение списка всех транспортных компаний
     allTCs() {
       CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tcs => {
         this.listAllTransportCompanies = tcs;
@@ -285,9 +297,11 @@ Vue.component('routes', {
       }
 
     });
+
     //Обновляем список RoutePoint после добавление в delivery-new
     Event.$on('addRoutePointPos', (tmp) => {
-      let tmp_routePoint = tmp.route.routepoints[0];
+      let tmp_routePoints = tmp.route.routepoints;
+      let changed_route;
 
       this.listAllStores.forEach(function (item) {
         if (item.id === tmp.storeId){
@@ -296,9 +310,15 @@ Vue.component('routes', {
               //TODO Prevent undefinded value
               if (item.routes[index_r].routepoints === undefined){
                 item.routes[index_r].routepoints = [];
-                item.routes[index_r].routepoints.push(tmp_routePoint);
+                tmp_routePoints.forEach(function (rp_item) {
+                  item.routes[index_r].routepoints.push(rp_item);
+                });
+                changed_route =  item.routes[index_r];
               } else {
-                item.routes[index_r].routepoints.push(tmp_routePoint);
+                tmp_routePoints.forEach(function (rp_item) {
+                  item.routes[index_r].routepoints.push(rp_item);
+                });
+                changed_route =  item.routes[index_r];
               }
             }
           });
@@ -307,8 +327,21 @@ Vue.component('routes', {
 
       this.$forceUpdate();
 
+      //Создаем событие для обновления маршрута в routes-deliveries
+      let _tmp = {};
+      _tmp.route = changed_route;
+      _tmp.storeId = tmp.storeId;
+
+      Event.$emit('afterAddRoutePoints', _tmp);
+
+      //Создаем событие для обновления маркеров нераспределенных заявок в delivery-new
+      Event.$emit('refreshDeliveryPlacemarkers', );
+
+
     });
   },
+
+  //Инициализация модели данных
   created() {
     this.allRoutesAndStores();
     this.allTCs();
