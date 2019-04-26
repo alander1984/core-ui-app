@@ -177,6 +177,7 @@ Vue.component('deliveries-new', {
                       });
                       return id;
                     }).then(id => {
+                      //Обновляем текущий список доставок, чтобы убрать элементы из таблицы
 
                       var i;
                       var tmp_list = this.listDeliveries;
@@ -189,6 +190,13 @@ Vue.component('deliveries-new', {
                       }
                       this.listDeliveries = tmp_list;
                       this.$forceUpdate();
+
+                      //Создаем event для обновления информации по маршруту в компоненте routes
+                      let aft_ch_route = {};
+                      aft_ch_route.storeId = this.selectedStoreId;
+                      aft_ch_route.route = tmp;
+                      Event.$emit('addRoutePointPos', aft_ch_route);
+
                     });
                 }
             }
@@ -247,6 +255,7 @@ Vue.component('deliveries-new', {
           let aft_ch_route = {};
           aft_ch_route.storeId = tmp.store.id;
           aft_ch_route.route = _tmp;
+          //Создаем event для обновления информации по маршруту в компоненте routes
           Event.$emit('addRoutePointPos', aft_ch_route);
         });
       },
@@ -258,6 +267,8 @@ Vue.component('deliveries-new', {
       dragStart(ev) {
           ev.target.style.backgroundColor = "#3ddb4a";
       },
+
+      //Отрисовываем доставки на карте
       drawAllUnclaimedDeliveries (){
         console.log("In drawAllUnclaimedDeliveries method");
 
