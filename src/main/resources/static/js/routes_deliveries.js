@@ -7,7 +7,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
         '<table id="routes_deliveries_table"  class="table table-lm" style="width: 100%;">' + 
             '<thead><th><input type="checkbox" disabled/></th><th scope="col">№</th><th scope="col">Адрес</th><th scope="col">Вес(кг)</th><th scope="col">Объём(м3)</th><th scope="col">ТК</th><th scope="col">Район</th><th scope="col">Маршрут</th><th scope="col"></th><th scope="col"></th><th scope="col"></th></thead>' + 
             '<tbody v-sortable:routepoints>' + 
-                '<tr draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" :key = item.pos>' + 
+                '<tr draggable="true" v-on:dragstart="dragstart(item, $event, index)" v-on:dragend="dragend(item, $event, index)" v-for="(item, index) in routepoints" v-bind:key = item.delivery.id>' + 
                     '<td><input type="checkbox" id="checkbox2" v-model="selectedRoutePoints[item.delivery.id]" unchecked-value="not_accepted"/></td>' +
                     '<td>{{item.delivery.id}} </td>' + 
                     '<td>{{item.delivery.street + " " + item.delivery.house + " " + item.delivery.flat}}</td>' + 
@@ -115,6 +115,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
         },
         
         dragend: function(item, e, index) {
+            console.log('dragenditem with index: ' + index);
             e.target.style.backgroundColor = "";
             let deliveriesIdList = []
             $('#routes_deliveries_table tr').each(function(){
@@ -132,12 +133,18 @@ var routesdeliveries = Vue.component('routesdeliveries', {
                 });
                 rp[0].pos = i + 1;
             });
+            rPoints.sort(function(a,b) {
+                return a.pos - b.pos;
+            });
+            
+            this.routepoints = rPoints;
             
             this.saveRoutePointsOrder(this.route);
             
-            this.routepoints.sort(function(a, b) {
-                    return a.pos - b.pos;
-            });
+            
+//            this.routepoints.sort(function(a, b) {
+//                    return a.pos - b.pos;
+//            });
             
          
             
