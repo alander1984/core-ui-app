@@ -151,9 +151,9 @@ var routesdeliveries = Vue.component('routesdeliveries', {
 //                }
 //            });
             console.log('MOUNTED_ROUTE_POINTS');
-            this.routepoints.forEach(function(rp, i ,arr) {
-                console.log('ID: ' + rp.id + ' STREET' + rp.delivery.street);
-            });
+            // this.routepoints.forEach(function(rp, i ,arr) {
+            //     console.log('ID: ' + rp.id + ' STREET' + rp.delivery.street);
+            // });
             console.log('MOUNTED_ROUTE_POINTS');
         })
     },
