@@ -13,11 +13,20 @@ Vue.component('tcs', {
       '<input id="createName"  type="text" placeholder="Название" v-model="tcName" class="form-control"/>'+
       '<label class="pointer-event-none" for="createName">Название</label>' +
       '</div>' +
-      '<label for="createVeh">Транспортные средства</label>'+
-      '<select id="createVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="createVeh">' + 
-      '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
-      'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary" id="add" @click="addVeh()">+</b-button>' +
+      '<table>' +
+         '<tr>' +
+            '<td width=90%>' +        
+                  '<label for="createVeh">Транспортные средства</label>'+
+                  '<select id="createVeh" class="form-control" v-model="selectedVehicle" v-select="createVeh">' + 
+                  '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
+                  'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
+                  '</option></select>'+ 
+              '</td>' +
+              '<td width=10% style="vertical-align: bottom;">' +     
+                  '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary" id="add" @click="addVeh()">+</b-button>' +
+              '</td>' +
+         '</tr>' +
+      '</table>' +
       '<div v-if="this.selectedVehicles.length > 0">' +
       '<br/><br/>'+
       '<table class="table-lm table-bordered" width=90%>'+
@@ -49,12 +58,21 @@ Vue.component('tcs', {
       '<input id="editName" type="text" placeholder="Название" v-model="tcName" class="form-control"/><br/>'+
       '<label class="pointer-event-none" for="editName">Название</label>' +
       '</div>' +
-      '<label for="editVeh">Транспортные средства</label>'+
-      '<select id="editVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="editVeh">' + // v-on:change="sel()">'+
-      '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
-      'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
-      '<b-button class="btn-primary" @click="sel()">+</b-button>' +
+      '<table>' +
+         '<tr>' +
+            '<td width=90%>' + 
+                  '<label for="editVeh">Транспортные средства</label>'+
+                  '<select id="editVeh" class="form-control" v-model="selectedVehicle" v-select="editVeh">' + // v-on:change="sel()">'+
+                  '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
+                  'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
+                  '</option></select>'+ 
+            '</td>' +
+            '<td width=10% style="vertical-align: bottom;">' +    
+                  '<span>&nbsp;&nbsp;&nbsp;</span>' +
+                  '<b-button class="btn-primary" @click="sel()">+</b-button>' +
+            '</td>' +
+         '</tr>' +
+      '</table>' +            
       '<div v-if="this.selectedEditVehicles.length > 0">' +
         '<br/><br/>'+
       '<table class="table-lm table-bordered" width=90%>'+
