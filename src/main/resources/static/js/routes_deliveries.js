@@ -198,18 +198,29 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             if(tmp.route.routepoints !== undefined) {
                 this.drawDeliveries(tmp.route.routepoints);
             }
-
-        });
+        }),
+            //Обновляем модель данных после добавления точек маршрута в deliveries-new
+            Event.$on('afterAddRoutePoints', (tmp) => {
+                this.route = tmp.route;
+                this.routepoints = tmp.route.routepoints;
+                console.log(this.route);
+                this.selectedStoreId = tmp.storeId;
+                this.deliveriesCoordinates = [];
+                // if(tmp.route.routepoints !== undefined) {
+                //     this.drawDeliveries(tmp.route.routepoints);
+                // };
+                //Обновлем таблицу
+                this.$forceUpdate();
+            })
     },
-    
-    updated() {
-        
-        console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
-        console.log(this.routepoints);
-        console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
-        
 
-    },
+  updated() {
+
+    console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
+    console.log(this.routepoints);
+    console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
+
+  },
     
    
     

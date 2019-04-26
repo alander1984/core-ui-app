@@ -301,6 +301,7 @@ Vue.component('routes', {
     //Обновляем список RoutePoint после добавление в delivery-new
     Event.$on('addRoutePointPos', (tmp) => {
       let tmp_routePoints = tmp.route.routepoints;
+      let changed_route;
 
       this.listAllStores.forEach(function (item) {
         if (item.id === tmp.storeId){
@@ -312,10 +313,12 @@ Vue.component('routes', {
                 tmp_routePoints.forEach(function (rp_item) {
                   item.routes[index_r].routepoints.push(rp_item);
                 });
+                changed_route =  item.routes[index_r];
               } else {
                 tmp_routePoints.forEach(function (rp_item) {
                   item.routes[index_r].routepoints.push(rp_item);
                 });
+                changed_route =  item.routes[index_r];
               }
             }
           });
@@ -323,6 +326,17 @@ Vue.component('routes', {
       });
 
       this.$forceUpdate();
+
+      //Создаем событие для обновления маршрута в routes-deliveries
+      let _tmp = {};
+      _tmp.route = changed_route;
+      _tmp.storeId = tmp.storeId;
+
+      Event.$emit('afterAddRoutePoints', _tmp);
+
+      //Создаем событие для обновления маркеров нераспределенных заявок в delivery-new
+      Event.$emit('refreshDeliveryPlacemarkers', );
+
 
     });
   },

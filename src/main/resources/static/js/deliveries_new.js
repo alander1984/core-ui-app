@@ -71,8 +71,12 @@ Vue.component('deliveries-new', {
             this.selectedStoreId = tmp.storeId;
         });
       Event.$on('addDeliveryByDD', (tmp) => {
-        // console.log("In addDeliveryByDD event.Selected Delivery id is - " + tmp);
         this.addUndistributedClaimsToRouteByDD(tmp);
+      });
+
+      //По событию обновлям маркеры нераспределенных заявок на карте
+      Event.$on('refreshDeliveryPlacemarkers', () => {
+        this.drawAllUnclaimedDeliveries();
       });
     },
     methods: {
@@ -222,6 +226,7 @@ Vue.component('deliveries-new', {
 
         let _tmpRoutePoint = {};
         _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
+        _tmpRoutePoint.delivery = this.draggableDelivery;
         //TODO Set "right" arrivalTime
         _tmpRoutePoint.arrivalTime = 1000000;
         _tmpRoutePoint.pos = pos;
