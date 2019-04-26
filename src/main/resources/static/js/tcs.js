@@ -2,26 +2,31 @@ Vue.component('tcs', {
   template:
       '<div>'+
       '<h3>Транспортные компании (ТК)</h3>'+
-      '<b-modal id="modalAddTC" ref="modal1" title="Добавить ТК" @ok="handleOk"'+
+      '<b-modal id="modalAddTC" ref="modal1" title="Добавить ТК" @ok="handleOk" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="clearName">'+
       '<form @submit.stop.prevent="handleSubmit">'+
-      '<b-form-input id="createCode" type="text" placeholder="Код" v-model="tcCode"/><br/>'+
-      '<b-form-input id="createName"  type="text" placeholder="Название" v-model="tcName"/>'+
+      '<div class="form-label-group-lm">' +
+      '<input id="createCode" type="text" placeholder="Код" v-model="tcCode" class="form-control"/><br/>'+
+      '<label class="pointer-event-none" for="createCode">Код</label>' +
+      '</div>' +
+      '<div class="form-label-group-lm">' +
+      '<input id="createName"  type="text" placeholder="Название" v-model="tcName" class="form-control"/>'+
+      '<label class="pointer-event-none" for="createName">Название</label>' +
+      '</div>' +
       '<label for="createVeh">Транспортные средства</label>'+
-      '<select id="createVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="createVeh">' + // v-on:change="addVeh()">'+
+      '<select id="createVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="createVeh">' + 
       '<option v-for="vehicle in listAllVehicles" v-bind:value="vehicle">'+
       'Номер: {{ vehicle.registrationNumber }}, Модель: {{ vehicle.model }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><input type="checkbox" id="checkbox" v-model="selected" v-on:change="addVeh()" unchecked-value="not_accepted"/>' +
-      //'<input type="checkbox" id="checkbox" v-model="selected" v-on:change="addVeh()" unchecked-value="not_accepted"/>' +
+      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary" id="add" @click="addVeh()">+</b-button>' +
       '<div v-if="this.selectedVehicles.length > 0">' +
       '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=90%>'+
+      //'<thead>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
       '<th>Удалить</th>'+
       '</tr>'+
-      '</thead>'+
+     // '</thead>'+
       
       '<tr v-for="(item, index) in selectedVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
@@ -33,28 +38,32 @@ Vue.component('tcs', {
       '</div>' +
       '</form>'+
       '</b-modal>'+
-      '<b-modal id="modalEditTC" ref="modal" title="Редактирование ТК" @ok="handleOkEdit"'+
+      '<b-modal id="modalEditTC" ref="modal" title="Редактирование ТК" @ok="handleOkEdit" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="iDriver">'+
       '<form @submit.stop.prevent="handleSubmitEdit">'+
-      '<h6>Код:</h6>'+
-      '<b-form-input type="text" v-model="tcCode"/>'+
-      '<h6>Название:</h6>'+
-      '<b-form-input type="text" v-model="tcName"/><br/>'+
+      '<div class="form-label-group-lm">' +
+      '<input id="editCode" type="text" placeholder="Код" v-model="tcCode" class="form-control"/><br/>'+
+      '<label class="pointer-event-none" for="editCode">Код</label>' +
+      '</div>' +
+      '<div class="form-label-group-lm">' +
+      '<input id="editName" type="text" placeholder="Название" v-model="tcName" class="form-control"/><br/>'+
+      '<label class="pointer-event-none" for="editName">Название</label>' +
+      '</div>' +
       '<label for="editVeh">Транспортные средства</label>'+
       '<select id="editVeh" class="form-control" v-model="selectedVehicle" style="width: 90%" v-select="editVeh">' + // v-on:change="sel()">'+
       '<option v-for="vehicle1 in listAllVehicles" v-bind:value="vehicle1">'+
       'Номер: {{ vehicle1.registrationNumber }}, Модель: {{ vehicle1.model }}'+
       '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
-      '<input type="checkbox" id="checkbox2" v-model="selected" v-on:change="sel()" unchecked-value="not_accepted"/>' +
+      '<b-button class="btn-primary" @click="sel()">+</b-button>' +
       '<div v-if="this.selectedEditVehicles.length > 0">' +
         '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=90%>'+
+     // '<thead>'+
       '<tr>'+
       '<th>Транспортное средство</th>'+
       '<th>Удалить</th>'+
       '</tr>'+
-      '</thead>'+
+      //'</thead>'+
       
       '<tr v-for="(item, index) in selectedEditVehicles" :key=item.index>'+
       '<td width=80%> Номер: {{ item.registrationNumber }}, Модель: {{ item.model }}</td>'+
@@ -66,10 +75,10 @@ Vue.component('tcs', {
       '</div>' +
       '</form>'+
       '</b-modal>'+
-      '<b-button id="addD" variant="primary" v-b-modal.modalAddTC>Добавить ТК</b-button>'+
+      '<button class="btn-primary" id="addD" v-b-modal.modalAddTC>Добавить ТК</button>'+
       '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=70%>'+
+      //'<thead>'+
       '<tr>'+
       '<th>#</th>'+
       '<th>Код</th>'+
@@ -77,18 +86,18 @@ Vue.component('tcs', {
       '<th></th>'+
       '<th></th>'+
       '</tr>'+
-      '</thead>'+
+      //'</thead>'+
       '<tr v-for="(item, index) in listTCs" :key=item.index>'+
-      '<td>{{ index + 1 }}</td>'+
-      '<td width=10%>{{item.code}}</td>'+
-      '<td width=10%>{{item.name}}</td>'+
+      '<td width=10%>{{ index + 1 }}</td>'+
+      '<td width=25%>{{item.code}}</td>'+
+      '<td width=45%>{{item.name}}</td>'+
       '<td>'+
       '<b-button variant="danger" v-on:click="deleteTC(index, item)">X</b-button>'+
       '</td>'+
       '<td>'+
-      '<b-button variant="success" v-b-modal.modalEditTC v-on:click="editTC(index)">'+
+      '<button class="btn-primary" v-b-modal.modalEditTC v-on:click="editTC(index)">'+
       'Редактировать'+
-      '</b-button>'+
+      '</button>'+
       '</td>'+
       '</tr>'+
       '</table>'+
@@ -98,7 +107,7 @@ Vue.component('tcs', {
       listTCs: [],
       selectedVehicles: [],
       selectedEditVehicles: [],
-      selected: false,
+     // selected: false,
       selectedVehicle: {},
       listAllVehicles: [],
       tcId: Number,
@@ -217,11 +226,11 @@ Vue.component('tcs', {
     },
     deleteVeh(index){
         this.selectedVehicles.splice(index, 1);
-        this.selected = false;
+        //this.selected = false;
     },
     deleteEditVeh(index){
         this.selectedEditVehicles.splice(index, 1);
-        this.selected = false;
+        //this.selected = false;
     },
     sel(){
         //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
@@ -233,7 +242,7 @@ Vue.component('tcs', {
             
             this.selectedEditVehicles.push(this.selectedVehicle);
         }
-        this.selected = false;
+        //this.selected = false;
     },
     addVeh(){
         //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
@@ -245,7 +254,7 @@ Vue.component('tcs', {
             
             this.selectedVehicles.push(this.selectedVehicle);
         }
-        this.selected = false;
+        //this.selected = false;
     }
   },
   created() {

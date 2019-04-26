@@ -131,18 +131,33 @@ Vue.component('deliveries-new', {
                     tmp.deliveryDate = this.selectedRoute.deliveryDate;
 
                     let routerPoints = [];
+                    //Получаем pos из существующих точек у маршрута
+
+                    let pos = 0;
+                    //TODO prevent undefined value
+                    if (this.selectedRoute.routepoints !== undefined){
+                      this.selectedRoute.routepoints.forEach(function (item) {
+                        if (pos <= item.pos)
+                          pos = item.pos + 1;
+                      });
+                    }
+
+
 
                     selectedDeliveries.forEach(function (item, index) {
                         let _tmpRoutePoint = {};
                         _tmpRoutePoint.deliveryId = item.id;
                         //TODO Set "right" arrivalTime
                         _tmpRoutePoint.arrivalTime = 1000000;
-                        _tmpRoutePoint.pos = index;
+                        //Берем pos из ранее определенного и увеличиваем для следующей итерации цикла
+                        _tmpRoutePoint.pos = pos++;
+                        //Устанавливаем id=0 для создания нового RoutePoint
+                        _tmpRoutePoint.id = 0;
 
                         routerPoints.push(_tmpRoutePoint);
                     });
 
-                    tmp.routerPoints = routerPoints;
+                    tmp.routepoints = routerPoints;
 
                     CDSAPI.RouteService.createOrUpdateRoute(tmp).then(id => {
                         return id;
@@ -162,6 +177,7 @@ Vue.component('deliveries-new', {
                       });
                       return id;
                     }).then(id => {
+                      //Обновляем текущий список доставок, чтобы убрать элементы из таблицы
 
                       var i;
                       var tmp_list = this.listDeliveries;
@@ -174,6 +190,13 @@ Vue.component('deliveries-new', {
                       }
                       this.listDeliveries = tmp_list;
                       this.$forceUpdate();
+
+                      //Создаем event для обновления информации по маршруту в компоненте routes
+                      let aft_ch_route = {};
+                      aft_ch_route.storeId = this.selectedStoreId;
+                      aft_ch_route.route = tmp;
+                      Event.$emit('addRoutePointPos', aft_ch_route);
+
                     });
                 }
             }
@@ -189,19 +212,24 @@ Vue.component('deliveries-new', {
         _tmp.name = '';
         _tmp.deliveryDate = tmp.route.deliveryDate;
 
-        tmp.route.routepoints.forEach(function (item) {
-          if (pos <= item.pos)
-            pos = item.pos + 1;
-        });
+        //TODO prevent undefined value
+        if (tmp.route.routepoints !== undefined){
+          tmp.route.routepoints.forEach(function (item) {
+            if (pos <= item.pos)
+              pos = item.pos + 1;
+          });
+        }
 
         let _tmpRoutePoint = {};
         _tmpRoutePoint.deliveryId = this.draggableDelivery.id;
         //TODO Set "right" arrivalTime
         _tmpRoutePoint.arrivalTime = 1000000;
         _tmpRoutePoint.pos = pos;
+        //Устанавливаем id=0 для создания нового RoutePoint
+        _tmpRoutePoint.id = 0;
         routerPoints.push(_tmpRoutePoint);
 
-        _tmp.routerPoints = routerPoints;
+        _tmp.routepoints = routerPoints;
 
         let currentDeliveryId = this.draggableDelivery.id;
 
@@ -218,8 +246,6 @@ Vue.component('deliveries-new', {
           });
           return id;
         }).then(id => {
-          return id;
-        }).then(id => {
           this.listDeliveries.forEach(function (item, index, object) {
             if (item.id === currentDeliveryId) {
               object.splice(index, 1);
@@ -229,6 +255,7 @@ Vue.component('deliveries-new', {
           let aft_ch_route = {};
           aft_ch_route.storeId = tmp.store.id;
           aft_ch_route.route = _tmp;
+          //Создаем event для обновления информации по маршруту в компоненте routes
           Event.$emit('addRoutePointPos', aft_ch_route);
         });
       },
@@ -240,6 +267,8 @@ Vue.component('deliveries-new', {
       dragStart(ev) {
           ev.target.style.backgroundColor = "#3ddb4a";
       },
+
+      //Отрисовываем доставки на карте
       drawAllUnclaimedDeliveries (){
         console.log("In drawAllUnclaimedDeliveries method");
 
@@ -259,38 +288,28 @@ Vue.component('deliveries-new', {
             items.forEach(function (del_item) {
               sumWeight += del_item.weight;
             });
-            // console.log("sumWeight is  :  " + sumWeight);
             return sumWeight;
           }).then(sumWeight => {
 
-            let routePlacemark;
+            let routePlacemark = new ymaps.Placemark([del.lon, del.lat],
+                {
+                  iconContent: del.id,
+                  balloonContentHeader: "Информация о доставке",
+                  balloonContent: "<button type=\"button\" class=\"btn btn-primary \" id='balloonDeliveryAddButton'>Добавить в маршрут</button>"
+                },
+            );
 
-            if (sumWeight < 300) {
-              routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                  { iconCaption: 'delivery#'+del.id },
-                  { preset: 'islands#icon',
-                    draggable: false });
-            } else {
-              // alert(sumWeight > 300 && sumWeight < 1000);
-              if (sumWeight >= 300 && sumWeight < 1000) {
-                routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                    { iconCaption: 'delivery#'+del.id },
-                    { preset: 'islands#icon',
-                      iconColor: 'orange',
-                      draggable: false });
-              } else {
-                routePlacemark= new ymaps.Placemark([del.lon, del.lat],
-                    { iconCaption: 'delivery#'+del.id },
-                    { preset: 'islands#icon',
-                      iconColor: 'black',
-                      draggable: false });
-              }
+            if (sumWeight >= 300 && sumWeight < 1000) {
+              routePlacemark.options.set('preset', 'islands#orangeIcon');
+            }
+            if (sumWeight > 1000) {
+              routePlacemark.options.set('preset', 'islands#blackIcon');
             }
 
             routesPlacemarks.push(routePlacemark);
             myMap.geoObjects.add(routePlacemark);
 
-            myMap.setBounds(myMap.geoObjects.getBounds());
+            myMap.setBounds(myMap.geoObjects.getBounds(),{ checkZoomRange: true });
           });
       });
       },

@@ -2,79 +2,167 @@ Vue.component('vehicles', {
   template:
       '<div>'+
       '<h3>Транспортные средства</h3>'+
-      '<b-modal id="modalAddVehicle" ref="modal1" title="Добавить ТС" @ok="handleOk"'+
+      '<b-modal id="modalAddVehicle" ref="modal1" title="Добавить ТС" @ok="handleOk" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="clearName">'+
       '<form @submit.stop.prevent="handleSubmit">'+
-      '<b-form-input type="text" placeholder="Регистрационный номер" v-model="vehicleReg"/><br/>'+
-      '<b-form-input type="text" placeholder="Модель" v-model="vehicleModel"/><br/>'+
-      '<b-form-input type="text" placeholder="Тоннаж" v-model="vehicleTonnage"/><br/>'+
-      '<b-form-input type="text" placeholder="Объем" v-model="vehicleCapacity"/><br/>'+
-      '<label for="createDriver">Водители</label>'+
-      '<select id="createDriver" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="createDriver">' + 
-      '<option v-for="driver in listAllDrivers" v-bind:value="driver">'+
-      '{{ driver.surname }}  {{ driver.name }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><input type="checkbox" id="checkbox" v-model="selected" v-on:change="addDrv()" unchecked-value="not_accepted"/>' +
-      '<div v-if="this.selectedDrivers.length > 0">' +
-      '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
-      '<tr>'+
-      '<th>Водитель</th>'+
-      '<th>Удалить</th>'+
-      '</tr>'+
-      '</thead>'+
-      
-      '<tr v-for="(item, index) in selectedDrivers" :key=item.index>'+
-      '<td width=80%> {{ item.surname }}, Модель: {{ item.name }}</td>'+
-      '<td width=20%>' +
-        '<b-button variant="danger" @click="deleteDrv(index)">X</b-button>' +
-      '</td>'+
-      '</tr>'+
-      '</table>'+
-      '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="regNumber" type="text" placeholder="Регистрационный номер" v-model="vehicleReg" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="regNumber">Регистрационный номер</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="model" type="text" placeholder="Модель" v-model="vehicleModel" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="model">Модель</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="tonnage" type="text" placeholder="Тоннаж" v-model="vehicleTonnage" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="tonnage">Тоннаж</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="capacity" type="text" placeholder="Объем" v-model="vehicleCapacity" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="capacity">Объем</label>' +
+          '</div>' +
+          
+          '<ul class="nav nav-tabs nav-justified" role="tablist">' +
+            '<li class="nav-item">' +
+                '<a class="nav-link active worktab" id="driver-tab-show" data-toggle="tab" href="#driver-show" role="tab" aria-controls="driver-div" aria-selected="true" data-tab="#driver-div">Водители</a>' +
+            '</li>' +
+            '<li class="nav-item">' +
+                '<a class="nav-link worktab" id="tcm-tab" data-toggle="tab" href="#tcm" role="tab" aria-controls="tcm-div" aria-selected="false" data-tab="#tcm-div">Транспортные компании</a>' +
+            '</li>' +
+          '</ul>' +
+          '<div class="tab-content" style="width:100%;  overflow-y: auto;" id="mainTabContent">' +
+            '<div class="workPanel" style="width:100%;" id="driver-div" aria-labelledby="driver-tab-show">' +
+                  '<label for="createDriver">Водители</label>'+
+                  '<select id="createDriver" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="createDriver">' + 
+                  '<option v-for="driver in listAllDrivers" v-bind:value="driver">'+
+                  '{{ driver.surname }}  {{ driver.name }}'+
+                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary" id="add" @click="addDrv()">+</b-button>' +
+                  '<div v-if="this.selectedDrivers.length > 0">' +
+                      '<br/><br/>'+
+                      '<table class="table-lm table-bordered" width=90%>'+
+                      '<tr>'+
+                      '<th>Водитель</th>'+
+                      '<th>Удалить</th>'+
+                      '</tr>'+
+                      
+                      '<tr v-for="(item, index) in selectedDrivers" :key=item.index>'+
+                      '<td width=80%> {{ item.surname }}, Модель: {{ item.name }}</td>'+
+                      '<td width=20%>' +
+                        '<b-button variant="danger" @click="deleteDrv(index)">X</b-button>' +
+                      '</td>'+
+                      '</tr>'+
+                      '</table>'+
+                  '</div>' +
+            '</div>' +
+            '<div class="workPanel hidden" id="tcm-div" style="width:100%;" aria-labelledby="tcm-tab">' +
+                //'Транспортные компании' +
+                    '<label for="createTC">Транспортные компании</label>'+
+                  '<select id="createTC" class="form-control" v-model="selectedTC" style="width: 90%" v-select="createTC">' + 
+                  '<option v-for="tc in listAllTC" v-bind:value="tc">'+
+                  '{{ tc.name }}  Код: {{ tc.code }}'+
+                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="addTC()">+</b-button>' +
+                  '<div v-if="this.selectedTCs.length > 0">' +
+                      '<br/><br/>'+
+                      '<table class="table-lm table-bordered" width=90%>'+
+                      '<tr>'+
+                      '<th>Название ТК</th>'+
+                      '<th>Удалить</th>'+
+                      '</tr>'+
+                      
+                      '<tr v-for="(item, index) in selectedTCs" :key=item.index>'+
+                      '<td width=80%> {{ item.name }}, Код: {{ item.code }}</td>'+
+                      '<td width=20%>' +
+                        '<b-button variant="danger" @click="deleteTC(index)">X</b-button>' +
+                      '</td>'+
+                      '</tr>'+
+                      '</table>'+
+                  '</div>' +
+            '</div>' +
+        '</div>' +
       '</form>'+
       '</b-modal>'+
-      '<b-modal id="modalEditVehicle" ref="modal" title="Редактирование ТС" @ok="handleOkEdit"'+
+      '<b-modal id="modalEditVehicle" ref="modal" title="Редактирование ТС" @ok="handleOkEdit" :no-close-on-backdrop="true" :no-close-on-esc="true"'+
       '@shown="iDriver">'+
       '<form @submit.stop.prevent="handleSubmitEdit">'+
-      '<h6>Регистрационный номер:</h6>'+
-      '<b-form-input type="text" v-model="vehicleReg"/>'+
-      '<h6>Модель:</h6>'+
-      '<b-form-input type="text" v-model="vehicleModel"/>'+
-      '<h6>Тоннаж:</h6>'+
-      '<b-form-input type="text" v-model="vehicleTonnage"/>'+
-      '<h6>Объем</h6>'+
-      '<b-form-input type="text" v-model="vehicleCapacity"/>'+
-      '<label for="editDrv">Водители</label>'+
-      '<select id="editDrv" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="editDrv">' + 
-      '<option v-for="driver1 in listAllDrivers" v-bind:value="driver1">'+
-      '{{ driver1.surname }}  {{ driver1.name }}'+
-      '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
-      '<input type="checkbox" id="checkbox2" v-model="selected" v-on:change="editDrv()" unchecked-value="not_accepted"/>' +
-      '<div v-if="this.selectedEditDrivers.length > 0">' +
-        '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
-      '<tr>'+
-      '<th>Водители</th>'+
-      '<th>Удалить</th>'+
-      '</tr>'+
-      '</thead>'+
-      
-      '<tr v-for="(item, index) in selectedEditDrivers" :key=item.index>'+
-      '<td width=80%> {{ item.surname }}  {{ item.name }}</td>'+
-      '<td width=20%>' +
-        '<b-button variant="danger" @click="deleteEditDrv(index)">X</b-button>' +
-      '</td>'+
-      '</tr>'+
-      '</table>'+
-      '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="regNumberEdit" type="text" placeholder="Регистрационный номер" v-model="vehicleReg" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="regNumberEdit">Регистрационный номер</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="modelEdit" type="text" placeholder="Модель" v-model="vehicleModel" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="modelEdit">Модель</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="tonnageEdit" type="text" placeholder="Тоннаж" v-model="vehicleTonnage" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="tonnageEdit">Тоннаж</label>' +
+          '</div>' +
+          '<div class="form-label-group-lm">' +
+            '<input id="capacityEdit" type="text" placeholder="Объем" v-model="vehicleCapacity" class="form-control"/><br/>'+
+            '<label class="pointer-event-none" for="capacityEdit">Объем</label>' +
+          '</div>' +
+          '<ul class="nav nav-tabs nav-justified" role="tablist">' +
+            '<li class="nav-item">' +
+                '<a class="nav-link active worktab" id="driver-tab-show-edit" data-toggle="tab" href="#driver-show" role="tab" aria-controls="driver-div-edit" aria-selected="true" data-tab="#driver-div-edit">Водители</a>' +
+            '</li>' +
+            '<li class="nav-item">' +
+                '<a class="nav-link worktab" id="tcm-tab-edit" data-toggle="tab" href="#tcm" role="tab" aria-controls="tcm-div-edit" aria-selected="false" data-tab="#tcm-div-edit">Транспортные компании</a>' +
+            '</li>' +
+          '</ul>' +
+          '<div class="tab-content" style="width:100%;  overflow-y: auto;" id="mainTabContentEdit">' +
+                '<div class="workPanel" style="width:100%;" id="driver-div-edit" aria-labelledby="driver-tab-show-edit">' +
+          
+                  '<label for="editDrv">Водители</label>'+
+                  '<select id="editDrv" class="form-control" v-model="selectedDriver" style="width: 90%" v-select="editDrv">' + 
+                  '<option v-for="driver1 in listAllDrivers" v-bind:value="driver1">'+
+                  '{{ driver1.surname }}  {{ driver1.name }}'+
+                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span>' +
+                  '<b-button class="btn-primary"  @click="editDrv()">+</b-button>' +
+                  '<div v-if="this.selectedEditDrivers.length > 0">' +
+                        '<br/><br/>'+
+                      '<table class="table-lm table-bordered" width=90%>'+
+                      '<tr>'+
+                      '<th>Водители</th>'+
+                      '<th>Удалить</th>'+
+                      '</tr>' +
+                      '<tr v-for="(item, index) in selectedEditDrivers" :key=item.index>'+
+                      '<td width=80%> {{ item.surname }}  {{ item.name }}</td>'+
+                      '<td width=20%>' +
+                        '<b-button variant="danger" @click="deleteEditDrv(index)">X</b-button>' +
+                      '</td>'+
+                      '</tr>'+
+                      '</table>'+
+                   '</div>' +
+               '</div>' +
+               '<div class="workPanel hidden" id="tcm-div-edit" style="width:100%;" aria-labelledby="tcm-tab-edit">' +
+                //'Транспортные компании Edit' +
+                    '<label for="editTC">Транспортные компании</label>'+
+                  '<select id="editTC" class="form-control" v-model="selectedTC" style="width: 90%" v-select="editTC">' + 
+                  '<option v-for="tc in listAllTC" v-bind:value="tc">'+
+                  '{{ tc.name }}  Код: {{ tc.code }}'+
+                  '</option></select>'+ '<span>&nbsp;&nbsp;&nbsp;</span><b-button class="btn-primary"  @click="editTC()">+</b-button>' +
+                  '<div v-if="this.selectedEditTCs.length > 0">' +
+                      '<br/><br/>'+
+                      '<table class="table-lm table-bordered" width=90%>'+
+                      '<tr>'+
+                      '<th>Название ТК</th>'+
+                      '<th>Удалить</th>'+
+                      '</tr>'+
+                      
+                      '<tr v-for="(item, index) in selectedEditTCs" :key=item.index>'+
+                      '<td width=80%> {{ item.name }}, Код: {{ item.code }}</td>'+
+                      '<td width=20%>' +
+                        '<b-button variant="danger" @click="deleteEditTC(index)">X</b-button>' +
+                      '</td>'+
+                      '</tr>'+
+                      '</table>'+
+                  '</div>' +
+                '</div>' +
+          '</div>' +
       '</form>'+
       '</b-modal>'+
-      '<b-button id="addV" variant="primary" v-b-modal.modalAddVehicle>Добавить ТС</b-button>'+
+      '<button id="addV" class="btn-primary" v-b-modal.modalAddVehicle>Добавить ТС</button>'+
       '<br/><br/>'+
-      '<table class="table table-bordered">'+
-      '<thead>'+
+      '<table class="table-lm table-bordered" width=70%>'+
       '<tr>'+
       '<th>#</th>'+
       '<th>Регистрационный номер</th>'+
@@ -84,20 +172,19 @@ Vue.component('vehicles', {
       '<th></th>'+
       '<th></th>'+
       '</tr>'+
-      '</thead>'+
       '<tr v-for="(item, index) in listVehicles" :key=item.index>'+
-      '<td>{{ index + 1 }}</td>'+
-      '<td width=10%>{{item.registrationNumber}}</td>'+
-      '<td width=10%>{{item.model}}</td>'+
-      '<td width=50%>{{item.tonnage}}</td>'+
-      '<td width=50%>{{item.capacity}}</td>'+
+      '<td width=10%>{{ index + 1 }}</td>'+
+      '<td width=20%>{{item.registrationNumber}}</td>'+
+      '<td width=20%>{{item.model}}</td>'+
+      '<td width=15%>{{item.tonnage}}</td>'+
+      '<td width=15%>{{item.capacity}}</td>'+
       '<td>'+
       '<b-button variant="danger" v-on:click="deleteVehicle(index, item)">X</b-button>'+
       '</td>'+
       '<td>'+
-      '<b-button variant="success" v-b-modal.modalEditVehicle v-on:click="editVehicle(index)">'+
+      '<button class="btn-primary" v-b-modal.modalEditVehicle v-on:click="editVehicle(index)">'+
       'Редактировать'+
-      '</b-button>'+
+      '</button>'+
       '</td>'+
       '</tr>'+
       '</table>'+
@@ -106,9 +193,13 @@ Vue.component('vehicles', {
     return {
       listVehicles: [],
       listAllDrivers: [],
+      listAllTC: [],
+      selectedEditTCs: [],
+      selectedTCs: [],
       selectedEditDrivers: [],
       selectedDrivers: [],
       selectedDriver: {},
+      selectedTC: {},
       selected: false,
       vehicleId: Number,
       vehicleReg: '',
@@ -133,6 +224,7 @@ Vue.component('vehicles', {
       this.vehicleTonnage = this.listVehicles[index].tonnage;
       this.vehicleCapacity = this.listVehicles[index].capacity;
       this.selectedEditDrivers = this.listVehicles[index].drivers;
+      this.selectedEditTCs = this.listVehicles[index].transportCompanies;
       this.index = index;
     },
     clearName() {
@@ -161,7 +253,8 @@ Vue.component('vehicles', {
       temp.model = this.vehicleModel;
       temp.tonnage = this.vehicleTonnage;
       temp.capacity = this.vehicleCapacity;
-      temp.drivers = this.selectedDrivers
+      temp.drivers = this.selectedDrivers;
+      temp.transportCompanies = this.selectedTCs;
       CDSAPI.Vehicles.createOrUpdateVehicle(temp).then(id => {
         console.log("Created ID :  " + id);
         temp.id = id;
@@ -197,6 +290,7 @@ Vue.component('vehicles', {
       temp.tonnage = this.vehicleTonnage;
       temp.capacity = this.vehicleCapacity;
       temp.drivers = this.selectedEditDrivers;
+      temp.transportCompanies = this.selectedEditTCs;
       //TODO Fix refresh bug
       Vue.set(this.listVehicles, this.index, temp);
       CDSAPI.Vehicles.createOrUpdateVehicle(temp).then(id => {
@@ -225,6 +319,12 @@ Vue.component('vehicles', {
         console.log("Drivers is - " + this.listAllDrivers);
       });
     },
+    allTC(){
+        CDSAPI.TransportCompanies.sendAllTransportCompanies().then(tc => {
+            this.listAllTC = tc;
+            console.log("TransportCompany is - " + this.listAllTC);
+        });
+    },
     addDrv(){
         //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
         var id = this.selectedDriver.id;
@@ -235,18 +335,34 @@ Vue.component('vehicles', {
             
             this.selectedDrivers.push(this.selectedDriver);
         }
-        this.selected = false;
+        //this.selected = false;
     },
     deleteDrv(index){
         this.selectedDrivers.splice(index, 1);
-        this.selected = false;
+        //this.selected = false;
+    },
+    addTC(){
+        var id = this.selectedTC.id;
+        let m = this.selectedTCs.filter(function(o){
+            return o.id == id 
+        });
+        if(m.length == 0) {
+            
+            this.selectedTCs.push(this.selectedTC);
+        }
+        
+    },
+    deleteTC(index){
+        this.selectedTCs.splice(index, 1);
+        
+    },
+    deleteEditTC(index){
+        this.selectedEditTCs.splice(index, 1);
     },
     deleteEditDrv(index){
         this.selectedEditDrivers.splice(index, 1);
-        this.selected = false;
     },
     editDrv(){
-        //console.log("ТРАНС СРЕДСТВА: " + this.selectedVehicle.model);
         var id = this.selectedDriver.id;
         let m = this.selectedEditDrivers.filter(function(o){
             return o.id == id 
@@ -255,12 +371,22 @@ Vue.component('vehicles', {
             
             this.selectedEditDrivers.push(this.selectedDriver);
         }
-        this.selected = false;
-    }
+    },
+   editTC(){
+        var id = this.selectedTC.id;
+        let m = this.selectedEditTCs.filter(function(o){
+            return o.id == id 
+        });
+        if(m.length == 0) {
+            
+            this.selectedEditTCs.push(this.selectedTC);
+        }
+    } 
   },
   created() {
     this.allVehicles();
     this.allDrivers();
+    this.allTC();
   },
   mounted(){
       $.fn.modal.Constructor.prototype._enforceFocus = function() {};

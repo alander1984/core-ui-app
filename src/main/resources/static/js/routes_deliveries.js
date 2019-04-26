@@ -198,6 +198,7 @@ var routesdeliveries = Vue.component('routesdeliveries', {
             if(tmp.route.routepoints !== undefined) {
                 this.drawDeliveries(tmp.route.routepoints);
             }
+
         });
     },
     
@@ -206,6 +207,8 @@ var routesdeliveries = Vue.component('routesdeliveries', {
         console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
         console.log(this.routepoints);
         console.log('!!!!!!!!!!!!!!!!!!!!!UPDATED');
+        
+
     },
     
    
